@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/MAPReiff/cs546-group-44/issues"
   },
-  "homepage": "https://github.com/MAPReiff/cs546-group-44#readme"
+  "homepage": "https://github.com/MAPReiff/cs546-group-44#readme",
+  "dependencies": {
+    "mongodb": "^5.1.0"
+  }
 }
