@@ -1,0 +1,21 @@
+{
+  "name": "cs546-group-44",
+  "version": "1.0.0",
+  "description": "Group 44 final project module",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MAPReiff/cs546-group-44.git"
+  },
+  "author": "Valentina Bustamante | David Bajollari | William Kastell | Mitchell Reiff",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MAPReiff/cs546-group-44/issues"
+  },
+  "homepage": "https://github.com/MAPReiff/cs546-group-44#readme"
+}
