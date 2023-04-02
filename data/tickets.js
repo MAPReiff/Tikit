@@ -58,7 +58,11 @@ const create = async (
     tags = helpers.checkStringArray(tags, "Tags");
   }
 
-  // now the db part
+  // now the rest
+  let status = logged;
+  let comments = [];
+
+
 };
 
 const getAll = async () => {};
@@ -69,4 +73,6 @@ const remove = async () => {};
 
 const update = async () => {};
 
-export default { create, getAll, get, remove, update };
+const comment = async () => {}
+
+export default { create, getAll, get, remove, update, comment };
