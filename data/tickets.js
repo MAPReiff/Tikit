@@ -3,7 +3,16 @@ import {tickets} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 
 
-const create = async () => {
+const create = async (name, 
+    description, 
+    status,
+    priority, 
+    createdOn, 
+    deadline, 
+    customerID, 
+    owners,
+    tags,
+    commments) => {
 
 }
 
@@ -11,15 +20,23 @@ const getAll = async () => {
 
 }
 
-const get = async () => {
+const get = async (id) => {
 
 }
 
-const remove = async () => {
+const remove = async (id) => {
 
 }
 
-const update = async () => {
+const update = async (name, 
+    description, 
+    status,
+    priority, 
+    createdOn, 
+    deadline, 
+    customerID, 
+    owners,
+    tags) => {
 
 }
 
