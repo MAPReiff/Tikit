@@ -87,6 +87,34 @@ const remove = async (ticketID, userID) => {
 
 const update = async () => {};
 
-const comment = async () => {}
+const comment = async (ticketID, userID, commentData, replyToID) => {
+  // validate the ticket is a valid ID
+  ticketID = helpers.checkId(ticketID, "Ticket ID");
+
+  // check the DB for the that ticket
+  // if found, procede
+  // if not found, error
+
+  // validate the user is a valid ID
+  userID = helpers.checkId(userID, "User ID");
+  // check DB if that user exists
+  // if found, procede
+  // if not found, error
+
+  // validate the comment data
+  commentData = helpers.checkString(commentData, "Comment data");
+
+  // if this is a reply to another comment
+  if (replyToID) {
+    // validate the reply to comment is a valid ID
+    replyToID = helpers.checkId(replyToID, "Reply to comment ID");
+
+    // search for comment ID under the ticket
+    // append this reply to that comment
+  } // if this is on the base ticket
+  else {
+    // append this to the ticket's comments
+  }
+};
 
 export default { create, getAll, get, remove, update, comment };
