@@ -67,7 +67,7 @@ const getAll = async () => {};
 
 const get = async (ticketID) => {
   // validate the ticket is a valid ID
-  let ticketID = helpers.checkId(ticketID, "Ticket ID");
+  ticketID = helpers.checkId(ticketID, "Ticket ID");
 
   // check the DB for the that ticket
   // if found, return the ticket
