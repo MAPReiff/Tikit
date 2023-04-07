@@ -11,7 +11,8 @@ const constructorMethod = (app) => {
   app.use('/tickets', ticketRoutes);
 
   app.use('*', (req, res) => {
-    res.status(404).json({error: 'Route Not found'});
+    // res.status(404).json({error: 'Route Not found'});
+    res.status(404).render("404", {title: "404 Page not found"})
   });
 };
 
