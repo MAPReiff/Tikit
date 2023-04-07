@@ -65,7 +65,14 @@ const create = async (
 
 const getAll = async () => {};
 
-const get = async () => {};
+const get = async (ticketID) => {
+  // validate the ticket is a valid ID
+  let ticketID = helpers.checkId(ticketID, "Ticket ID");
+
+  // check the DB for the that ticket
+  // if found, return the ticket
+  // if not found, error
+};
 
 const remove = async (ticketID, userID) => {
   // validate the ticket is a valid ID
