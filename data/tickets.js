@@ -61,15 +61,29 @@ const create = async (
   // now the rest
   let status = logged;
   let comments = [];
-
-
 };
 
 const getAll = async () => {};
 
 const get = async () => {};
 
-const remove = async () => {};
+const remove = async (ticketID, userID) => {
+  // validate the ticket is a valid ID
+  ticketID = helpers.checkId(ticketID, "Ticket ID");
+
+  // check the DB for the that ticket
+  // if found, procede
+  // if not found, error
+
+  // validate the user is a valid ID
+  userID = helpers.checkId(userID, "User ID");
+  // check DB if that user exists
+  // if found
+  //    check that the ID is either the ticket customer, or has a role that can close any ticket
+  //      if good, procede
+  //      if not, error
+  // if not found, error
+};
 
 const update = async () => {};
 
