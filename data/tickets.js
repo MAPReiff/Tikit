@@ -92,7 +92,97 @@ const remove = async (ticketID, userID) => {
   // if not found, error
 };
 
-const update = async () => {};
+const update = async (
+  ticketID,
+  userID,
+  name,
+  description,
+  status,
+  priority,
+  deadline,
+  owners,
+  tags
+) => {
+  // this function does not modify the comments or the createdOn attributes.
+
+  // validate the ticket is a valid ID
+  ticketID = helpers.checkId(ticketID, "Ticket ID");
+
+  // check the DB for the that ticket
+  // if found, procede
+  // if not found, error
+
+  // validate the user is a valid ID
+  userID = helpers.checkId(userID, "User ID");
+  // check DB if that user exists
+  // if found, procede
+  // if not found, error
+
+  // validate name
+  name = helpers.checkString(name, "Name");
+
+  // validate description
+  description = helpers.checkString(description, "Description");
+
+  // validate status
+  status = helpers.checkString(status, "Status");
+  if (
+    status != "Logged" ||
+    status != "In Progress" ||
+    status != "On Hold" ||
+    status != "Resolved"
+  ) {
+    throw new Error("status must be Logged, In Progress, On Hold, or Resolved");
+  }
+
+  // validate priority
+  priority = helpers.checkString(priority, "Priority");
+  if (
+    priority != "Low" ||
+    priority != "Medium" ||
+    priority != "High" ||
+    priority != "Critical"
+  ) {
+    throw new Error("priority must be Low, Medium, High, or Critical");
+  }
+
+  let timeNow = Date.now();
+
+  // check if dadline is provided
+  if (!deadline) {
+    deadline = NaN;
+    // no deadline so we just use NaN as a placeholder
+  } else {
+    // a dealine was provided
+    if (new Date(deadline).getTime() === NaN) {
+      throw new Error("provided dealine is not a valid timestamp");
+    } else if (new Date(deadline).getTime() < timeNow) {
+      throw new Error("provided dealine in the past");
+    }
+  }
+
+  // validate owners array
+  if (typeof owners == "undefined") {
+    throw new Error("please provide an array of owners");
+  } else if (typeof owners != "object") {
+    throw new Error("please provide an array of owners");
+  }
+
+  if (!Array.isArray(owners)) {
+    throw new Error("please provide an array of owners");
+  }
+
+  if (owners.length != 0) {
+    owners[i] = helpers.checkId(owners[i]);
+    // check DB if that user exists
+    // if found, procede
+    // if not found, error
+  } // no owners is acceptable (has not been assigned yet, un assigned, etc)
+
+  if (tags.length != 0) {
+    tags = helpers.checkStringArray(tags, "tags")
+  } // no tags is acceptable
+};
 
 const comment = async (ticketID, userID, commentData, replyToID) => {
   // validate the ticket is a valid ID
