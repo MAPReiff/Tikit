@@ -1,4 +1,4 @@
-# Ticketing System
+# Tikit
 
 ## Team Members
 
