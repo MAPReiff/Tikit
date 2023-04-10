@@ -28,8 +28,6 @@ const create = async (
     throw new Error("priority must be Low, Medium, High, or Critical");
   }
 
-const create = async () => {
-
   // check if dadline is provided
   // deadline expected like this - timestamp
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local
@@ -58,7 +56,15 @@ const create = async () => {
     tags = helpers.checkStringArray(tags, "Tags");
   }
 
-const get = async () => {
+}; 
+
+//get all users
+const getAll = async () => {
+
+}
+
+//get user based on id
+const get = async (id) => {
 
   // validate priority
   priority = helpers.checkString(priority, "Priority");
@@ -71,7 +77,10 @@ const get = async () => {
     throw new Error("priority must be Low, Medium, High, or Critical");
   }
 
-const remove = async () => {
+}; 
+
+//remove user based on id
+const remove = async (id) => {
 
   // check if dadline is provided
   if (!deadline) {
@@ -85,8 +94,20 @@ const remove = async () => {
       throw new Error("provided dealine in the past");
     }
   }
+}; 
 
-const update = async () => {
+const update = async (
+    id, 
+    name, 
+    description, 
+    status,
+    priority, 
+    createdOn, 
+    deadline, 
+    customerID, 
+    owners,
+    tags
+) => {
 
   if (!Array.isArray(owners)) {
     throw new Error("please provide an array of owners");
@@ -103,6 +124,8 @@ const update = async () => {
     tags = helpers.checkStringArray(tags, "tags")
   } // no tags is acceptable
 };
+
+
 
 const comment = async (ticketID, userID, commentData, replyToID) => {
   // validate the ticket is a valid ID
