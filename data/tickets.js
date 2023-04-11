@@ -1,5 +1,6 @@
 import * as helpers from "../helpers.js";
 import { tickets } from "../config/mongoCollections.js";
+import { users } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
 
 const create = async (
@@ -9,6 +10,7 @@ const create = async (
   priority, // dropdown menue to select (probably strings)
   deadline, // optional timestamp
   customerID, // objectID of the account who did the action
+  owners, //objectID array of who the tickets is assigned to
   category, // dropdown menu to select (probably strings)
   tags // optional array of tags
 ) => {
@@ -59,6 +61,9 @@ const create = async (
   // validate customerID
   customerID = helpers.checkId(customerID, "Customer ID");
 
+  //validate owners
+  owners = helpers.checkIdArray(owners, "Owners ID Array")
+
   // validate category
   category = helpers.checkString(category, "Category");
 
@@ -77,6 +82,7 @@ const create = async (
     createdOn: createdOn,
     deadline: deadline,
     customerID: customerID,
+    owners: owners,
     category: category,
     tags: tags,
     comments: []
@@ -127,6 +133,14 @@ const remove = async (id) => {
 
 };
 
+
+/*for now I will not allow users to upate the owners of a ticket, 
+because it make it alittle more complex, we need to go and update the ticketsBeingWorkedOn in the user
+If we need this functionallity we can add it later */
+
+/* also when we update a ticket do we change createdOn to when it got updated or leave it as is
+for now I will just leave it as is*/
+
 const update = async (
   id,
   name,
@@ -134,10 +148,14 @@ const update = async (
   status,
   priority,
   deadline,
-  customerID,
-  owners,
+  category,
   tags
 ) => {
+
+  id = helpers.checkId(id, "Ticket ID");
+  const ticketCollection = await tickets();
+  const ticket = await ticketCollection.findOne({ _id: new ObjectId(id) });
+  if (ticket === null) throw "Error: No ticket found with that ID";
 
   // validate name
   name = helpers.checkString(name, "Name");
@@ -170,7 +188,6 @@ const update = async (
   // deadline expected like this - timestamp
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local
 
-  let createdOn = Date.now();
   if (!deadline) {
     deadline = NaN;
     // no deadline so we just use NaN as a placeholder
@@ -183,9 +200,6 @@ const update = async (
     }
   }
 
-  // validate customerID
-  customerID = helpers.checkId(customerID, "Customer ID");
-
   // validate category
   category = helpers.checkString(category, "Category");
 
@@ -195,7 +209,34 @@ const update = async (
   } else {
     tags = helpers.checkStringArray(tags, "Tags");
   }
+
+  const curTicket = await get(id);
+
+  let updatedTicket = { 
+    name: name,
+    description: description,
+    status: status,
+    priority: priority,
+    createdOn: curTicket.createdOn,
+    deadline: deadline,
+    customerID: curTicket.customerID,
+    owners: curTicket.owners,
+    category: category,
+    tags: tags,
+    comments: curTicket.comments
+  }
+  const updatedInfo = await ticketCollection.findOneAndUpdate(
+    {_id: new ObjectId(id)},
+    {$set: updatedTicket},
+    {returnDocument: 'after'}
+  );
+  if (updatedInfo.lastErrorObject.n === 0) {
+    throw "Error: could not update ticket successfully!";
+  }
+  updatedInfo.value._id = updatedInfo.value._id.toString();
+  return updatedInfo.value;
 };
+
 
 
 export default { create, getAll, get, remove, update};
