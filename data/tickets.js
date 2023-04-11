@@ -1,13 +1,16 @@
 import * as helpers from "../helpers.js";
 import { tickets } from "../config/mongoCollections.js";
+import { users } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
 
 const create = async (
   name, // string input
   description, // string input
+  status, //string input, dropdown menu 
   priority, // dropdown menue to select (probably strings)
   deadline, // optional timestamp
   customerID, // objectID of the account who did the action
+  owners, //objectID array of who the tickets is assigned to
   category, // dropdown menu to select (probably strings)
   tags // optional array of tags
 ) => {
@@ -17,22 +20,32 @@ const create = async (
   // validate description
   description = helpers.checkString(description, "Description");
 
+  // validate status
+  status = helpers.checkString(status, "Status");
+  if (
+    status != "To Do" &&
+    status != "In Progress" &&
+    status != "Completed"
+  ) {
+    throw new Error("status must be a string equal to, To Do, In Progress, or Completed");
+  }
+
   // validate priority
   priority = helpers.checkString(priority, "Priority");
   if (
-    priority != "Low" ||
-    priority != "Medium" ||
-    priority != "High" ||
+    priority != "Low" &&
+    priority != "Medium" &&
+    priority != "High" &&
     priority != "Critical"
   ) {
-    throw new Error("priority must be Low, Medium, High, or Critical");
+    throw new Error("priority must be a string equal to, Low, Medium, High, or Critical");
   }
-
-  let createdOn = Date.now();
 
   // check if dadline is provided
   // deadline expected like this - timestamp
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local
+
+  let createdOn = Date.now();
   if (!deadline) {
     deadline = NaN;
     // no deadline so we just use NaN as a placeholder
@@ -48,6 +61,9 @@ const create = async (
   // validate customerID
   customerID = helpers.checkId(customerID, "Customer ID");
 
+  //validate owners
+  owners = helpers.checkIdArray(owners, "Owners ID Array")
+
   // validate category
   category = helpers.checkString(category, "Category");
 
@@ -58,65 +74,88 @@ const create = async (
     tags = helpers.checkStringArray(tags, "Tags");
   }
 
-  // now the rest
-  let status = logged;
-  let comments = [];
+  let newTicket = {
+    name: name,
+    description: description,
+    status: status,
+    priority: priority,
+    createdOn: createdOn,
+    deadline: deadline,
+    customerID: customerID,
+    owners: owners,
+    category: category,
+    tags: tags,
+    comments: []
+  };
+  const ticketCollection = await tickets();
+  const insertInfo = await ticketCollection.insertOne(newTicket);
+  if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error: Could not add new ticket!';
+
+  const newId = insertInfo.insertedId.toString();
+
+  const ticket = await get(newId);
+  return ticket;
 };
 
-const getAll = async () => {};
+//get all tickets
+const getAll = async () => {
+  const ticketCollection = await tickets();
+  let ticketList = await ticketCollection.find({}).toArray();
+  if (!ticketList) throw 'Error: Could not get all tickets!';
+  ticketList = ticketList.map((element) => {
+    element._id = element._id.toString();
+    return element;
+  });
+  return ticketList;
+}
 
-const get = async (ticketID) => {
-  // validate the ticket is a valid ID
-  ticketID = helpers.checkId(ticketID, "Ticket ID");
-
-  // check the DB for the that ticket
-  // if found, return the ticket
-  // if not found, error
+//get ticket based on id
+const get = async (id) => {
+  id = helpers.checkId(id, "Ticket ID");
+  const ticketCollection = await tickets();
+  const ticket = await ticketCollection.findOne({ _id: new ObjectId(id) });
+  if (ticket === null) throw "Error: No ticket found with that ID";
+  ticket._id = ticket._id.toString();
+  return ticket;
 };
 
-const remove = async (ticketID, userID) => {
-  // validate the ticket is a valid ID
-  ticketID = helpers.checkId(ticketID, "Ticket ID");
+//remove ticket based on id
+const remove = async (id) => {
+  id = helpers.checkId(id, "Ticket ID");
+  const ticketCollection = await tickets();
+  const deletionInfo = await ticketCollection.findOneAndDelete({
+    _id: new ObjectId(id)
+  });
+  if (deletionInfo.lastErrorObject.n === 0) {
+    throw `Could not delete ticket with id of ${id}`;
+  }
+  return `${deletionInfo.value.name} has been successfully deleted!`;
 
-  // check the DB for the that ticket
-  // if found, procede
-  // if not found, error
-
-  // validate the user is a valid ID
-  userID = helpers.checkId(userID, "User ID");
-  // check DB if that user exists
-  // if found
-  //    check that the ID is either the ticket customer, or has a role that can close any ticket
-  //      if good, procede
-  //      if not, error
-  // if not found, error
 };
+
+
+/*for now I will not allow users to upate the owners of a ticket, 
+because it make it alittle more complex, we need to go and update the ticketsBeingWorkedOn in the user
+If we need this functionallity we can add it later */
+
+/* also when we update a ticket do we change createdOn to when it got updated or leave it as is
+for now I will just leave it as is*/
 
 const update = async (
-  ticketID,
-  userID,
+  id,
   name,
   description,
   status,
   priority,
   deadline,
-  owners,
+  category,
   tags
 ) => {
-  // this function does not modify the comments or the createdOn attributes.
 
-  // validate the ticket is a valid ID
-  ticketID = helpers.checkId(ticketID, "Ticket ID");
-
-  // check the DB for the that ticket
-  // if found, procede
-  // if not found, error
-
-  // validate the user is a valid ID
-  userID = helpers.checkId(userID, "User ID");
-  // check DB if that user exists
-  // if found, procede
-  // if not found, error
+  id = helpers.checkId(id, "Ticket ID");
+  const ticketCollection = await tickets();
+  const ticket = await ticketCollection.findOne({ _id: new ObjectId(id) });
+  if (ticket === null) throw "Error: No ticket found with that ID";
 
   // validate name
   name = helpers.checkString(name, "Name");
@@ -127,28 +166,28 @@ const update = async (
   // validate status
   status = helpers.checkString(status, "Status");
   if (
-    status != "Logged" ||
-    status != "In Progress" ||
-    status != "On Hold" ||
-    status != "Resolved"
+    status != "To Do" &&
+    status != "In Progress" &&
+    status != "Completed"
   ) {
-    throw new Error("status must be Logged, In Progress, On Hold, or Resolved");
+    throw new Error("status must be a string equal to, To Do, In Progress, or Completed");
   }
 
   // validate priority
   priority = helpers.checkString(priority, "Priority");
   if (
-    priority != "Low" ||
-    priority != "Medium" ||
-    priority != "High" ||
+    priority != "Low" &&
+    priority != "Medium" &&
+    priority != "High" &&
     priority != "Critical"
   ) {
-    throw new Error("priority must be Low, Medium, High, or Critical");
+    throw new Error("priority must be a string equal to, Low, Medium, High, or Critical");
   }
 
-  let timeNow = Date.now();
-
   // check if dadline is provided
+  // deadline expected like this - timestamp
+  // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local
+
   if (!deadline) {
     deadline = NaN;
     // no deadline so we just use NaN as a placeholder
@@ -156,62 +195,48 @@ const update = async (
     // a dealine was provided
     if (new Date(deadline).getTime() === NaN) {
       throw new Error("provided dealine is not a valid timestamp");
-    } else if (new Date(deadline).getTime() < timeNow) {
+    } else if (new Date(deadline).getTime() < createdOn) {
       throw new Error("provided dealine in the past");
     }
   }
 
-  // validate owners array
-  if (typeof owners == "undefined") {
-    throw new Error("please provide an array of owners");
-  } else if (typeof owners != "object") {
-    throw new Error("please provide an array of owners");
+  // validate category
+  category = helpers.checkString(category, "Category");
+
+  // check if tags are provided
+  if (!tags) {
+    tags = [];
+  } else {
+    tags = helpers.checkStringArray(tags, "Tags");
   }
 
-  if (!Array.isArray(owners)) {
-    throw new Error("please provide an array of owners");
+  const curTicket = await get(id);
+
+  let updatedTicket = { 
+    name: name,
+    description: description,
+    status: status,
+    priority: priority,
+    createdOn: curTicket.createdOn,
+    deadline: deadline,
+    customerID: curTicket.customerID,
+    owners: curTicket.owners,
+    category: category,
+    tags: tags,
+    comments: curTicket.comments
   }
-
-  if (owners.length != 0) {
-    owners[i] = helpers.checkId(owners[i]);
-    // check DB if that user exists
-    // if found, procede
-    // if not found, error
-  } // no owners is acceptable (has not been assigned yet, un assigned, etc)
-
-  if (tags.length != 0) {
-    tags = helpers.checkStringArray(tags, "tags")
-  } // no tags is acceptable
+  const updatedInfo = await ticketCollection.findOneAndUpdate(
+    {_id: new ObjectId(id)},
+    {$set: updatedTicket},
+    {returnDocument: 'after'}
+  );
+  if (updatedInfo.lastErrorObject.n === 0) {
+    throw "Error: could not update ticket successfully!";
+  }
+  updatedInfo.value._id = updatedInfo.value._id.toString();
+  return updatedInfo.value;
 };
 
-const comment = async (ticketID, userID, commentData, replyToID) => {
-  // validate the ticket is a valid ID
-  ticketID = helpers.checkId(ticketID, "Ticket ID");
 
-  // check the DB for the that ticket
-  // if found, procede
-  // if not found, error
 
-  // validate the user is a valid ID
-  userID = helpers.checkId(userID, "User ID");
-  // check DB if that user exists
-  // if found, procede
-  // if not found, error
-
-  // validate the comment data
-  commentData = helpers.checkString(commentData, "Comment data");
-
-  // if this is a reply to another comment
-  if (replyToID) {
-    // validate the reply to comment is a valid ID
-    replyToID = helpers.checkId(replyToID, "Reply to comment ID");
-
-    // search for comment ID under the ticket
-    // append this reply to that comment
-  } // if this is on the base ticket
-  else {
-    // append this to the ticket's comments
-  }
-};
-
-export default { create, getAll, get, remove, update, comment };
+export default { create, getAll, get, remove, update};
