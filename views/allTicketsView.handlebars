@@ -1,0 +1,19 @@
+<h1>Tickets</h1>
+<table>
+    <tr>
+        <th>Ticket Name</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>Created</th>
+        <th>Deadline</th>
+    </tr>
+  {{#each tickets}}
+    <tr>
+        <td><a href= "/tickets/view/{{this._id}}">{{this.name}}</a></td>
+        <td>{{this.status}}</td>
+        <td>{{this.priority}}</td>
+        <td>{{this.createdOn}}</td>
+        <td>{{this.deadline}}</td>
+    </tr>
+  {{/each}}
+</table>
