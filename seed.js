@@ -9,13 +9,14 @@ await db.dropDatabase();
 
 
 /*** Just using this for testing purposes now. Will have to update with real data later-***/
-const ticket1 = await tickets.create("Testing Ticket", "This is a ticket for testing my database", "To Do", "Low", "", '641f8e18c0e10f3dd6d24eea',["641f8e18c0e10f3dd6d24eea", "641f8e18c0e10f3dd6d24eea"], "Test Category", ["Databases", "Angular"],);
-const ticket2 = await tickets.create("Testing Ticket 2", "This is another ticket for testing my database", "In Progress", "Low", "", '641f8e18c0e10f3dd6d24eea',["641f8e18c0e10f3dd6d24eea", "641f8e18c0e10f3dd6d24eea"], "Test Category", ["Databases"]);
-const ticket2Update = await tickets.update(ticket2._id, "Testing Ticket 2 Updated", "This is another ticket for testing my database, but with an update", "In Progress", "Low", "", "Test Category 2", ["Databases", "Mongo"]);
-
 const user1 = await users.create("David","Bajo","dbajo1","password","dbajollar1@yahoo.com", "Admin","creator");
 const user2 = await users.create("David1","Bajo","dbajo2","password","dbajollar1@hotmail.com", "User","Developer");
 const user3 = await users.create("Ryan","Bajo","rbajo","password","rbajollar1@yahoo.com", "User","Developer");
+
+const ticket1 = await tickets.create("Testing Ticket", "This is a ticket for testing my database", "To Do", "Low", "", user3._id,[user2._id, user3._id], "Test Category", ["Databases", "Angular"],);
+const ticket2 = await tickets.create("Testing Ticket 2", "This is another ticket for testing my database", "In Progress", "Low", "", user2._id, [user3._id], "Test Category", ["Databases"]);
+const ticket2Update = await tickets.update(ticket2._id, "Testing Ticket 2 Updated", "This is another ticket for testing my database, but with an update", "In Progress", "Low", "", "Test Category 2", ["Databases", "Mongo"]);
+
 const allUser = await users.getAll();
 const getUser = await users.get(user1._id);
 const removeUser = await users.remove(user1._id);

@@ -59,6 +59,14 @@ const getAll = async () => {
     return userList;
 }
 
+const getMultiple = async (ids) => {
+    let retArr = [];
+    for(const id of ids){
+        retArr.push(await get(id));
+    }
+    return retArr;
+}
+
 const get = async (id) => {
     id = helpers.checkId(id, "User ID");
     const userCollection = await users();
@@ -133,4 +141,4 @@ const update = async (id,
 }
 
 
-export default { create, getAll, get, remove, update }; 
+export default { create, getAll, get, getMultiple, remove, update }; 
