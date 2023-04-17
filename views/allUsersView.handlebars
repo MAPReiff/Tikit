@@ -1,0 +1,19 @@
+<h1>Users</h1>
+<table>
+    <tr>
+        <th>Username</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Title</th>
+    </tr>
+  {{#each tickets}}
+    <tr>
+        <td><a href= "/users/view/{{this._id}}">{{this.username}}</a></td>
+        <td>{{this.firstName}} {{this.lastName}}</td>
+        <td><a href="mailto:{{this.email}}">{{this.email}}</a></td>
+        <td>{{this.role}}</td>
+        <td>{{this.title}}</td>
+    </tr>
+  {{/each}}
+</table>

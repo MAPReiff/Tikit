@@ -115,6 +115,30 @@ const update = async (id,
 
     const curUser = await get(id);
 
+    if(createdTickets && Array.isArray(createdTickets)){
+        for(let ticket of createdTickets){
+            ticket = helpers.validateID(ticket);
+        }
+    } else {
+        throw 'Created Tickets is not a valid array';
+    }
+
+    if(ticketsBeingWorkedOn && Array.isArray(ticketsBeingWorkedOn)){
+        for(let ticket of ticketsBeingWorkedOn){
+            ticket = helpers.validateID(ticket);
+        }
+    } else{
+        throw 'Owned Tickets is not a valid array';
+    }
+
+    if(commentsLeft && Array.isArray(commentsLeft)){
+        for(let comment of commentsLeft){
+            comment = helpers.validateID(comment);
+        }
+    } else{
+        throw 'Comments Left is not a valid array';
+    }
+
     let updatedUser = {
         firstName: firstName,
         lastName: lastName,
@@ -123,9 +147,9 @@ const update = async (id,
         email: email,
         role: role,
         title: title,
-        createdTickets: curUser.createdTickets,
-        ticketsBeingWorkedOn: curUser.ticketsBeingWorkedOn,
-        commentsLeft: curUser.commentsLeft
+        createdTickets: createdTickets,
+        ticketsBeingWorkedOn: ticketsBeingWorkedOn,
+        commentsLeft: commentsLeft
     };
 
     const updatedInfo = await userCollection.findOneAndUpdate(

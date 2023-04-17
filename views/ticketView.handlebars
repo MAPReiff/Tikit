@@ -2,11 +2,11 @@
 <p>Status: {{status}}</p>
 <p>Priority: {{priority}}</p>
 <p>Category: {{category}}</p>
-<a href= "/users/{{customer._id}}">Customer: {{customer.firstName}} {{customer.lastName}}</a>
+<a href= "/users/view/{{customer._id}}">Customer: {{customer.firstName}} {{customer.lastName}}</a>
 <p>Owners:</p>
 <ul>
   {{#each owner}}
-    <li><a href= "/users/{{this._id}}">{{this.firstName}} {{this.lastName}}</a></li>
+    <li><a href= "/users/view/{{this._id}}">{{this.firstName}} {{this.lastName}}</a></li>
   {{/each}}
 </ul>
 <p>Created: {{created}}</p>

@@ -10,7 +10,7 @@ router
   .get(async (req, res) => {
     try{
       let tickets = await ticketData.getAll();
-      
+
       for(let ticket of tickets){
         ticket.createdOn = !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString();
         ticket.deadline = !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString();
@@ -52,12 +52,13 @@ router
         tag: ticket.tags
       });
     } catch (e) {
+      console.log(e);
       res.status(404).render("404", {
         title: "404 Ticket not found",
         msg: "Error 404: Ticket ID Not Found"});
     }
     
     //code here for GET
-  })
+  });
 
   export default router;

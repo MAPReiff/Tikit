@@ -50,6 +50,15 @@ export const checkStringArray = (arr, varName) => {
   return arr;
 }
 
+export const validateID = (id) => {
+  if(!id) throw "Error: ID must be provided.";
+  if(typeof id !== 'string') throw 'Error: ID must be a string.';
+  id = id.trim();
+  if(id.length === 0, 'ID string cannot be empty');
+  if(!ObjectId.isValid(id), 'ID is invalid');
+  return id;
+}
+
 export const validateEmail = (email) => { 
   if (!email) throw "Error: You must supply a email!";
   if (typeof email !== 'string') throw "Error: email must be a string!";

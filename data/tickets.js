@@ -109,6 +109,14 @@ const getAll = async () => {
   return ticketList;
 }
 
+const getMultiple = async (ids) => {
+  let retArr = [];
+  for(const id of ids){
+      retArr.push(await get(id));
+  }
+  return retArr;
+}
+
 //get ticket based on id
 const get = async (id) => {
   id = helpers.checkId(id, "Ticket ID");
@@ -239,4 +247,4 @@ const update = async (
 
 
 
-export default { create, getAll, get, remove, update};
+export default { create, getAll, get, getMultiple, remove, update};
