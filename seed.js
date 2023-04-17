@@ -20,7 +20,7 @@ const ticket2Update = await tickets.update(ticket2._id, "Testing Ticket 2 Update
 const allUser = await users.getAll();
 const getUser = await users.get(user1._id);
 const removeUser = await users.remove(user1._id);
-const updatedUser = await users.update(user3._id,"Ari","Bajo","abajo","rbajollar1@yahoo.com", "Admin","Lead");
+const updatedUser = await users.update(user3._id,"Ari","Bajo","abajo","rbajollar1@yahoo.com", "Admin","Lead", [ticket1._id], [ticket1._id, ticket2._id], []);
 //console.log(removeUser)
 
 const comment1 = await comments.create(ticket2._id,user2._id,"this is my fist comment");
