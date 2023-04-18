@@ -6,6 +6,7 @@ import { ObjectId } from 'mongodb';
 
 
 
+
 /*I think we should do two different create functions
 One for creating a brand new comment on a ticket 
 and one for adding a reply to a ticket
@@ -154,5 +155,23 @@ const remove = async (commentId) => {
 }
 
 
+//function to update content of given comment
+const update = async (commentId, content) => { 
+    if(!commentId || !content) throw "Error: Must pass neccessary fields to function!";
+    commentId = helpers.checkId(commentId); 
+    content = helpers.checkString(content);
 
-export default { create, getAll, get, remove }; 
+    let ticketCollection = await tickets();
+
+    let curComment = await ticketCollection.findOne({ "comments": { $elemMatch: { "_id": new ObjectId(commentId) } } });
+    if(!curComment) throw "Error: Could not find comment with that ID!";
+    
+    const result = await ticketCollection.findOneAndUpdate({ "comments": { $elemMatch: { "_id": new ObjectId(commentId)}}}, {$set: {"comments.$.content": content}}, {returnDocument: 'after'});
+        
+    if(!result.value) throw "Error: Failed to update comment!"
+    return result.value;
+}
+
+
+
+export default { create, getAll, get, remove, update }; 
