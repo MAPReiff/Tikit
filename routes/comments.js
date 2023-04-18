@@ -118,6 +118,35 @@ router
       return res.status(404).json({error: e});
     }
 
+  })
+  .patch(async (req, res) => {
+    try {
+      req.params.commentId = helpers.checkId(req.params.commentId, 'ID URL Param');
+    } catch (e) {
+      return res.status(400).json({error: e});
+    }
+
+    try {
+      let curComment = await commentData.get(req.params.commentId); 
+    } catch (e) { 
+      return res.status(404).json({error: e});
+    }
+
+    let content = req.body.content;
+    try { 
+      content = helpers.checkString(content, "Content")
+    } catch (e) { 
+      return res.status(400).json({error: e});
+    }
+
+    //update the comment and return the new ticket
+    try { 
+      let updatedTicket = await commentData.update(req.params.commentId, content);
+      res.json(updatedTicket);
+    } catch (e) { 
+      return res.status(404).json({error: e});
+    }
+
   });
 
 
