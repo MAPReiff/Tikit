@@ -29,7 +29,9 @@ const comment3 = await comments.create(ticket2._id,user2._id,"this is my third c
 const getAllComments = await comments.getAll(ticket2._id)
 const getComment = await comments.get(comment1._id);
 const removeComment = await comments.remove(comment1._id);
-console.log(removeComment)
+
+const updatedComment = await comments.update(comment2._id,"This is my updated second comment" )
+console.log(updatedComment)
 
 //console.log(ticket2Update);
 // try { 
