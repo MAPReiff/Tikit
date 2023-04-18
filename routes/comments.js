@@ -17,23 +17,22 @@ router
       return res.status(400).json({error: e});
     }
 
-    try {
-      const curTicket = await ticketData.get(req.params.ticketId); 
+    try { 
+      const curTicket = await ticketData.get(req.params.ticketId);
     } catch (e) { 
       return res.status(404).json({error: e});
     }
 
     try {
-      const tickets = await ticketData.getAll(req.params.ticketId);
-      if (tickets.length === 0) throw "No comments found with that ticket id "
-      res.json(tickets);
+      const comments = await commentData.getAll(req.params.ticketId);
+      if (comments.length === 0) throw "No comments found with that ticket id"
+      res.json(comments);
     } catch (e) {
       res.status(404).json({error: e});
     }
 
-    //code here for GET
   })
-  /*add comment to given ticket*/
+  /*add comment to given ticket, need to pass userId in body as well as content, may be able to change how this works later*/
   .post(async (req, res) => {
     try {
       req.params.ticketId = helpers.checkId(req.params.ticketId, 'ID URL Param');
@@ -76,7 +75,50 @@ router
       res.status(500).json({error: e});
     }
     //code here for POST
-   
   });
+
+  router
+  .route('/comment/:commentId')
+  //get comment based on commentId
+  .get(async (req, res) => {
+    //code here for GET
+    try {
+      req.params.commentId = helpers.checkId(req.params.commentId, 'ID URL Param');
+    } catch (e) {
+      return res.status(400).json({error: e});
+    }
+
+    try { 
+      const curComment = await commentData.get(req.params.commentId);
+      res.json(curComment);
+    } catch (e) { 
+      return res.status(404).json({error: e});
+    }
+
+  })
+  .delete(async (req, res) => {
+    //code here for DELETE
+    try {
+      req.params.commentId = helpers.checkId(req.params.commentId, 'ID URL Param');
+    } catch (e) {
+      return res.status(400).json({error: e});
+    }
+
+    try {
+      let curComment = await commentData.get(req.params.commentId); 
+    } catch (e) { 
+      return res.status(404).json({error: e});
+    }
+
+    try {
+      let updatedTicket = await commentData.remove(req.params.commentId); 
+      updatedTicket._id = updatedTicket._id.toString();
+      res.json(updatedTicket);
+    } catch (e) { 
+      return res.status(404).json({error: e});
+    }
+
+  });
+
 
   export default router;
