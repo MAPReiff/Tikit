@@ -187,7 +187,7 @@ const checkUser = async (email, password) => {
     throw "No user found with that email";
   }
 
-  if (!(await bcrypt.compareSync(password, existingUser.password))) {
+  if (!(await bcrypt.compareSync(password, existingUser.hashedPassword))) {
     throw "Either the email address or password is invalid";
   }
 
