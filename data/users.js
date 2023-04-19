@@ -24,7 +24,7 @@ const create = async (
     throw "Error: Passwords do not match!";
   }
 
-  hashedPassword = await bcrypt.hashSync(password, 15);
+  let hashedPassword = await bcrypt.hashSync(password, 15);
 
   email = helpers.validateEmail(email);
   role = helpers.checkString(role);
