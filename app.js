@@ -1,5 +1,6 @@
 import express from "express";
 import exphbs from "express-handlebars";
+import session from "express-session";
 import configRoutes from "./routes/index.js";
 
 import { fileURLToPath } from "url";
@@ -28,6 +29,15 @@ app.use("/public", staticDir);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(rewriteUnsupportedBrowserMethods);
+app.use(
+  session({
+    name: "TikitAuthCookie",
+    secret:
+      "Tikit is a really secure application and this is a really secure secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
