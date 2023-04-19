@@ -7,7 +7,9 @@ const create = async (
   firstName,
   lastName,
   username,
-  hashedPassword,
+  // hashedPassword,
+  password,
+  confirmPassword,
   email,
   role, //can be any string for now, will have the figure out the roles we define later
   title
@@ -16,9 +18,13 @@ const create = async (
   lastName = helpers.checkString(lastName, "First Name");
   username = helpers.checkString(username, "First Name");
 
-  //will have to add logic for hashedPassword later, for now just pass string 'password'
-  hashedPassword = helpers.checkString(hashedPassword, "Password");
-  if (!(hashedPassword === "password")) throw "Error: Invalid Password";
+  password = helpers.checkString(password, "Password");
+  confirmPassword = helpers.checkString(confirmPassword, "Confirm Password");
+  if (!(password === confirmPassword)) {
+    throw "Error: Passwords do not match!";
+  }
+
+  hashedPassword = await bcrypt.hashSync(password, 15);
 
   email = helpers.validateEmail(email);
   role = helpers.checkString(role);
