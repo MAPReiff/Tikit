@@ -1,0 +1,26 @@
+{{!--
+<script src="/public/js/login.js"></script> --}}
+
+{{#if error}}
+<p id="error" class="error">{{error}}</p>
+{{else}}
+<p id="error" class="error" hidden></p>
+{{/if}}
+
+
+<h1>{{title}}</h1>
+
+<form action="/login" method="POST" class="login-form" id="login-form">
+  <label for="emailAddressInput">Email Address</label>
+  <input type="email" id="emailAddressInput" name="emailAddressInput" placeholder="Email Address" required>
+  <br><br>
+  <label for="passwordInput">Password</label>
+  <input type="password" id="passwordInput" name="passwordInput" placeholder="Password" required>
+  <br><br>
+  <div class="text-center">
+    <input type="submit" id="submitButton" name="submitButton" value="Submit">
+  </div>
+</form>
+
+<br><br>
+<a href="/register">Click here to register!</a>
