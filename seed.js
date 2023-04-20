@@ -11,8 +11,8 @@ const user1 = await users.create(
   "David",
   "Bajo",
   "dbajo1",
-  "password",
-  "password",
+  "Password!23",
+  "Password!23",
   "dbajollar1@yahoo.com",
   "Admin",
   "creator"
@@ -21,8 +21,8 @@ const user2 = await users.create(
   "David1",
   "Bajo",
   "dbajo2",
-  "password",
-  "password",
+  "Password!23",
+  "Password!23",
   "dbajollar1@hotmail.com",
   "User",
   "Developer"
@@ -31,8 +31,8 @@ const user3 = await users.create(
   "Ryan",
   "Bajo",
   "rbajo",
-  "password",
-  "password",
+  "Password!23",
+  "Password!23",
   "rbajollar1@yahoo.com",
   "User",
   "Developer"
