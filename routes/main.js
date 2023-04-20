@@ -68,4 +68,19 @@ router
       res.status(400).render("login", { title: "Login", error: `${e}` });
     }
   });
+
+  router.route("/logout").get(
+    (req, res, next) => {
+      if (!req.session.user) {
+        return res.redirect("/login");
+      } else {
+        next();
+      }
+    },
+    async (req, res) => {
+      //code here for GET
+      req.session.destroy();
+      res.redirect("/");
+    }
+  );
 export default router;
