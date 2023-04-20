@@ -24,18 +24,28 @@ router
 
 router
   .route("/login")
-  .get(async (req, res) => {
-    //code here for GET
-    try {
-      res.status(200).render("login", { title: "Login" });
-    } catch (e) {
-      res.status(500).render("error", {
-        title: "Error",
-        error: "internal server error",
-        code: "500",
-      });
+  .get(
+    (req, res, next) => {
+      if (req.session.user) {
+        res.status(200).json({ login: true });
+      } else {
+        req.method = "GET";
+        next();
+      }
+    },
+    async (req, res) => {
+      //code here for GET
+      try {
+        res.status(200).render("login", { title: "Login" });
+      } catch (e) {
+        res.status(500).render("error", {
+          title: "Error",
+          error: "internal server error",
+          code: "500",
+        });
+      }
     }
-  })
+  )
   .post(async (req, res) => {
     try {
       if (
@@ -46,7 +56,7 @@ router
         let password = helpers.checkPassword(req.body.passwordInput);
 
         let user = await users.checkUser(email, password);
-        
+
         if (user) {
           req.session.user = user;
           res.status(200).json({ login: true });
