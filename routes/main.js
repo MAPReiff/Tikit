@@ -129,8 +129,14 @@ router
         req.body.hasOwnProperty("passwordInput") &&
         req.body.hasOwnProperty("confirmPasswordInput")
       ) {
-        let firstName = helpers.checkString(req.body["firstNameInput"], "first name");
-        let lastName = helpers.checkString(req.body["lastNameInput"], "last name");
+        let firstName = helpers.checkString(
+          req.body["firstNameInput"],
+          "first name"
+        );
+        let lastName = helpers.checkString(
+          req.body["lastNameInput"],
+          "last name"
+        );
         let emailAddress = helpers.validateEmail(req.body["emailAddressInput"]);
         let username = helpers.checkString(req.body["usernameInput"]);
         let password = helpers.checkPassword(req.body["passwordInput"]);
