@@ -155,10 +155,7 @@ router
           "User" // default title
         );
 
-        if (
-          user.hasOwnProperty("insertedUser") &&
-          user["insertedUser"] == true
-        ) {
+        if (user) {
           // res.status(200).render("login", { title: "Login" });
           res.status(200).redirect("/login");
         } else {
