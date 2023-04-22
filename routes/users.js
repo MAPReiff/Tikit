@@ -67,4 +67,64 @@ router.route("/view/:id").get(async (req, res) => {
   //code here for GET
 });
 
+router
+  .route("/edit/:id")
+  .get(async (req, res) => {
+    try {
+      let user = await userData.get(req.params.id);
+      let adminUser = req.session.user;
+      const name = `${user.firstName} ${user.lastName}`;
+      res.status(200).render("userEdit", {
+        id: user._id,
+        name: name,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        title: user.title,
+        createdTickets: await ticketData.getMultiple(user.createdTickets),
+        ownedTickets: await ticketData.getMultiple(user.ticketsBeingWorkedOn),
+        commentsLeft: user.commentsLeft,
+        adminID: adminUser._id,
+      });
+    } catch (e) {
+      console.log(e);
+      res.status(404).render("404", {
+        title: "404 User not found",
+        msg: "Error 404: User ID Not Found",
+      });
+    }
+  })
+  .post(async (req, res) => {
+    try {
+      if (
+        req.body.hasOwnProperty("roleInput") &&
+        req.body.hasOwnProperty("titleInput") &&
+        req.body.hasOwnProperty("userIDInput") &&
+        req.body.hasOwnProperty("adminIDInput")
+      ) {
+        let adminUser = await userData.get(req.body.adminIDInput);
+        if (adminUser.role.toLowerCase() === "admin") {
+          await userData.editUserRoleTitle(
+            req.body.userIDInput,
+            req.session.user._id,
+            req.body.roleInput,
+            req.body.titleInput
+          );
+          res.status(200).redirect(`/users/view/${req.body.userIDInput}`);
+        } else {
+          res.status(403).render("403", {
+            title: "403 Forbidden",
+            msg: "Error 403: Forbidden",
+          });
+        }
+      }
+    } catch (e) {
+      console.log(e);
+      res.status(404).render("404", {
+        title: "404 User not found",
+        msg: "Error 404: User ID Not Found",
+      });
+    }
+  });
+
 export default router;

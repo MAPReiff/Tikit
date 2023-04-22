@@ -1,0 +1,28 @@
+<h1>Edit {{name}}</h1>
+
+<p>Current settings for {{name}}</p>
+<ul>
+  <li>Role: {{role}}</li>
+  <li>Title: {{title}}</li>
+</ul>
+
+<br>
+
+<p>New settings for {{name}}</p>
+
+<form action="/users/edit/{{id}}" method="POST" class="userEdit-form" id="userEdit-form">
+  <label for="roleInput">Role</label>
+  <select id="roleInput" name="roleInput" required>
+    <option value="admin">Admin</option>
+    <option value="user" selected>User</option>
+  </select>
+  <br><br>
+  <label for="titleInput">Title</label>
+  <input type="text" id="titleInput" name="titleInput" placeholder="New Title" required>
+  <br><br>
+  {{!-- these 2 are passed along but not intended for the end user to see/edit --}}
+  <input type="hidden" id="userIDInput" name="userIDInput" value="{{id}}">
+  <input type="hidden" id="adminIDInput" name="adminIDInput" value="{{adminID}}">
+
+  <input type="submit" id="submitButton" name="submitButton" value="Submit">
+</form>
