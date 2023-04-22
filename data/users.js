@@ -15,14 +15,16 @@ const create = async (
   title
 ) => {
   firstName = helpers.checkString(firstName, "First Name");
-  lastName = helpers.checkString(lastName, "First Name");
-  username = helpers.checkString(username, "First Name");
+  lastName = helpers.checkString(lastName, "Last Name");
+  username = helpers.checkString(username, "Username");
 
   password = helpers.checkString(password, "Password");
   confirmPassword = helpers.checkString(confirmPassword, "Confirm Password");
   if (!(password === confirmPassword)) {
     throw "Error: Passwords do not match!";
   }
+
+  password = helpers.checkPassword(password);
 
   let hashedPassword = await bcrypt.hashSync(password, 15);
 
@@ -36,9 +38,9 @@ const create = async (
   let newUser = {
     firstName: firstName,
     lastName: lastName,
-    username: username,
+    username: username.toLowerCase(),
     hashedPassword: hashedPassword,
-    email: email,
+    email: email.toLowerCase(),
     role: role,
     title: title,
     createdTickets: createdTickets,
@@ -46,14 +48,36 @@ const create = async (
     commentsLeft: commentsLeft,
   };
   const userCollection = await users();
+
+  const existingEmailUser = await userCollection.findOne({
+    email: {
+      $eq: email.toLowerCase(),
+    },
+  });
+
+  if (existingEmailUser != null) {
+    throw new Error("a user with this email already exists");
+  }
+
+  const existingUsernameUser = await userCollection.findOne({
+    username: {
+      $eq: username.toLowerCase(),
+    },
+  });
+
+  if (existingUsernameUser != null) {
+    throw new Error("a user with this username already exists");
+  }
+
   const insertInfo = await userCollection.insertOne(newUser);
   if (!insertInfo.acknowledged || !insertInfo.insertedId)
     throw "Error: Could not add new user!";
 
   const newId = insertInfo.insertedId.toString();
 
-  const user = await get(newId);
-  return user;
+  // const user = await get(newId);
+
+  return { insertedUser: true };
 };
 
 const getAll = async () => {
