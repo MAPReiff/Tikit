@@ -61,7 +61,7 @@ router
         req.body.hasOwnProperty("emailAddressInput") &&
         req.body.hasOwnProperty("passwordInput")
       ) {
-        let email = helpers.checkEmail(req.body.emailAddressInput);
+        let email = helpers.validateEmail(req.body.emailAddressInput);
         let password = helpers.checkPassword(req.body.passwordInput);
 
         let user = await users.checkUser(email, password);
@@ -125,25 +125,28 @@ router
         req.body.hasOwnProperty("firstNameInput") &&
         req.body.hasOwnProperty("lastNameInput") &&
         req.body.hasOwnProperty("emailAddressInput") &&
+        req.body.hasOwnProperty("usernameInput") &&
         req.body.hasOwnProperty("passwordInput") &&
-        req.body.hasOwnProperty("confirmPasswordInput") &&
-        req.body.hasOwnProperty("roleInput")
+        req.body.hasOwnProperty("confirmPasswordInput")
       ) {
-        let firstName = checkName(req.body["firstNameInput"], "first name");
-        let lastName = checkName(req.body["lastNameInput"], "last name");
-        let emailAddress = checkEmail(req.body["emailAddressInput"]);
-        let password = checkPassword(req.body["passwordInput"]);
+        let firstName = helpers.checkString(req.body["firstNameInput"], "first name");
+        let lastName = helpers.checkString(req.body["lastNameInput"], "last name");
+        let emailAddress = helpers.validateEmail(req.body["emailAddressInput"]);
+        let username = helpers.checkString(req.body["usernameInput"]);
+        let password = helpers.checkPassword(req.body["passwordInput"]);
         if (password != req.body["confirmPasswordInput"]) {
           throw new Error("your passwords do not match");
         }
-        let role = checkRole(req.body["roleInput"]);
 
-        let user = await createUser(
+        let user = await users.create(
           firstName,
           lastName,
-          emailAddress,
+          username,
           password,
-          role
+          req.body["confirmPasswordInput"],
+          emailAddress,
+          "User", // default role
+          "User" // default title
         );
 
         if (
