@@ -1,4 +1,7 @@
 <h1>{{name}}</h1>
+{{#if admin}}
+<p><a href="/users/edit/{{id}}">Edit User</a></p>
+{{/if}}
 <p>Username: {{username}}</p>
 <p>Email: <a href="mailto:{{email}}">{{email}}</a></p>
 <p>Role: {{role}}</p>
@@ -6,18 +9,18 @@
 <p>Tickets Created:</p>
 <ul>
   {{#each createdTickets}}
-    <li><a href= "/tickets/view/{{this._id}}">{{this.name}}</a></li>
+  <li><a href="/tickets/view/{{this._id}}">{{this.name}}</a></li>
   {{/each}}
 </ul>
 <p>Tickets Owned:</p>
 <ul>
   {{#each ownedTickets}}
-    <li><a href= "/tickets/view/{{this._id}}">{{this.name}}</a></li>
+  <li><a href="/tickets/view/{{this._id}}">{{this.name}}</a></li>
   {{/each}}
 </ul>
 <p>Comments Left:</p>
 <ul>
   {{#each commentsLeft}}
-    <li><a href= "/users/{{this._id}}">{{this.name}}</a></li>
+  <li><a href="/users/{{this._id}}">{{this.name}}</a></li>
   {{/each}}
 </ul>
