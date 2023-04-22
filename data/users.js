@@ -75,9 +75,9 @@ const create = async (
 
   const newId = insertInfo.insertedId.toString();
 
-  // const user = await get(newId);
+  const user = await get(newId);
 
-  return { insertedUser: true };
+  return user;
 };
 
 const getAll = async () => {
