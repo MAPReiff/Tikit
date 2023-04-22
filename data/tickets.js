@@ -1,5 +1,5 @@
 import * as helpers from "../helpers.js";
-import { tickets } from "../config/mongoCollections.js";
+import { tickets, createIndexes} from "../config/mongoCollections.js";
 import { users } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
 
@@ -92,7 +92,7 @@ const create = async (
   if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error: Could not add new ticket!';
 
   const newId = insertInfo.insertedId.toString();
-
+  
   const ticket = await get(newId);
   return ticket;
 };
@@ -109,6 +109,7 @@ const getAll = async () => {
   return ticketList;
 }
 
+//gets multiple tickets based on an array of ids
 const getMultiple = async (ids) => {
   let retArr = [];
   for(const id of ids){
@@ -241,10 +242,22 @@ const update = async (
   if (updatedInfo.lastErrorObject.n === 0) {
     throw "Error: could not update ticket successfully!";
   }
+
   updatedInfo.value._id = updatedInfo.value._id.toString();
   return updatedInfo.value;
 };
 
+const search = async (query) => {
+  const ticketCollection = await tickets();
+  return await (
+  ticketCollection.find( 
+    {$text: {$search: `${query}`, $caseSensitive: false}},
+    { score: { $meta: "textScore" } }
+  )
+  .sort( { score: { $meta: "textScore" } } )
+  ).toArray();
+}
 
 
-export default { create, getAll, get, getMultiple, remove, update};
+
+export default { create, getAll, get, getMultiple, remove, update, search};
