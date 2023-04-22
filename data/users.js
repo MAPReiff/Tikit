@@ -15,7 +15,7 @@ const create = async (
   title
 ) => {
   firstName = helpers.checkString(firstName, "First Name");
-  lastName = helpers.checkString(lastName, "First Name");
+  lastName = helpers.checkString(lastName, "Last Name");
   username = helpers.checkString(username, "Username");
 
   password = helpers.checkString(password, "Password");
@@ -75,8 +75,9 @@ const create = async (
 
   const newId = insertInfo.insertedId.toString();
 
-  const user = await get(newId);
-  return user;
+  // const user = await get(newId);
+
+  return { insertedUser: true };
 };
 
 const getAll = async () => {
