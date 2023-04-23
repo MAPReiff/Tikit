@@ -4,6 +4,12 @@ import validator from "validator";
 import * as EmailValidator from "email-validator";
 import passwordValidator from "password-validator";
 
+export const renderError = (res, code, msg) => {
+  res.status(code).render("404", {
+    title: `Error ${code}`,
+    msg: `Error ${code}: ${msg}`});
+}
+
 export const checkId = (id, varName) => {
   if (!id) throw `Error: You must provide a ${varName}`;
   if (typeof id !== "string") throw `Error:${varName} must be a string`;

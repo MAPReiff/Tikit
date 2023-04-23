@@ -1,5 +1,16 @@
-<h1>Tickets</h1>
-<table>
+<a class="pageLink link-body-emphasis" href="/">Return to Homepage</a>
+<br>
+<h1 class="display-4 fw-normal searchPageHeader">Tickets</h1>
+<form class="form-inline searchForm" action="/tickets" method="POST">
+  <div class="col-auto form-group">
+      <input class="form-control" type="text" id="search" name="search" placeholder="Search Tickets" value={{query}}>
+      <label class="visually-hidden-focusable" for="search">Search Tickets:</label>
+  </div>
+  <input class="btn btn-primary searchBtn" type="submit" id="subBtn" value="Search">
+</form>
+<br>
+<table class="table table-hover table-bordered">
+  <thead class="table-light">
     <tr>
         <th>Ticket Name</th>
         <th>Status</th>
@@ -7,13 +18,16 @@
         <th>Created</th>
         <th>Deadline</th>
     </tr>
+  </thead>
+  <tbody>
   {{#each tickets}}
-    <tr>
-        <td><a href= "/tickets/view/{{this._id}}">{{this.name}}</a></td>
+    <tr style="transform: rotate(0);">
+        <td><a href= "/tickets/view/{{this._id}}" class="stretched-link"></a>{{this.name}}</td>
         <td>{{this.status}}</td>
         <td>{{this.priority}}</td>
         <td>{{this.createdOn}}</td>
         <td>{{this.deadline}}</td>
     </tr>
   {{/each}}
+  </tbody>
 </table>

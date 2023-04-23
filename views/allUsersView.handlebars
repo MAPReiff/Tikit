@@ -1,5 +1,16 @@
-<h1>Users</h1>
-<table>
+<a class="pageLink link-body-emphasis" href="/">Return to Homepage</a>
+<br>
+<h1 class="display-4 fw-normal searchPageHeader">Users</h1>
+<form class="form-inline searchForm" action="/users" method="POST">
+  <div class="col-auto form-group">
+      <input class="form-control" type="text" id="search" name="search" placeholder="Search Users" value={{query}}>
+      <label class="visually-hidden-focusable" for="search">Search Users:</label>
+  </div>
+  <input class="btn btn-primary searchBtn" type="submit" id="subBtn" value="Search">
+</form>
+<br>
+<table class="table table-hover table-bordered">
+  <thead class="table-light">
     <tr>
         <th>Username</th>
         <th>Name</th>
@@ -7,13 +18,16 @@
         <th>Role</th>
         <th>Title</th>
     </tr>
-  {{#each tickets}}
-    <tr>
-        <td><a href= "/users/view/{{this._id}}">{{this.username}}</a></td>
+  </thead>
+  <tbody>
+  {{#each users}}
+    <tr style="transform: rotate(0);">
+        <td><a href= "/users/view/{{this._id}}" class="stretched-link"></a>{{this.username}}</td>
         <td>{{this.firstName}} {{this.lastName}}</td>
-        <td><a href="mailto:{{this.email}}">{{this.email}}</a></td>
+        <td>{{this.email}}</td>
         <td>{{this.role}}</td>
         <td>{{this.title}}</td>
     </tr>
   {{/each}}
+  </tbody>
 </table>

@@ -226,6 +226,18 @@ const checkUser = async (email, password) => {
   };
 };
 
+const search = async (query) => {
+  const userCollection = await users();
+  return await (
+  userCollection.find( 
+    {$text: {$search: `${query}`, $caseSensitive: false}},
+    { score: { $meta: "textScore" } }
+  )
+  .sort( { score: { $meta: "textScore" } } )
+  ).toArray();
+}
+
+
 const editUserRoleTitle = async (userID, adminID, role, title) => {
   userID = helpers.checkId(userID, "User ID");
   adminID = helpers.checkId(adminID, "Admin ID");
@@ -266,4 +278,5 @@ export default {
   update,
   checkUser,
   editUserRoleTitle,
+  search
 };
