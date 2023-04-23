@@ -1,20 +1,27 @@
-<h1>{{name}}</h1>
-<p>Status: {{status}}</p>
-<p>Priority: {{priority}}</p>
-<p>Category: {{category}}</p>
-<a href= "/users/view/{{customer._id}}">Customer: {{customer.firstName}} {{customer.lastName}}</a>
-<p>Owners:</p>
+<a class="pageLink link-body-emphasis" href="/">Return to Homepage</a>
+<br>
+<h1 class="display-4 fw-normal pageHeader">{{name}}</h1>
+<p class="lead info">Status: {{status}}</p>
+<p class="lead info">Priority: {{priority}}</p>
+<p class="lead info">Category: {{category}}</p>
+<div>
+  <p class="lead info ">Customer:
+  <a class="badge link-clean text-bg-primary rounded-pill" href= "/users/view/{{customer._id}}">{{customer.firstName}} {{customer.lastName}}</a></p>
+</div>
+<p class="lead info">Owners:</p>
 <ul>
   {{#each owner}}
-    <li><a href= "/users/view/{{this._id}}">{{this.firstName}} {{this.lastName}}</a></li>
+    <li class="badge text-bg-primary rounded-pill"><a  class="pageLink-light" href= "/users/view/{{this._id}}">{{this.firstName}} {{this.lastName}}</a></li>
   {{/each}}
 </ul>
-<p>Created: {{created}}</p>
-<p>Deadline: {{deadline}}</p>
-<p>Tickets:</p>
+<p class="lead info">Created: {{created}}</p>
+<p class="lead info">Deadline: {{deadline}}</p>
+<p class="lead info">Tags:</p>
 <ul>
   {{#each tag}}
-    <li>{{this}}</li>
+    <li class="badge text-bg-primary rounded-pill">{{this}}</li>
   {{/each}}
 </ul>
-<p>{{description}}</p>
+<div class="bg-light">
+  <p class="lead description info">{{description}}</p>
+</div>
