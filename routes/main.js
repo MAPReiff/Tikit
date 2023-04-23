@@ -74,7 +74,7 @@ router
         }
       }
     } catch (e) {
-      res.status(400).render("login", { title: "Login", error: `${e}` });
+      res.status(400).render("login", { title: "Login", error: `${e}`, loginPage: true });
     }
   });
 
@@ -164,7 +164,7 @@ router
       }
     } catch (e) {
       // render form with 400 code
-      res.status(400).render("register", { title: "Register", error: `${e}` });
+      res.status(400).render("register", { title: "Register", error: `${e}`, loginPage: true });
     }
   });
 
