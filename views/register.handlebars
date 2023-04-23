@@ -1,16 +1,17 @@
 <script src="/public/js/register.js"></script>
 <link href="/public/css/login.css" rel="stylesheet">
 
-{{#if error}}
-<p id="error" class="error">{{error}}</p>
-{{else}}
-<p id="error" class="error" hidden></p>
-{{/if}}
-
 <div class="form-signin w-100 m-auto text-center">
   <form action="/register" method="POST" class="registration-form" id="registration-form">
     <img class="mb-4" src="/public/assets/tikit_logo_full.png" alt="Tikit" width="250" height="72">
     <h1 class="h3 mb-3 font-weight-normal">Let's get started!</h1>
+
+    {{#if error}}
+    <p id="error" class="error">{{error}}</p>
+    {{else}}
+    <p id="error" class="error" hidden></p>
+    {{/if}}
+
     <div class="form-floating">
       <input type="text" class="form-control" id="firstNameInput" name="firstNameInput" placeholder="First Name"
         required>
