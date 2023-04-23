@@ -1,37 +1,61 @@
 <script src="/public/js/register.js"></script>
+<link href="/public/css/login.css" rel="stylesheet">
 
-{{#if error}}
-<p id="error" class="error">{{error}}</p>
-{{else}}
-<p id="error" class="error" hidden></p>
-{{/if}}
+<div class="form-signin w-100 m-auto text-center">
+  <form action="/register" method="POST" class="registration-form" id="registration-form">
+    <img class="mb-4" src="/public/assets/tikit_logo_full.png" alt="Tikit" width="250" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">Let's get started!</h1>
 
-<h1>{{title}}</h1>
+    {{#if error}}
+    <p id="error" class="error">{{error}}</p>
+    {{else}}
+    <p id="error" class="error" hidden></p>
+    {{/if}}
 
-<form action="/register" method="POST" class="registration-form" id="registration-form">
-  <label for="firstNameInput">First Name</label>
-  <input type="text" id="firstNameInput" name="firstNameInput" placeholder="First Name" required>
-  <br><br>
-  <label for="lastNameInput">Last Name</label>
-  <input type="text" id="lastNameInput" name="lastNameInput" placeholder="Last Name" required>
-  <br><br>
-  <label for="usernameInput">Username</label>
-  <input type="text" id="usernameInput" name="usernameInput" placeholder="Username" required>
-  <br><br>
-  <label for="emailAddressInput">Email Address</label>
-  <input type="email" id="emailAddressInput" name="emailAddressInput" placeholder="Email Address" required>
-  <br><br>
-  <label for="passwordInput">Password</label>
-  <input type="password" id="passwordInput" name="passwordInput" placeholder="Password" required>
-  <br><br>
-  <label for="confirmPasswordInput">Confirm Password</label>
-  <input type="password" id="confirmPasswordInput" name="confirmPasswordInput" placeholder="Confirm Password" required>
-  <br><br>
-  {{!-- role and title must be modified by an admin. defaults for both will just be `User` --}}
+    <div class="form-floating">
+      <input type="text" class="form-control" id="firstNameInput" name="firstNameInput" placeholder="First Name"
+        required>
+      <label for="firstNameInput">First Name</label>
+    </div>
 
-  <input type="submit" id="submitButton" name="submitButton" value="Submit">
+    <div class="form-floating">
+      <input type="text" class="form-control" id="lastNameInput" name="lastNameInput" placeholder="Last Name" required>
+      <label for="lastNameInput">Last Name</label>
 
-</form>
+    </div>
 
-<br><br>
-<a href="/login">Already have an account? Click here to log-in</a>
+    <br>
+
+    <div class="form-floating">
+      <input type="text" class="form-control" id="usernameInput" name="usernameInput" placeholder="Username" required>
+      <label for="usernameInput">Username</label>
+    </div>
+
+    <div class="form-floating">
+      <input type="email" class="form-control" id="emailAddressInput" name="emailAddressInput"
+        placeholder="Email Address" required>
+      <label for="emailAddressInput">Email Address</label>
+    </div>
+
+    <br>
+
+    <div class="form-floating">
+      <input type="password" class="form-control" id="passwordInput" name="passwordInput" placeholder="Password"
+        required>
+      <label for="passwordInput">Password</label>
+    </div>
+    <div class="form-floating">
+      <input type="password" class="form-control" id="confirmPasswordInput" name="confirmPasswordInput"
+        placeholder="Confirm Password" required>
+      <label for="confirmPasswordInput">Confirm Password</label>
+    </div>
+
+    {{!-- role and title must be modified by an admin. defaults for both will just be `User` --}}
+
+    <br>
+    <input type="submit" class="w-100 btn btn-lg btn-primary" id="submitButton" name="submitButton" value="Submit">
+  </form>
+  <br>
+  <h2 class="h4 mb-3 font-weight-normal">Already have an account?</h1>
+    <a class="btn btn-primary w-100 btn-lg" href="/login" role="button">Log In</a>
+</div>

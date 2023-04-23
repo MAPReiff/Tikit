@@ -9,7 +9,11 @@
 </head>
 
 <body>
+  {{#if loginPage}}
+  <main class="form-signin w-100 m-auto">
+  {{else}}
   <main>
+  {{/if}}
     {{{body}}}
   </main>
    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
