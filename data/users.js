@@ -11,7 +11,7 @@ const create = async (
   password,
   confirmPassword,
   email,
-  role, //can be any string for now, will have the figure out the roles we define later
+  role,
   title
 ) => {
   firstName = helpers.checkString(firstName, "First Name");
@@ -30,6 +30,7 @@ const create = async (
 
   email = helpers.validateEmail(email);
   role = helpers.checkString(role);
+  role = helpers.validateRole(role); //check that role is admin or user
   title = helpers.checkString(title);
   let createdTickets = []; //creating user now so should always be empty in this function
   let ticketsBeingWorkedOn = []; //creating user now so should always be empty in this function

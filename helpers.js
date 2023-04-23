@@ -133,3 +133,13 @@ export const checkPassword = (password) => {
 
   return password;
 };
+
+
+export const validateRole = (role) => { 
+  if (!role) throw "Error: No role provided!";
+  if(typeof role  !== 'string') throw 'Error: Role must be a string.';
+  role = role.trim();
+  role = role.toLowerCase();
+  if(role !== "admin" && role !== "user") throw "Error: Invalid role passed!";
+  return role; 
+}
