@@ -45,7 +45,7 @@ router
     async (req, res) => {
       //code here for GET
       try {
-        res.status(200).render("login", { title: "Login" });
+        res.status(200).render("login", { title: "Login", loginPage: true });
       } catch (e) {
         res.status(500).render("error", {
           title: "Error",
