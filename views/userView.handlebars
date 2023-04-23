@@ -1,5 +1,4 @@
-<a class="pageLink link-body-emphasis" href="/">Return to Homepage</a>
-<br>
+<section>
 <h1 class="display-4 fw-normal pageHeader">{{name}}</h1>
 {{#if admin}}
 <p class="lead info"><a class="badge link-clean text-bg-primary rounded-pill" href="/users/edit/{{id}}">Edit User</a></p>
@@ -26,3 +25,4 @@
   <li class="badge text-bg-primary rounded-pill"><a class="badge link-clean text-bg-primary rounded-pill" href="/users/{{this._id}}">{{this.name}}</a></li>
   {{/each}}
 </ul>
+</section>
