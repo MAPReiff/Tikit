@@ -226,4 +226,15 @@ const checkUser = async (email, password) => {
   };
 };
 
-export default { create, getAll, get, getMultiple, remove, update, checkUser };
+const search = async (query) => {
+  const userCollection = await users();
+  return await (
+  userCollection.find( 
+    {$text: {$search: `${query}`, $caseSensitive: false}},
+    { score: { $meta: "textScore" } }
+  )
+  .sort( { score: { $meta: "textScore" } } )
+  ).toArray();
+}
+
+export default { create, getAll, get, getMultiple, remove, update, checkUser, search};

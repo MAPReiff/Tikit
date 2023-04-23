@@ -1,0 +1,14 @@
+.searchPageHeader {
+    padding-top: 1%;
+    padding-bottom: 2%;
+    text-align: center;
+}
+
+.searchForm {
+    width: 30%;
+    margin-left: 2%;
+}
+
+.searchBtn {
+    width: 40%;
+}

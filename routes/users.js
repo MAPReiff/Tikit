@@ -12,7 +12,8 @@ router
 
     res.status(200).render("allUsersView", {
       title: "Users View",
-      tickets: users
+      users: users,
+      query: ""
     });
 
   }catch(e) {
@@ -24,7 +25,14 @@ router
   })
   .post(async (req, res) => {
     //code here for POST
-   
+    const { search } = req.body;
+    let users = await userData.search(search);
+
+    res.status(200).render("allUsersView", {
+      title: "Users View",
+      users: users,
+      query: search
+    });
   });
 
   router
