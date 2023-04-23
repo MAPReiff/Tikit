@@ -2,44 +2,62 @@ import {Router} from 'express';
 const router = Router();
 import {ticketData} from '../data/index.js';
 import {userData} from '../data/index.js';
-import * as helpers from "../helpers.js"; 
+import { renderError } from '../helpers.js';
 
 router
   .route('/')
   .get(async (req, res) => {
+    let users;
+
     try {
-    let users = await userData.getAll();
+      users = await userData.getAll();
+    }catch(e) {
+      renderError(res, 404, 'Issue Retrieving users');
+    }
 
-    res.status(200).render("allUsersView", {
-      title: "Users View",
-      users: users,
-      query: ""
-    });
-
-  }catch(e) {
-    res.status(404).render("404", {
-      title: "404 Tickets not found",
-      msg: "Error 404: Issue Retrieving tickets"});
-  }
-    //code here for GET
+    try{
+      res.status(200).render("allUsersView", {
+        title: "Users View",
+        users: users,
+        query: ""
+      });
+    }catch(e) {
+      renderError(res, 500, 'Internal Server Error');
+    }
   })
   .post(async (req, res) => {
-    //code here for POST
+    let users;
     const { search } = req.body;
-    let users = await userData.search(search);
 
-    res.status(200).render("allUsersView", {
-      title: "Users View",
-      users: users,
-      query: search
-    });
+    try {
+      users = await userData.search(search);
+    }catch(e) {
+      renderError(res, 404, 'User(s) not found');
+    }
+
+    try{
+      res.status(200).render("allUsersView", {
+        title: "Users View",
+        users: users,
+        query: search
+      });
+    }catch(e) {
+      renderError(res, 500, 'Internal Server Error');
+    }
   });
 
   router
   .route('/view/:id')
   .get(async (req, res) => {
+
+    let user;
     try {
-      let user = await userData.get(req.params.id);
+      user = await userData.get(req.params.id);
+    }catch(e) {
+      renderError(res, 404, 'User not found');
+    }
+
+    try {
       const name = `${user.firstName} ${user.lastName}`
       res.status(200).render("userView", {
         title: name,
@@ -53,13 +71,9 @@ router
         commentsLeft: user.commentsLeft
       });
     } catch (e) {
-      console.log(e);
-      res.status(404).render("404", {
-        title: "404 User not found",
-        msg: "Error 404: User ID Not Found"});
+      renderError(res, 500, 'Internal Server Error');
     }
     
-    //code here for GET
   });
 
   export default router;
