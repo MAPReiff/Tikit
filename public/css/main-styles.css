@@ -12,3 +12,9 @@
 .searchBtn {
     width: 40%;
 }
+
+.pageLink {
+    padding-right: 2%;
+    text-decoration: none;
+    float: right;
+}
