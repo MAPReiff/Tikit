@@ -1,26 +1,28 @@
-<h1>{{name}}</h1>
+<a class="pageLink link-body-emphasis" href="/">Return to Homepage</a>
+<br>
+<h1 class="display-4 fw-normal pageHeader">{{name}}</h1>
 {{#if admin}}
-<p><a href="/users/edit/{{id}}">Edit User</a></p>
+<p class="lead info"><a class="badge link-clean text-bg-primary rounded-pill" href="/users/edit/{{id}}">Edit User</a></p>
 {{/if}}
-<p>Username: {{username}}</p>
-<p>Email: <a href="mailto:{{email}}">{{email}}</a></p>
-<p>Role: {{role}}</p>
-<p>Title: {{title}}</p>
-<p>Tickets Created:</p>
+<p class="lead info">Username: {{username}}</p>
+<p class="lead info">Email: <a class="badge link-clean text-bg-primary rounded-pill" href="mailto:{{email}}">{{email}}</a></p>
+<p class="lead info">Role: {{role}}</p>
+<p class="lead info">Title: {{title}}</p>
+<p class="lead info">Tickets Created:</p>
 <ul>
   {{#each createdTickets}}
-  <li><a href="/tickets/view/{{this._id}}">{{this.name}}</a></li>
+  <li class="badge text-bg-primary rounded-pill"><a class="badge link-clean text-bg-primary rounded-pill" href="/tickets/view/{{this._id}}">{{this.name}}</a></li>
   {{/each}}
 </ul>
-<p>Tickets Owned:</p>
+<p class="lead info">Tickets Owned:</p>
 <ul>
   {{#each ownedTickets}}
-  <li><a href="/tickets/view/{{this._id}}">{{this.name}}</a></li>
+  <li class="badge text-bg-primary rounded-pill"><a class="badge link-clean text-bg-primary rounded-pill" href="/tickets/view/{{this._id}}">{{this.name}}</a></li>
   {{/each}}
 </ul>
-<p>Comments Left:</p>
+<p class="lead info">Comments Left:</p>
 <ul>
   {{#each commentsLeft}}
-  <li><a href="/users/{{this._id}}">{{this.name}}</a></li>
+  <li class="badge text-bg-primary rounded-pill"><a class="badge link-clean text-bg-primary rounded-pill" href="/users/{{this._id}}">{{this.name}}</a></li>
   {{/each}}
 </ul>
