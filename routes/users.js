@@ -79,8 +79,16 @@ router.route("/view/:id").get(async (req, res) => {
 
 router
   .route("/edit/:id")
-  .get(async (req, res) => {
-
+  .get(
+    (req, res, next) => {
+      if (req.session.user.role.toLowerCase() !== "admin") {
+        return renderError(res, 403, 'Forbidden - Only admins can edit users');
+      } else {
+        req.method = "GET";
+        next();
+      }
+    },
+    async (req, res) => {
     let user;
     try {
       user = await userData.get(req.params.id);
@@ -116,7 +124,16 @@ router
       });
     }
   })
-  .post(async (req, res) => {
+  .post(
+    (req, res, next) => {
+    if (req.session.user.role.toLowerCase() !== "admin") {
+      return res.status(403).json({ error: "Forbidden - Only admins can edit users"});
+    } else {
+      req.method = "GET";
+      next();
+    }
+  },
+  async (req, res) => {
     try {
       if (
         req.body.hasOwnProperty("roleInput") &&
@@ -134,10 +151,7 @@ router
           );
           res.status(200).redirect(`/users/view/${req.body.userIDInput}`);
         } else {
-          res.status(403).render("403", {
-            title: "403 Forbidden",
-            msg: "Error 403: Forbidden",
-          });
+          renderError(res, 403, 'Forbidden');
         }
       }
     } catch (e) {
