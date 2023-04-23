@@ -237,4 +237,46 @@ const search = async (query) => {
   ).toArray();
 }
 
-export default { create, getAll, get, getMultiple, remove, update, checkUser, search};
+
+const editUserRoleTitle = async (userID, adminID, role, title) => {
+  userID = helpers.checkId(userID, "User ID");
+  adminID = helpers.checkId(adminID, "Admin ID");
+  role = helpers.checkString(role);
+  title = helpers.checkString(title);
+
+  const userCollection = await users();
+
+  const user = await userCollection.findOne({ _id: new ObjectId(userID) });
+  if (user === null) throw "Error: No user found with that ID";
+
+  const admin = await userCollection.findOne({ _id: new ObjectId(adminID) });
+
+  if (admin === null) throw "Error: No user found with that ID";
+  if (admin.role.toLowerCase() !== "admin") throw "Error: You are not an admin";
+  console.log("here");
+
+  const updatedInfo = await userCollection.findOneAndUpdate(
+    { _id: new ObjectId(userID) },
+    { $set: { role: role, title: title } },
+    { returnDocument: "after" }
+  );
+
+  if (updatedInfo.lastErrorObject.n === 0) {
+    throw "Error: could not update user successfully!";
+  }
+
+  updatedInfo.value._id = updatedInfo.value._id.toString();
+  return updatedInfo.value;
+};
+
+export default {
+  create,
+  getAll,
+  get,
+  getMultiple,
+  remove,
+  update,
+  checkUser,
+  editUserRoleTitle,
+  search
+};
