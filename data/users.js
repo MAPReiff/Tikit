@@ -1,5 +1,5 @@
 import * as helpers from "../helpers.js";
-import { users } from "../config/mongoCollections.js";
+import { users, tickets } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
 
@@ -73,6 +73,9 @@ const create = async (
   if (!insertInfo.acknowledged || !insertInfo.insertedId)
     throw "Error: Could not add new user!";
 
+  const ticketCollection = await tickets();
+  await updateTickets(ticketCollection, insertInfo.insertedId, ticketsBeingWorkedOn, createdTickets);
+
   const newId = insertInfo.insertedId.toString();
 
   const user = await get(newId);
@@ -85,8 +88,7 @@ const getAll = async () => {
   let userList = await userCollection.find({}).toArray();
   if (!userList) throw "Error: Could not get all tickets!";
   userList = userList.map((element) => {
-    element._id = element._id.toString();
-    return element;
+    return toStringify(element);
   });
   return userList;
 };
@@ -104,8 +106,7 @@ const get = async (id) => {
   const userCollection = await users();
   const user = await userCollection.findOne({ _id: new ObjectId(id) });
   if (user === null) throw "Error: No user found with that ID";
-  user._id = user._id.toString();
-  return user;
+  return toStringify(user);
 };
 
 const remove = async (id) => {
@@ -148,16 +149,16 @@ const update = async (
   const curUser = await get(id);
 
   if (createdTickets && Array.isArray(createdTickets)) {
-    for (let ticket of createdTickets) {
-      ticket = helpers.validateID(ticket);
+    for (let [index, ticket] of createdTickets.entries()) {
+      createdTickets[index] = new ObjectId(helpers.validateID(ticket));
     }
   } else {
     throw "Created Tickets is not a valid array";
   }
 
   if (ticketsBeingWorkedOn && Array.isArray(ticketsBeingWorkedOn)) {
-    for (let ticket of ticketsBeingWorkedOn) {
-      ticket = helpers.validateID(ticket);
+    for (let [index, ticket] of ticketsBeingWorkedOn.entries()) {
+      ticketsBeingWorkedOn[index] = new ObjectId(helpers.validateID(ticket));
     }
   } else {
     throw "Owned Tickets is not a valid array";
@@ -184,16 +185,20 @@ const update = async (
     commentsLeft: commentsLeft,
   };
 
+  const objID = new ObjectId(id);
   const updatedInfo = await userCollection.findOneAndUpdate(
-    { _id: new ObjectId(id) },
+    { _id: objID},
     { $set: updatedUser },
     { returnDocument: "after" }
   );
   if (updatedInfo.lastErrorObject.n === 0) {
     throw "Error: could not update user successfully!";
   }
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+
+  const ticketCollection = await tickets();
+  await updateTickets(ticketCollection, objID, ticketsBeingWorkedOn, createdTickets);
+
+  return toStringify(updatedInfo.value);
 };
 
 const checkUser = async (email, password) => {
@@ -253,7 +258,6 @@ const editUserRoleTitle = async (userID, adminID, role, title) => {
 
   if (admin === null) throw "Error: No user found with that ID";
   if (admin.role.toLowerCase() !== "admin") throw "Error: You are not an admin";
-  console.log("here");
 
   const updatedInfo = await userCollection.findOneAndUpdate(
     { _id: new ObjectId(userID) },
@@ -265,9 +269,54 @@ const editUserRoleTitle = async (userID, adminID, role, title) => {
     throw "Error: could not update user successfully!";
   }
 
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  return toStringify(updatedInfo.value);
 };
+
+const updateTickets = async (ticketCollection, userID, owned, created) => {
+  let updatedInfo;
+
+  for(let ownedUser of owned) {
+    updatedInfo = await ticketCollection.findOneAndUpdate(
+     { _id: new ObjectId(ownedUser) },
+     { $addToSet: {
+       owners: userID
+      } 
+     },
+     { returnDocument: "after" }
+   );
+
+   if (updatedInfo.lastErrorObject.n === 0) {
+     throw "Error: could not update user successfully!";
+   }
+ }
+  
+  for(let createdTickets of created) {
+    updatedInfo = await ticketCollection.findOneAndUpdate(
+     { _id: new ObjectId(createdTickets) },
+     { $set: {
+       customerID: userID
+      } 
+     },
+     { returnDocument: "after" }
+   );
+
+   if (updatedInfo.lastErrorObject.n === 0) {
+     throw "Error: could not update user successfully!";
+   }
+ }
+}
+
+const toStringify = (user) => {
+  user._id = user._id.toString();
+  user.createdTickets = user.createdTickets.map((ticket) => {
+    return ticket.toString();
+  });
+  user.ticketsBeingWorkedOn = user.ticketsBeingWorkedOn.map((ticket) => {
+    return ticket.toString();
+  });
+
+  return user;
+}
 
 export default {
   create,

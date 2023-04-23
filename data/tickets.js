@@ -67,6 +67,16 @@ const create = async (
   // validate category
   category = helpers.checkString(category, "Category");
 
+  customerID = new ObjectId(helpers.validateID(customerID));
+
+  if (owners && Array.isArray(owners)) {
+    for (let [index, user] of owners.entries()) {
+      owners[index] = new ObjectId(helpers.validateID(user));
+    }
+  } else {
+    throw "Owners is not a valid array";
+  }
+
   // check if tags are provided
   if (!tags) {
     tags = [];
@@ -91,6 +101,22 @@ const create = async (
   const insertInfo = await ticketCollection.insertOne(newTicket);
   if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error: Could not add new ticket!';
 
+  const userCollection = await users();
+  const updatedInfo = await userCollection.findOneAndUpdate(
+    { _id: new ObjectId(customerID) },
+    { $addToSet: {
+      createdTickets: insertInfo.insertedId,
+     } 
+    },
+    { returnDocument: "after" }
+  );
+
+  if (updatedInfo.lastErrorObject.n === 0) {
+    throw "Error: could not update user successfully!";
+  }
+
+  await updateOwners(userCollection, insertInfo.insertedId, owners);
+
   const newId = insertInfo.insertedId.toString();
   
   const ticket = await get(newId);
@@ -103,8 +129,7 @@ const getAll = async () => {
   let ticketList = await ticketCollection.find({}).toArray();
   if (!ticketList) throw 'Error: Could not get all tickets!';
   ticketList = ticketList.map((element) => {
-    element._id = element._id.toString();
-    return element;
+    return toStringify(element);
   });
   return ticketList;
 }
@@ -124,8 +149,7 @@ const get = async (id) => {
   const ticketCollection = await tickets();
   const ticket = await ticketCollection.findOne({ _id: new ObjectId(id) });
   if (ticket === null) throw "Error: No ticket found with that ID";
-  ticket._id = ticket._id.toString();
-  return ticket;
+  return toStringify(ticket);
 };
 
 //remove ticket based on id
@@ -157,6 +181,7 @@ const update = async (
   status,
   priority,
   deadline,
+  owners,
   category,
   tags
 ) => {
@@ -209,6 +234,14 @@ const update = async (
     }
   }
 
+  if (owners && Array.isArray(owners)) {
+    for (let [index, user] of owners.entries()) {
+      owners[index] = new ObjectId(helpers.validateID(user));
+    }
+  } else {
+    throw "Owners is not a valid array";
+  }
+
   // validate category
   category = helpers.checkString(category, "Category");
 
@@ -229,13 +262,14 @@ const update = async (
     createdOn: curTicket.createdOn,
     deadline: deadline,
     customerID: curTicket.customerID,
-    owners: curTicket.owners,
+    owners: owners,
     category: category,
     tags: tags,
     comments: curTicket.comments
   }
+  const objID = new ObjectId(id);
   const updatedInfo = await ticketCollection.findOneAndUpdate(
-    {_id: new ObjectId(id)},
+    {_id: objID},
     {$set: updatedTicket},
     {returnDocument: 'after'}
   );
@@ -243,8 +277,10 @@ const update = async (
     throw "Error: could not update ticket successfully!";
   }
 
-  updatedInfo.value._id = updatedInfo.value._id.toString();
-  return updatedInfo.value;
+  const userCollection = await users();
+  await updateOwners(userCollection, objID, owners);
+
+  return toStringify(updatedInfo.value);
 };
 
 const search = async (query) => {
@@ -258,6 +294,34 @@ const search = async (query) => {
   ).toArray();
 }
 
+const updateOwners = async (userCollection, ticketID, owners) => {
+  let updatedInfo;
+  
+  for(let owner of owners) {
+    updatedInfo = await userCollection.findOneAndUpdate(
+     { _id: new ObjectId(owner) },
+     { $addToSet: {
+       ticketsBeingWorkedOn: ticketID
+      } 
+     },
+     { returnDocument: "after" }
+   );
+
+   if (updatedInfo.lastErrorObject.n === 0) {
+     throw "Error: could not update user successfully!";
+   }
+ }
+}
+
+const toStringify = (ticket) => {
+  ticket._id = ticket._id.toString();
+  ticket.customerID = ticket.customerID.toString();
+  ticket.owners = ticket.owners.map((owner) => {
+    return owner.toString();
+  });
+
+  return ticket;
+}
 
 
 export default { create, getAll, get, getMultiple, remove, update, search};

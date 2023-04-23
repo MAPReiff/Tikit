@@ -48,8 +48,8 @@ const create = async (
 
     let newComment = {
         _id: new ObjectId(),
-        ticketID: ticketId,
-        author: userId,
+        ticketID: new ObjectId(ticketId),
+        author: new ObjectId(userId),
         content: content,
         commentedOn: commentedOn,
         replies: []
