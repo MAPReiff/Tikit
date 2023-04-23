@@ -50,32 +50,22 @@ router.route("/view/:id").get(async (req, res) => {
   try {
     let user = await userData.get(req.params.id);
     const name = `${user.firstName} ${user.lastName}`;
-    if (req.session.user.role.toLowerCase() === "admin") {
-      res.status(200).render("userView", {
-        id: user._id,
-        name: name,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-        title: user.title,
-        createdTickets: await ticketData.getMultiple(user.createdTickets),
-        ownedTickets: await ticketData.getMultiple(user.ticketsBeingWorkedOn),
-        commentsLeft: user.commentsLeft,
-        admin: true,
-      });
-    } else {
-      res.status(200).render("userView", {
-        id: user._id,
-        name: name,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-        title: user.title,
-        createdTickets: await ticketData.getMultiple(user.createdTickets),
-        ownedTickets: await ticketData.getMultiple(user.ticketsBeingWorkedOn),
-        commentsLeft: user.commentsLeft,
-      });
-    }
+    res.status(200).render("userView", {
+      id: user._id,
+      name: name,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+      title: user.title,
+      createdTickets: await ticketData.getMultiple(user.createdTickets.map((ticket) => {
+        return ticket.toString();
+      })),
+      ownedTickets: await ticketData.getMultiple(user.ticketsBeingWorkedOn.map((ticket) => {
+        return ticket.toString();
+      })),
+      commentsLeft: user.commentsLeft,
+      admin: (req.session.user.role.toLowerCase() === "admin"),
+    });
   } catch (e) {
     console.log(e);
     res.status(404).render("404", {
@@ -109,8 +99,12 @@ router
         email: user.email,
         role: user.role,
         title: user.title,
-        createdTickets: await ticketData.getMultiple(user.createdTickets),
-        ownedTickets: await ticketData.getMultiple(user.ticketsBeingWorkedOn),
+        createdTickets: await ticketData.getMultiple(user.createdTickets.map((ticket) => {
+          return ticket.toString();
+        })),
+        ownedTickets: await ticketData.getMultiple(user.ticketsBeingWorkedOn.map((ticket) => {
+          return ticket.toString();
+        })),
         commentsLeft: user.commentsLeft,
         adminID: adminUser._id,
       });

@@ -2,7 +2,7 @@ import {Router} from 'express';
 const router = Router();
 import {ticketData} from '../data/index.js';
 import {userData} from '../data/index.js'
-import * as helpers from "../helpers.js"; 
+import { renderError } from '../helpers.js';
 
 
 router
@@ -79,8 +79,10 @@ router
         priority: ticket.priority,
         created: !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString(),
         deadline: !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString(),
-        customer: await userData.get(ticket.customerID),
-        owner: await userData.getMultiple(ticket.owners),
+        customer: await userData.get(ticket.customerID.toString()),
+        owner: await userData.getMultiple(ticket.owners.map((ticket) => {
+          return ticket.toString();
+        })),
         category: ticket.category,
         tag: ticket.tags
       });

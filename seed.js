@@ -60,6 +60,8 @@ const ticket2 = await tickets.create(
   "Test Category",
   ["Databases"]
 );
+let newOwners = [];// = ticket2.owners.map((owner) => {return owner.toString() });
+newOwners.push(user3._id.toString());
 const ticket2Update = await tickets.update(
   ticket2._id,
   "Testing Ticket 2 Updated",
@@ -67,6 +69,7 @@ const ticket2Update = await tickets.update(
   "In Progress",
   "Low",
   "",
+  newOwners,
   "Test Category 2",
   ["Databases", "Mongo"]
 );
@@ -111,9 +114,9 @@ const updatedComment = await comments.update(
   comment2._id,
   "This is my updated second comment"
 );
-console.log(updatedComment);
+//console.log(updatedComment);
 let cursor = await tickets.search("2");
-console.log(cursor);
+//console.log(cursor);
 const ticket3 = await tickets.create(
   "ith with With handlebar 3",
   "This is another ticket for testing my database",
@@ -126,7 +129,7 @@ const ticket3 = await tickets.create(
   ["Databases"]
 );
 cursor = await tickets.search("handlebar");
-console.log(cursor);
+//console.log(cursor);
 //console.log(ticket2Update);
 // try {
 //     //console.log(ticket2._id)
