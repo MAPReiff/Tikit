@@ -1,9 +1,6 @@
 <script src="/public/js/login.js"></script>
 <link href="/public/css/login.css" rel="stylesheet">
 
-
-
-
 <div class="form-signin w-100 m-auto text-center">
   <form action="/login" method="POST" class="login-form" id="login-form">
     <img class="mb-4" src="/public/assets/tikit_logo_full.png" alt="Tikit" width="250" height="72">
@@ -26,8 +23,11 @@
         required>
       <label for="passwordInput">Password</label>
     </div>
-    <input type="submit" class="w-100 btn btn-lg btn-primary" id="submitButton" name="submitButton" value="Submit">
+    <div class="form-bottom">
+      <input type="submit" class="w-100 btn btn-lg btn-primary" id="submitButton" name="submitButton" value="Submit">
+    </div>
   </form>
   <br>
-  <a class="btn btn-primary w-100 btn-lg" href="/register" role="button">Register</a>
+  <h2 class="h4 mb-3 font-weight-normal">Need an account?</h1>
+    <a class="btn btn-primary w-100 btn-lg" href="/register" role="button">Register</a>
 </div>

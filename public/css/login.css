@@ -1,3 +1,4 @@
+/* used for both login and register pages */
 html,
 body {
   height: 100%;
@@ -27,7 +28,11 @@ body {
 }
 
 .form-signin input[type="password"] {
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+.form-bottom {
+  margin-top: 10px;
 }
