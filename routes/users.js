@@ -51,12 +51,13 @@ router.route("/view/:id").get(async (req, res) => {
     let user = await userData.get(req.params.id);
     const name = `${user.firstName} ${user.lastName}`;
     res.status(200).render("userView", {
+      title: `View User - ${name}`,
       id: user._id,
       name: name,
       username: user.username,
       email: user.email,
       role: user.role,
-      title: user.title,
+      jobTitle: user.title,
       createdTickets: await ticketData.getMultiple(
         user.createdTickets.map((ticket) => {
           return ticket.toString();
