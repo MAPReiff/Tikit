@@ -127,7 +127,6 @@ router
           adminID: adminUser._id,
         });
       } catch (e) {
-        console.log(e);
         res.status(404).render("404", {
           title: "404 User not found",
           msg: "Error 404: User ID Not Found",
