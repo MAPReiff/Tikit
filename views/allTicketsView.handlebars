@@ -1,4 +1,9 @@
 <h1>Tickets</h1>
+<form action="/tickets" method="POST">
+  <label for="search">Search Tickets:</label>
+  <input type="text" id="search" name="search" value={{query}}>
+  <input type="submit" id="subBtn" value="Search">
+</form>
 <table>
     <tr>
         <th>Ticket Name</th>
@@ -17,3 +22,4 @@
     </tr>
   {{/each}}
 </table>
+<script src="/public/js/search.js"></script>

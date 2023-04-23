@@ -18,7 +18,8 @@ router
 
       res.status(200).render("allTicketsView", {
         title: "Tickets View",
-        tickets: tickets
+        tickets: tickets,
+        query: ""
       });
 
     }catch(e) {
@@ -30,7 +31,19 @@ router
   })
   .post(async (req, res) => {
     //code here for POST
-   
+    const { search } = req.body;
+    let tickets = await ticketData.search(search);
+
+    for(let ticket of tickets){
+      ticket.createdOn = !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString();
+      ticket.deadline = !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString();
+    }
+
+    res.status(200).render("allTicketsView", {
+      title: "Tickets View",
+      tickets: tickets,
+      query: search
+    });
   });
 
 router
