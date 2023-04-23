@@ -68,3 +68,15 @@ section {
 .nav-foot { 
     text-align: right
 }
+
+/* make btn-primary purple */
+.btn-primary {
+    background-color: purple !important;
+    border-color: purple !important;
+}
+
+/* make btn-primary purple */
+.btn-primary:hover {
+    background-color: #4d004d !important;
+    border-color: #4d004d !important;
+}
