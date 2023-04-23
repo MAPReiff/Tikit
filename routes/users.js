@@ -106,12 +106,13 @@ router
         let adminUser = req.session.user;
         const name = `${user.firstName} ${user.lastName}`;
         res.status(200).render("userEdit", {
+          title: `Edit User - ${name}`,
           id: user._id,
           name: name,
           username: user.username,
           email: user.email,
           role: user.role,
-          title: user.title,
+          jobTitle: user.title,
           createdTickets: await ticketData.getMultiple(
             user.createdTickets.map((ticket) => {
               return ticket.toString();
