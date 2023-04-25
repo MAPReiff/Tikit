@@ -65,13 +65,14 @@ router
     let ticket;
 
     try {
-      ticket = await ticketData.get(req.params.id);
+      ticket = await ticketData.get(req.params.id); 
     } catch(e) {
        renderError(res, 404, 'Issue Retrieving ticket');
     }
 
     try{ 
       res.status(200).render("ticketView", {
+        ticketId: ticket._id,
         title: ticket.name,
         name: ticket.name,
         description: ticket.description,
@@ -84,7 +85,8 @@ router
           return ticket.toString();
         })),
         category: ticket.category,
-        tag: ticket.tags
+        tag: ticket.tags,
+        comments: ticket.comments
       });
     } catch (e) {
       renderError(res, 500, 'Internal Server Error');

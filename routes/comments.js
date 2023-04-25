@@ -5,6 +5,7 @@ import {ticketData} from '../data/index.js';
 import {userData} from '../data/index.js';
 import {commentData} from '../data/index.js';
 import * as helpers from "../helpers.js"; 
+import { renderError } from '../helpers.js';
 
 
 router
@@ -14,21 +15,16 @@ router
     try {
       req.params.ticketId = helpers.checkId(req.params.ticketId, 'ID URL Param');
     } catch (e) {
-      return res.status(400).json({error: e});
-    }
-
-    try { 
-      const curTicket = await ticketData.get(req.params.ticketId);
-    } catch (e) { 
-      return res.status(404).json({error: e});
+      renderError(res, 400, 'Bad Ticket ID given');
     }
 
     try {
+      const curTicket = await ticketData.get(req.params.ticketId);
       const comments = await commentData.getAll(req.params.ticketId);
       if (comments.length === 0) throw "No comments found with that ticket id"
       res.json(comments);
     } catch (e) {
-      res.status(404).json({error: e});
+      renderError(res, 404, 'Bad Ticket ID given');
     }
 
   })

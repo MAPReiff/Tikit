@@ -80,3 +80,7 @@ section {
     background-color: #4d004d !important;
     border-color: #4d004d !important;
 }
+
+.add-comment { 
+    text-align: right;
+}

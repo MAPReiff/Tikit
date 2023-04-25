@@ -29,7 +29,8 @@ const create = async (
     const userCollection = await users();
     const user = await userCollection.findOne({ _id: new ObjectId(userId) });
     if (user === null) throw "Error: No user found with that ID";
-
+    
+    let username = user.username
     content = helpers.checkString(content, "Content");
 
     // // if this is a reply to another comment
@@ -50,6 +51,7 @@ const create = async (
         _id: new ObjectId(),
         ticketID: new ObjectId(ticketId),
         author: new ObjectId(userId),
+        createdBy: username,
         content: content,
         commentedOn: commentedOn,
         replies: []
