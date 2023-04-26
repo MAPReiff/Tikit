@@ -15,7 +15,7 @@ router
     try {
       req.params.ticketId = helpers.checkId(req.params.ticketId, 'ID URL Param');
     } catch (e) {
-      renderError(res, 400, 'Bad Ticket ID given');
+      renderError400(res, 400, 'Bad Ticket ID given');
     }
 
     try {
@@ -24,7 +24,7 @@ router
       if (comments.length === 0) throw "No comments found with that ticket id"
       res.json(comments);
     } catch (e) {
-      renderError(res, 404, 'Bad Ticket ID given');
+      renderError(res, 404, 'Resource not found');
     }
 
   })

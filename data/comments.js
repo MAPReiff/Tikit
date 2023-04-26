@@ -16,10 +16,11 @@ will just do the create comment on ticket for now */
 const create = async (
     ticketId,
     userId, //author of the ticket
+    replyingToID, //if missing means, new comment added to ticket, otherwise if parentId(commentId) passed then it is reply to this comment
     content) => {
 
     ticketId = helpers.checkId(ticketId, "Ticket ID");
-
+    
     const ticketCollection = await tickets();
     const ticket = await ticketCollection.findOne({ _id: new ObjectId(ticketId) });
     if (ticket === null) throw "Error: No ticket found with that ID";
@@ -32,30 +33,37 @@ const create = async (
     
     let username = user.username
     content = helpers.checkString(content, "Content");
-
-    // // if this is a reply to another comment
-    // if (replyToID) {
-    //     // validate the reply to comment is a valid ID
-    //     replyToID = helpers.checkId(replyToID, "Reply to comment ID");
-
-    //     // search for comment ID under the ticket
-    //     // append this reply to that comment
-    // } // if this is on the base ticket
-    // else {
-    //     // append this to the ticket's comments
-    // }
-
     let commentedOn = Date.now();
 
-    let newComment = {
-        _id: new ObjectId(),
-        ticketID: new ObjectId(ticketId),
-        author: new ObjectId(userId),
-        createdBy: username,
-        content: content,
-        commentedOn: commentedOn,
-        replies: []
-    };
+
+    let newComment; 
+    if (replyingToID !== 0) { //comment is replying to comment
+        replyingToID = helpers.checkId(replyingToID, "Replying to ID");
+        let curComment = await ticketCollection.findOne({ "comments": { $elemMatch: { "_id": new ObjectId(replyingToID) } } });
+        if(!curComment) throw "Error: Could not find comment with that ID!";
+        newComment = {
+            _id: new ObjectId(),
+            ticketID: new ObjectId(ticketId),
+            author: new ObjectId(userId),
+            replyingToID: new ObjectId(replyingToID), 
+            createdBy: username,
+            content: content,
+            commentedOn: commentedOn,
+        };
+    } else { //comment is new 
+        newComment = {
+            _id: new ObjectId(),
+            ticketID: new ObjectId(ticketId),
+            author: new ObjectId(userId),
+            replyingToID: null, 
+            createdBy: username,
+            content: content,
+            commentedOn: commentedOn,
+        };
+    }
+
+
+
     const updatedInfoTicket = await ticketCollection.findOneAndUpdate(
         { _id: new ObjectId(ticketId) },
         { $push: { comments: newComment } },
@@ -87,7 +95,7 @@ const getAll = async (ticketId) => {
     const ticket = await ticketCollection.findOne({ _id: new ObjectId(ticketId) });
     if (ticket === null) throw "Error: No ticket found with that ID";
 
-    const comments = await ticketCollection.findOne({ _id: new ObjectId(ticketId) }, { projection: { _id: 0, comments: 1 } });
+    const comments = await ticketCollection.findOne({ _id: new ObjectId(ticketId) }, { projection: { _id: 0, comments: 1 } ,$orderby:{commentedOn:-1}});
     if (!comments) {
         throw 'Could not find tickets for id, ' + ticketId;
     }
@@ -95,7 +103,26 @@ const getAll = async (ticketId) => {
     for (let i = 0; i < commentsArr.length; i++) {
         commentsArr[i]._id = commentsArr[i]._id.toString()
     }
-    return commentsArr;
+
+    let allComments = []; //need to reorder comments for view
+    for(let i = 0; i < commentsArr.length; i++) { 
+        if (!commentsArr[i].replyingToID) { 
+            commentsArr[i].commentedOn = helpers.timeConverter(commentsArr[i].commentedOn);
+            commentsArr[i]['allReplies'] = [];
+            //console.log("Parent ID: " + commentsArr[i]._id)
+            for(let j = 0; j < commentsArr.length; j++) { 
+                //console.log("Child ID: " + commentsArr[j].replyingToID)
+                if (commentsArr[j].replyingToID !== null && commentsArr[i]._id === commentsArr[j].replyingToID.toString()) { 
+                    commentsArr[j].commentedOn = helpers.timeConverter(commentsArr[j].commentedOn);
+                    commentsArr[i]['allReplies'].push(commentsArr[j]);
+                }
+            }
+            allComments.push(commentsArr[i]); 
+        }
+    }
+    //console.log(allComments)
+
+    return allComments;
 }
 
 /*get a specific comment(pass comment id) */

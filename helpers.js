@@ -10,6 +10,12 @@ export const renderError = (res, code, msg) => {
     msg: `Error ${code}: ${msg}`});
 }
 
+export const renderError400 = (res, code, msg) => {
+  res.status(code).render("400", {
+    title: `Error ${code}`,
+    msg: `Error ${code}: ${msg}`});
+}
+
 export const checkId = (id, varName) => {
   if (!id) throw `Error: You must provide a ${varName}`;
   if (typeof id !== "string") throw `Error:${varName} must be a string`;
@@ -142,4 +148,19 @@ export const validateRole = (role) => {
   role = role.toLowerCase();
   if(role !== "admin" && role !== "user") throw "Error: Invalid role passed!";
   return role; 
+}
+
+
+//https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
+export const timeConverter = (UNIX_timestamp) => {
+  let a = new Date(UNIX_timestamp * 1);
+  let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  let year = a.getFullYear();
+  let month = months[a.getMonth()];
+  let date = a.getDate();
+  let hour = a.getHours();
+  let min = a.getMinutes();
+  let sec = a.getSeconds();
+  let time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
 }

@@ -1,7 +1,8 @@
 import {Router} from 'express';
 const router = Router();
 import {ticketData} from '../data/index.js';
-import {userData} from '../data/index.js'
+import {userData} from '../data/index.js';
+import {commentData} from '../data/index.js';
 import { renderError } from '../helpers.js';
 
 
@@ -63,9 +64,11 @@ router
   .get(async (req, res) => {
 
     let ticket;
+    let comments; 
 
     try {
       ticket = await ticketData.get(req.params.id); 
+      comments = await commentData.getAll(req.params.id);
     } catch(e) {
        renderError(res, 404, 'Issue Retrieving ticket');
     }
@@ -86,7 +89,7 @@ router
         })),
         category: ticket.category,
         tag: ticket.tags,
-        comments: ticket.comments
+        comments: comments
       });
     } catch (e) {
       renderError(res, 500, 'Internal Server Error');

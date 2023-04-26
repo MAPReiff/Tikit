@@ -28,20 +28,30 @@
     <p class="lead description info">{{description}}</p>
   </div>
   <div>
-    <div class="add-comment"> 
+    <div class="add-comment">
       <a href="/comments/{{ticketId}}"><button type="button" class="btn btn-secondary">Add Comment</button></a>
     </div>
-    <p> 
-    {{#each comments}}
+    <p>
+      {{#each comments}}
     <ol class="list-group">
       <li class="list-group-item d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
           <div class="fw-bold">Author: {{this.createdBy}}</div>
           {{this.content}}
         </div>
-        <span class="badge bg-primary rounded-pill">14</span>
+        <span class="badge bg-primary rounded-pill">{{this.commentedOn}}</span>
       </li>
+      {{#each this.allReplies}}
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">Author: {{this.createdBy}}</div>
+          {{this.content}}
+        </div>
+        <span class="badge bg-primary rounded-pill">{{this.commentedOn}}</span>
+      </li>
+      {{/each}}
     </ol>
+
     {{/each}}
   </div>
 
