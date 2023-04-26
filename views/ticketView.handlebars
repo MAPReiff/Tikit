@@ -6,7 +6,7 @@
 <p class="lead info">Category: {{category}}</p>
 <div>
   <p class="lead info ">Customer:
-    
+
   <a class="badge link-clean text-bg-primary rounded-pill" href= "/users/view/{{customer._id}}">{{customer.firstName}} {{customer.lastName}}</a></p>
 </div>
 <p class="lead info">Owners:</p>
@@ -28,4 +28,5 @@
 <div class="bg-light">
   <p class="lead description info">{{description}}</p>
 </div>
+<a href="/tickets/editTicket/{{_id}}" class="btn btn-primary searchBtn" id="editButton" name="editButton" value="Edit Ticket" _id={{_id}} status={{status}} deadline={{deadline}} name={{name}} priority={{priority}} category={{category}} description={{description}}>Edit ticket</a>
 </section>

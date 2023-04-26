@@ -72,6 +72,7 @@ router
 
     try{ 
       res.status(200).render("ticketView", {
+        _id: req.params.id,
         title: ticket.name,
         name: ticket.name,
         description: ticket.description,
@@ -91,6 +92,54 @@ router
     }
     
     //code here for GET
+  });
+
+
+  router
+  .route('/editTicket/:id')
+  .get(async (req, res) => {
+
+    let ticket;
+
+    try {
+      ticket = await ticketData.get(req.params.id);
+    } catch(e) {
+       renderError(res, 404, 'Issue Retrieving ticket');
+    }
+
+    try{ 
+      res.status(200).render("editTicket", {
+        _id: req.params.id,
+        title: ticket.name,
+        name: ticket.name,
+        description: ticket.description,
+        status: ticket.status,
+        priority: ticket.priority,
+        created: !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString(),
+        deadline: !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString(),
+        customer: await userData.get(ticket.customerID.toString()),
+        owner: await userData.getMultiple(ticket.owners.map((ticket) => {
+          return ticket.toString();
+        })),
+        category: ticket.category,
+        tag: ticket.tags
+      });
+    } catch (e) {
+      renderError(res, 500, 'Internal Server Error');
+    }
+    
+    //code here for GET
+  }).post(async (req, res) => {
+    let ticket;
+
+    try {
+      ticket = await ticketData.get(req.params.id);
+    } catch(e) {
+       renderError(res, 404, 'Issue Retrieving ticket');
+    }
+    
+
+    update()
   });
 
 
