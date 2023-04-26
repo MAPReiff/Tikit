@@ -27,18 +27,19 @@ const create = async (
     status != "In Progress" &&
     status != "Completed"
   ) {
-    throw new Error("status must be a string equal to, To Do, In Progress, or Completed");
+    throw new Error("status must be a string equal to To Do, In Progress, or Completed");
   }
 
   // validate priority
   priority = helpers.checkString(priority, "Priority");
+  console.log(priority);
   if (
     priority != "Low" &&
-    priority != "Medium" &&
+    priority != "Normal" &&
     priority != "High" &&
     priority != "Critical"
   ) {
-    throw new Error("priority must be a string equal to, Low, Medium, High, or Critical");
+    throw new Error("priority must be a string equal to Low, Normal, High, or Critical");
   }
 
   // check if dadline is provided
@@ -66,6 +67,14 @@ const create = async (
 
   // validate category
   category = helpers.checkString(category, "Category");
+  if (
+    category != "Service Request" &&
+    category != "Incident" &&
+    category != "Problem" &&
+    category != "Change Request"
+  ) {
+    throw new Error("category must be a string equal to Service Request, Incident, Problem, or Change Request");
+  }
 
   customerID = new ObjectId(helpers.validateID(customerID));
 

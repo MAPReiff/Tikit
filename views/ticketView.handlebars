@@ -6,6 +6,7 @@
 <p class="lead info">Category: {{category}}</p>
 <div>
   <p class="lead info ">Customer:
+    
   <a class="badge link-clean text-bg-primary rounded-pill" href= "/users/view/{{customer._id}}">{{customer.firstName}} {{customer.lastName}}</a></p>
 </div>
 <p class="lead info">Owners:</p>
@@ -16,12 +17,14 @@
 </ul>
 <p class="lead info">Created: {{created}}</p>
 <p class="lead info">Deadline: {{deadline}}</p>
-<p class="lead info">Tags:</p>
-<ul>
-  {{#each tag}}
-    <li class="badge text-bg-primary rounded-pill">{{this}}</li>
-  {{/each}}
-</ul>
+{{#if tag}}
+  <p class="lead info">Tags:</p>
+  <ul>
+    {{#each tag}}
+      <li class="badge text-bg-primary rounded-pill">{{this}}</li>
+    {{/each}}
+  </ul>
+{{/if}}
 <div class="bg-light">
   <p class="lead description info">{{description}}</p>
 </div>
