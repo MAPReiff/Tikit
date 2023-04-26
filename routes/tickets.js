@@ -126,38 +126,39 @@ router
           req.body.hasOwnProperty("ticketPriority")
         ){
 
-          let ticketName = helpers.checkString(
+          let ticketName = checkString(
             req.body["ticketName"],
             "ticket name"
           );
-          let ticketDescription = helpers.checkString(
+          let ticketDescription = checkString(
             req.body["ticketDescription"],
             "ticket description"
           );
-          let ticketCategory = helpers.checkString(
+          let ticketCategory = checkString(
             req.body["ticketCategory"],
             "ticket category"
           );
-          let ticketPriority = helpers.checkString(
+          let ticketPriority = checkString(
             req.body["ticketPriority"],
             "ticket priority"
           );
+          console.log(ticketName, ticketDescription, ticketCategory, ticketPriority);
         
-          let createdTicket = await tickets.create(
+          let createdTicket = await ticketData.create(
             ticketName,
             ticketDescription,
             "To Do",
             ticketPriority,
             req.body["ticketDeadline"],
             req.session.user._id,
-            [],
-            ticketCategory,
-            []
+            ['644939d4475bc92a43a50aef'],
+            ticketCategory
+            //[]
           );
 
           if (createdTicket) {
             console.log("ticketId",createdTicket._id);
-            res.status(200).redirect("/view/" + createdTicket._id);
+            res.status(200).redirect("/tickets/view/" + createdTicket._id);
           } else {
             throw new Error("unable to create user");
           }
