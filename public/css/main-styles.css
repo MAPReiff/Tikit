@@ -24,8 +24,8 @@ section {
 }
 
 .link-clean {
-    text-decoration: none;
-    color: black;
+    text-decoration: inherit;
+    color: inherit;
 }
 
 .pageLink-light {

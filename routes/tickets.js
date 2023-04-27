@@ -33,11 +33,11 @@ router
   })
   .post(async (req, res) => {
     //code here for POST
-    const { search } = req.body;
+    const { searchTickets } = req.body;
     let tickets;
 
     try{
-      tickets = await ticketData.search(search);
+      tickets = await ticketData.search(searchTickets);
     }catch(e) {
       renderError(res, 404, 'Issue Retrieving ticket(s)');
     }
@@ -51,7 +51,7 @@ router
       res.status(200).render("allTicketsView", {
         title: "Tickets View",
         tickets: tickets,
-        query: search
+        query: searchTickets
       });
     }catch(e) {
       renderError(res, 500, 'Internal Server Error');

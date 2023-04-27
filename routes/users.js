@@ -27,10 +27,10 @@ router
   })
   .post(async (req, res) => {
     let users;
-    const { search } = req.body;
+    const { searchUsers } = req.body;
 
     try {
-      users = await userData.search(search);
+      users = await userData.search(searchUsers);
     } catch (e) {
       renderError(res, 404, "User(s) not found");
     }
@@ -39,7 +39,7 @@ router
       res.status(200).render("allUsersView", {
         title: "Users View",
         users: users,
-        query: search,
+        query: searchUsers,
       });
     } catch (e) {
       renderError(res, 500, "Internal Server Error");
