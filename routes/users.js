@@ -72,7 +72,6 @@ router.route("/view/:id").get(async (req, res) => {
       admin: req.session.user.role.toLowerCase() === "admin",
     });
   } catch (e) {
-    console.log(e);
     res.status(404).render("404", {
       title: "404 User not found",
       msg: "Error 404: User ID Not Found",
@@ -167,7 +166,7 @@ router
           }
         }
       } catch (e) {
-        console.log(e);
+
         res.status(404).render("404", {
           title: "404 User not found",
           msg: "Error 404: User ID Not Found",

@@ -1,9 +1,8 @@
 
-console.log("in here")
-var form = document.getElementById("makeTicketForm");
-if (form) {
-    console.log("wow");
-    form.addEventListener("submit", (event) => {
+
+var formTicket = document.getElementById("makeTicketForm");
+if (formTicket) {
+    formTicket.addEventListener("submit", (event) => {
     event.preventDefault();
     let ticketName = document.getElementById("ticketName").value;
     let ticketDescription = document.getElementById("ticketDescription").value;
@@ -19,7 +18,7 @@ if (form) {
         checkTicketCategory(ticketCategory, "ticket category");
         checkTicketDeadline(ticketDeadline);
         checkTicketPriority(ticketPriority);
-        form.submit();
+        formTicket.submit();
     } catch (e) {
         errorP.innerHTML = `${e}`;
         errorP.hidden = false;

@@ -22,7 +22,7 @@ const create = async (
   
   if (description.length < 10) {
     throw new Error(`${type} must be atleast 10 characters long`);
-  } else if (data.length > 200) {
+  } else if (description.length > 200) {
     throw new Error(`${type} must be no longer than 200 characters`);
   }
 
@@ -38,7 +38,7 @@ const create = async (
 
   // validate priority
   priority = helpers.checkString(priority, "Priority");
-  console.log(priority);
+
   if (
     priority != "Low" &&
     priority != "Normal" &&

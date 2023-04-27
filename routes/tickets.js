@@ -137,7 +137,7 @@ router
     } catch(e) {
        renderError(res, 404, 'Issue Retrieving ticket');
     }
-    
+
 
     update()
   });
@@ -146,7 +146,7 @@ router
   router
   .route('/makeTicket')
   .get(async (req, res) => {
-    console.log("IN MAKE TICKET GET")
+
     try{ 
       res.status(200).render("makeTicket", {
         title: "Create Ticket"
@@ -157,7 +157,7 @@ router
     
     //code here for POST
   }).post(async (req, res) => {
-    console.log("IN MAKE TICKET POST")
+
     let user;
 
     try {
@@ -191,7 +191,6 @@ router
             req.body["ticketPriority"],
             "ticket priority"
           );
-          console.log(ticketName, ticketDescription, ticketCategory, ticketPriority);
         
           let createdTicket = await ticketData.create(
             ticketName,
@@ -206,7 +205,6 @@ router
           );
 
           if (createdTicket) {
-            console.log("ticketId",createdTicket._id);
             res.status(200).redirect("/tickets/view/" + createdTicket._id);
           } else {
             throw new Error("unable to create user");
