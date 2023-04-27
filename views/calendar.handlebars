@@ -1,0 +1,24 @@
+<div id='calendar'></div>
+<table class="table table-hover table-bordered">
+  <thead class="table-light">
+    <tr>
+        <th>Ticket Name</th>
+        <th>Status</th>
+        <th>Priority</th>
+        <th>Created</th>
+        <th>Deadline</th>
+    </tr>
+  </thead>
+  <tbody id="allTicketTable">
+  {{#each tickets}}
+    <tr style="transform: rotate(0);">
+        <td><a href= "/tickets/view/{{this._id}}" class="stretched-link"></a>{{this.name}}</td>
+        <td>{{this.status}}</td>
+        <td>{{this.priority}}</td>
+        <td>{{this.createdOn}}</td>
+        <td>{{this.deadline}}</td>
+    </tr>
+  {{/each}}
+  </tbody>
+</table>
+<script src="/public/js/calendar.js"></script>
