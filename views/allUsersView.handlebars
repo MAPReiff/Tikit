@@ -3,8 +3,8 @@
 <h1 class="display-4 fw-normal pageHeader">Users</h1>
 <form class="form-inline searchForm" action="/users" method="POST">
   <div class="col-auto form-group">
-      <input class="form-control" type="text" id="search" name="search" placeholder="Search Users" value={{query}}>
-      <label class="visually-hidden-focusable" for="search">Search Users:</label>
+      <input class="form-control" type="text" id="searchUsers" name="searchUsers" placeholder="Search Users" value={{query}}>
+      <label class="visually-hidden-focusable" for="searchUsers">Search Users:</label>
   </div>
   <input class="btn btn-primary searchBtn" type="submit" id="subBtn" value="Search">
 </form>
@@ -22,7 +22,7 @@
   <tbody>
   {{#each users}}
     <tr style="transform: rotate(0);">
-        <td><a href= "/users/view/{{this._id}}" class="stretched-link"></a>{{this.username}}</td>
+        <td><a href= "/users/view/{{this._id}}" class="stretched-link link-clean">{{this.username}}</a></td>
         <td>{{this.firstName}} {{this.lastName}}</td>
         <td>{{this.email}}</td>
         <td>{{this.role}}</td>
