@@ -34,10 +34,14 @@ router
   })
   .post(async (req, res) => {
     //code here for POST
-    const { searchTickets } = req.body;
+    let { searchTickets } = req.body;
     let tickets;
 
     try{
+      if(!searchTickets){
+        searchTickets = req.body.search;
+      }
+      
       tickets = await ticketData.search(searchTickets);
     }catch(e) {
       renderError(res, 404, 'Issue Retrieving ticket(s)');
