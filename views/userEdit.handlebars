@@ -14,8 +14,9 @@
 <form action="/users/edit/{{id}}" method="POST" class="userEdit-form" id="userEdit-form">
   <label for="roleInput">Role</label>
   <select id="roleInput" name="roleInput" required>
+    <option value="">Choose Role</option>
     <option value="admin">Admin</option>
-    <option value="user" selected>User</option>
+    <option value="user">User</option>
   </select>
   <br><br>
   <label for="titleInput">Title</label>
