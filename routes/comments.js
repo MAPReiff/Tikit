@@ -22,16 +22,16 @@ router
     try {
       req.params.ticketId = helpers.checkId(req.params.ticketId, 'ID URL Param');
     } catch (e) {
-      renderError400(res, 400, 'Bad Ticket ID given');
+      return res.status(400).json({error: e});
     }
 
     try {
       const curTicket = await ticketData.get(req.params.ticketId);
       const comments = await commentData.getAll(req.params.ticketId,req.session.user._id);
       if (comments.length === 0) throw "No comments found with that ticket id";
-      res.status(200).render("commentView", {ticketId: req.params.ticketId} );
+      return res.status(200).json(comments);
     } catch (e) {
-      renderError(res, 404, 'Resource not found');
+      return res.status(404).json({error: e});
     }
 
   })
@@ -44,13 +44,13 @@ router
       if ( !commentInfo.contentInput) throw 'Not all neccessary fields provided in request body'; 
       commentInfo.contentInput = helpers.checkString(commentInfo.contentInput, 'content');
     } catch (e) {
-      renderError400(res, 400, 'Missing request body info');
+      return res.status(400).json({error: e});
     }
 
     try {
       let curTicket = await ticketData.get(req.params.ticketId); 
     } catch (e) { 
-      renderError(res, 404, 'Resource not found');
+      return res.status(404).json({error: e});
     }
 
     try {

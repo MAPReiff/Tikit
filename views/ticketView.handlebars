@@ -44,8 +44,8 @@
         </div>
         <span class="material-symbols-outlined replyicon">reply_all</span>
         {{#if this.allowDelete}}
-        <a onclick="deleteComment('{{this._id}}')"><span class="material-symbols-outlined deleteicon"> delete
-          </span></a>
+        <button class="deleteCommentBtn" id="deleteCommentBtn" value="{{this._id}}"><span class="material-symbols-outlined deleteicon"> delete
+          </span></button>
           {{/if}}
         <span class="badge text-bg-light rounded-pill">{{this.commentedOn}}</span>
       </li>
@@ -68,6 +68,9 @@
 
 </section>
 
+
+{{!-- code for modal taken from https://getbootstrap.com/docs/5.2/components/modal/ --}}
+
 <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -75,10 +78,11 @@
         <h1 class="modal-title fs-5" id="commentModalLabel">Modal title</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div id="error-div" class="error-div"></div>
+      <div id="error-div" class="error-div" hidden></div>
       <form method="POST" action="/comments/{{ticketId}}" class="comment-form" id="comment-form">
       <div class="modal-body">
           <div class="mb-3">
+            <input id="tickedIDInput" type="text" name="tickedIDInput" value={{ticketId}} hidden>
             <label for="contentInput" class="form-label">Comment:</label>
             <textarea id="contentInput" type="text" name="contentInput" placeholder="Enter your comment"
               class="form-control" rows="3"></textarea>
@@ -86,7 +90,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="postComment('{{ticketId}}')">Save changes</button>
+         <button class="btn btn-primary"type="submit" value="Submit">Submit</button>
+        {{!-- <button type="button" class="btn btn-primary" onclick="postComment('{{ticketId}}')">Save changes</button> --}}
       </div>
       </form>
     </div>

@@ -118,3 +118,11 @@ section {
     font-weight: bold;
     padding: 5px;
 }
+
+.deleteCommentBtn {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    text-decoration: underline;
+    cursor: pointer;
+  }
