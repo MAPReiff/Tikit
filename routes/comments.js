@@ -27,7 +27,7 @@ router
 
     try {
       const curTicket = await ticketData.get(req.params.ticketId);
-      const comments = await commentData.getAll(req.params.ticketId);
+      const comments = await commentData.getAll(req.params.ticketId,req.session.user._id);
       if (comments.length === 0) throw "No comments found with that ticket id";
       res.status(200).render("commentView", {ticketId: req.params.ticketId} );
     } catch (e) {
@@ -66,7 +66,14 @@ router
   router
   .route('/comment/:commentId')
   //get comment based on commentId
-  .get(async (req, res) => {
+  .get(
+    (req, res, next) => {
+      if (!req.session.user) {
+        return res.redirect('/login');
+      }
+      next();
+    },
+    async (req, res) => {
     //code here for GET
     try {
       req.params.commentId = helpers.checkId(req.params.commentId, 'ID URL Param');
@@ -84,6 +91,7 @@ router
   })
   .delete(async (req, res) => {
     //code here for DELETE
+
     try {
       req.params.commentId = helpers.checkId(req.params.commentId, 'ID URL Param');
     } catch (e) {
@@ -92,12 +100,19 @@ router
 
     try {
       let curComment = await commentData.get(req.params.commentId); 
+      if (curComment.author != req.session.user._id) {
+        return res.status(403).render("403", {msg: "Error: Cannot delete other users comments"});
+      }
     } catch (e) { 
       return res.status(404).json({error: e});
     }
 
     try {
-      let updatedTicket = await commentData.remove(req.params.commentId); 
+      let curComment = await commentData.get(req.params.commentId); 
+      let updatedTicket;
+      let hasChildren = !curComment.replyingToID;
+      updatedTicket = await commentData.remove(req.params.commentId,hasChildren);
+
       updatedTicket._id = updatedTicket._id.toString();
       res.json(updatedTicket);
     } catch (e) { 

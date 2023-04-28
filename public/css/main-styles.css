@@ -84,3 +84,37 @@ section {
 .add-comment { 
     text-align: right;
 }
+
+.list-group { 
+    padding-bottom: 20px;
+}
+
+.reply { 
+    margin-left: 20px;
+}
+
+.author { 
+    font-size: 0.7em;
+}
+
+.replyicon { 
+    margin-right: 5px;
+}
+
+.deleteicon { 
+    margin-right: 5px;
+}
+
+.replyicon:hover{
+    color: green;
+}
+
+.deleteicon:hover { 
+    color: red;
+}
+
+.error-div { 
+    color: red;
+    font-weight: bold;
+    padding: 5px;
+}

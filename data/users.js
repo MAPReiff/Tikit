@@ -110,7 +110,7 @@ const get = async (id) => {
   return toStringify(user);
 };
 
-const remove = async (id) => {
+const remove = async (id,hasChildren) => {
   id = helpers.checkId(id, "User ID");
   const userCollection = await users();
   const deletionInfo = await userCollection.findOneAndDelete({

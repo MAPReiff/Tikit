@@ -68,7 +68,7 @@ router
 
     try {
       ticket = await ticketData.get(req.params.id); 
-      comments = await commentData.getAll(req.params.id);
+      comments = await commentData.getAll(req.params.id,req.session.user._id);
     } catch(e) {
        renderError(res, 404, 'Issue Retrieving ticket');
     }

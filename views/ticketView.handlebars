@@ -29,25 +29,36 @@
   </div>
   <div>
     <div class="add-comment">
-      <a href="/comments/{{ticketId}}"><button type="button" class="btn btn-secondary">Add Comment</button></a>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal">
+        Add Comment
+    </button>
     </div>
+
     <p>
       {{#each comments}}
     <ol class="list-group">
       <li class="list-group-item d-flex justify-content-between align-items-start">
         <div class="ms-2 me-auto">
-          <div class="fw-bold">Author: {{this.createdBy}}</div>
+          <div class="fw-bold author">Author: {{this.createdBy}}</div>
           {{this.content}}
         </div>
-        <span class="badge bg-primary rounded-pill">{{this.commentedOn}}</span>
+        <span class="material-symbols-outlined replyicon">reply_all</span>
+        {{#if this.allowDelete}}
+        <a onclick="deleteComment('{{this._id}}')"><span class="material-symbols-outlined deleteicon"> delete
+          </span></a>
+          {{/if}}
+        <span class="badge text-bg-light rounded-pill">{{this.commentedOn}}</span>
       </li>
       {{#each this.allReplies}}
-      <li class="list-group-item d-flex justify-content-between align-items-start">
+      <li class="list-group-item d-flex justify-content-between align-items-start reply">
         <div class="ms-2 me-auto">
-          <div class="fw-bold">Author: {{this.createdBy}}</div>
-          {{this.content}}
+          <div class="fw-bold author">- Author: {{this.createdBy}}</div>
+          &nbsp;&nbsp;{{this.content}}
         </div>
-        <span class="badge bg-primary rounded-pill">{{this.commentedOn}}</span>
+        {{#if this.allowDelete}}
+        <span class="material-symbols-outlined deleteicon"> delete </span>
+         {{/if}}
+        <span class="badge text-bg-light rounded-pill">{{this.commentedOn}}</span>
       </li>
       {{/each}}
     </ol>
@@ -56,3 +67,28 @@
   </div>
 
 </section>
+
+<div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="commentModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="error-div" class="error-div"></div>
+      <form method="POST" action="/comments/{{ticketId}}" class="comment-form" id="comment-form">
+      <div class="modal-body">
+          <div class="mb-3">
+            <label for="contentInput" class="form-label">Comment:</label>
+            <textarea id="contentInput" type="text" name="contentInput" placeholder="Enter your comment"
+              class="form-control" rows="3"></textarea>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="postComment('{{ticketId}}')">Save changes</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>

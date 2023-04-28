@@ -11,7 +11,7 @@ const user1 = await users.create(
   "David",
   "Bajo",
   "dbajo1",
-  "David@123",
+  "Password!23",
   "Password!23",
   "dbajollar1@yahoo.com",
   "Admin",
@@ -125,7 +125,7 @@ const replyToComment2 = await comments.create(
 )
 const getAllComments = await comments.getAll(ticket2._id);
 const getComment = await comments.get(comment1._id);
-const removeComment = await comments.remove(comment1._id);
+const removeComment = await comments.remove(comment1._id,true);
 
 const updatedComment = await comments.update(
   comment2._id,

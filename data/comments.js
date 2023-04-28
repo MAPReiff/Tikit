@@ -88,9 +88,12 @@ const create = async (
 }
 
 /*get all comments for a specific ticket(id of ticket passed to this function) */
-const getAll = async (ticketId) => {
+const getAll = async (ticketId,curUserID) => {
+    if(!(curUserID))throw "Error: Must pass curUserID to function!";
     if (!(ticketId)) throw "Error: Must pass ticketId to function!";
     ticketId = helpers.checkId(ticketId)
+    curUserID = helpers.checkId(curUserID)
+
     const ticketCollection = await tickets();
     const ticket = await ticketCollection.findOne({ _id: new ObjectId(ticketId) });
     if (ticket === null) throw "Error: No ticket found with that ID";
@@ -109,11 +112,17 @@ const getAll = async (ticketId) => {
         if (!commentsArr[i].replyingToID) { 
             commentsArr[i].commentedOn = helpers.timeConverter(commentsArr[i].commentedOn);
             commentsArr[i]['allReplies'] = [];
+            if(curUserID === commentsArr[i].author.toString()){ 
+                commentsArr[i]['allowDelete'] = true;
+            } 
             //console.log("Parent ID: " + commentsArr[i]._id)
             for(let j = 0; j < commentsArr.length; j++) { 
                 //console.log("Child ID: " + commentsArr[j].replyingToID)
                 if (commentsArr[j].replyingToID !== null && commentsArr[i]._id === commentsArr[j].replyingToID.toString()) { 
                     commentsArr[j].commentedOn = helpers.timeConverter(commentsArr[j].commentedOn);
+                    if(curUserID === commentsArr[j].author.toString()){ 
+                        commentsArr[j]['allowDelete'] = true;
+                    }
                     commentsArr[i]['allReplies'].push(commentsArr[j]);
                 }
             }
@@ -147,14 +156,36 @@ const get = async (commentId) => {
 }
 
 /*remove a specific comment(pass comment id) */
-const remove = async (commentId) => {
+const remove = async (commentId,hasChildren) => {
     commentId = helpers.checkId(commentId); 
 
-    //first remove from ticket
+    if (!hasChildren) throw `Error: You must supply hasChildren!`;
+    if (typeof hasChildren !== "boolean") throw `Error: hasChildren must be a boolean!`;
+
     const ticketCollection = await tickets();
     let ticketId = await ticketCollection.find({ "comments" : {$elemMatch: { "_id": new ObjectId(commentId)}}}).toArray();
     if (ticketId === null) throw "Error: No ticket found with that comment ID";
     ticketId = ticketId[0]._id.toString(); 
+
+
+    // //first remove from replies
+    // if (hasChildren) { 
+    //     //here the comment has children so must write a mongodb query to find and delete them all, we cna have more than one child comment
+    //     // get all the child comment ids
+    //     const replies = await ticketCollection
+    //     .find({ "comments.replyingToID": new ObjectId(commentId) })
+    //     .toArray();
+    //     //console.log(replies)
+    //     const result = await ticketCollection.find({ "comments": { $elemMatch: { "replyingToID": new ObjectId(commentId)}}});
+    //     console.log(result)
+    //     // const childIds = comment[0].comments[0].replies.map((reply) => reply._id);
+    //     // childIds.push(new ObjectId(commentId)); // include the comment itself
+    //     // // remove the comment and its children from the ticket
+    //     // filter = { _id: new ObjectId(ticketId), "comments._id": { $in: childIds } };
+    //     // update = { $pull: { comments: { _id: { $in: childIds } } } };
+    // } 
+
+   
 
     const updatedInfoTicket = await ticketCollection.findOneAndUpdate(
         {_id: new ObjectId(ticketId)},
