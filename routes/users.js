@@ -13,6 +13,7 @@ router
       users = await userData.getAll();
     } catch (e) {
       renderError(res, 404, "Issue Retrieving users");
+      return;
     }
 
     try {
@@ -33,6 +34,7 @@ router
       users = await userData.search(searchUsers);
     } catch (e) {
       renderError(res, 404, "User(s) not found");
+      return;
     }
 
     try {
@@ -72,7 +74,6 @@ router.route("/view/:id").get(async (req, res) => {
       admin: req.session.user.role.toLowerCase() === "admin",
     });
   } catch (e) {
-    console.log(e);
     res.status(404).render("404", {
       title: "404 User not found",
       msg: "Error 404: User ID Not Found",
@@ -99,6 +100,7 @@ router
         user = await userData.get(req.params.id);
       } catch (e) {
         renderError(res, 404, "User not found");
+        return;
       }
 
       try {
@@ -164,6 +166,7 @@ router
             res.status(200).redirect(`/users/view/${req.body.userIDInput}`);
           } else {
             renderError(res, 403, "Forbidden");
+            return;
           }
         }
       } catch (e) {

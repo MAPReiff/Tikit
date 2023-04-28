@@ -46,13 +46,21 @@ section {
     padding-bottom: 5px;
 }
 
+.fc-today-button{
+    background-color: rgb(102, 1, 102) !important;
+}
+
+.fc-daygrid-day-number{
+    color: black !important;
+}
+
 #userImage {
     width:50px;
     margin: 5%;
     height: auto;
 }
 
-#ticketImage {
+.smallImage {
     width:80px;
     margin: 5%;
     height: auto;

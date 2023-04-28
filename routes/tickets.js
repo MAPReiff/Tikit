@@ -13,6 +13,7 @@ router
       tickets = await ticketData.getAll();
     }catch(e) {
       renderError(res, 404, 'Issue Retrieving tickets');
+      return;
     }
 
     for(let ticket of tickets){
@@ -37,18 +38,23 @@ router
     let tickets;
 
     try{
+
       if(!searchTickets){
         searchTickets = req.body.search;
       }
       
       tickets = await ticketData.search(searchTickets);
-    }catch(e) {
-      renderError(res, 404, 'Issue Retrieving ticket(s)');
-    }
 
-    for(let ticket of tickets){
-      ticket.createdOn = !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString();
-      ticket.deadline = !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString();
+      for(let ticket of tickets){
+        ticket.createdOn = !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString();
+        ticket.deadline = !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString();
+      }
+
+
+    }catch(e) {
+      console.log(e);
+      renderError(res, 404, 'Issue Retrieving ticket(s)');
+      return;
     }
 
     try {
@@ -72,6 +78,7 @@ router
       ticket = await ticketData.get(req.params.id);
     } catch(e) {
        renderError(res, 404, 'Issue Retrieving ticket');
+       return;
     }
 
     try{ 
@@ -96,5 +103,32 @@ router
     
     //code here for GET
   });
+
+  router
+    .route('/calendar')  
+    .get(async (req, res) => {
+      let tickets;
+
+      try{
+        tickets = await ticketData.getAll();
+      }catch(e) {
+        renderError(res, 404, 'Issue Retrieving ticket(s)');
+        return;
+      }
+ 
+      for(let ticket of tickets){
+        ticket.createdOn = !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString();
+        ticket.deadline = !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString();
+      }
+
+      try{ 
+        res.status(200).render("calendar", {
+          title: "Calendar View",
+          tickets: tickets
+        });
+      } catch (e) {
+        renderError(res, 500, 'Internal Server Error');
+      }
+    });
 
   export default router;
