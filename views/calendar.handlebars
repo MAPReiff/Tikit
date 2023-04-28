@@ -1,3 +1,4 @@
+<h1 class="display-4 fw-normal pageHeader">Calendar</h1>
 <div id='calendar'></div>
 <table class="table table-hover table-bordered">
   <thead class="table-light">
@@ -12,7 +13,7 @@
   <tbody id="allTicketTable">
   {{#each tickets}}
     <tr style="transform: rotate(0);">
-        <td><a href= "/tickets/view/{{this._id}}" class="stretched-link"></a>{{this.name}}</td>
+        <td><a href= "/tickets/view/{{this._id}}" class="stretched-link link-clean">{{this.name}}</a></td>
         <td>{{this.status}}</td>
         <td>{{this.priority}}</td>
         <td>{{this.createdOn}}</td>
