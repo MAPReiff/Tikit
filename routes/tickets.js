@@ -34,16 +34,22 @@ router
   })
   .post(async (req, res) => {
     //code here for POST
-    const { search } = req.body;
+    let { searchTickets } = req.body;
     let tickets;
 
     try{
-      tickets = await ticketData.search(search);
+
+      if(!searchTickets){
+        searchTickets = req.body.search;
+      }
+      
+      tickets = await ticketData.search(searchTickets);
 
       for(let ticket of tickets){
         ticket.createdOn = !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString();
         ticket.deadline = !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString();
       }
+
 
     }catch(e) {
       console.log(e);
@@ -55,7 +61,7 @@ router
       res.status(200).render("allTicketsView", {
         title: "Tickets View",
         tickets: tickets,
-        query: search
+        query: searchTickets
       });
     }catch(e) {
       renderError(res, 500, 'Internal Server Error');
