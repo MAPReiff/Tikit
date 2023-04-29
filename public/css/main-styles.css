@@ -126,3 +126,11 @@ section {
     text-decoration: underline;
     cursor: pointer;
   }
+
+  .commentHeader { 
+    color: black; 
+  }
+  .commentBorder { 
+    padding: 10px;
+    color: lightgray;
+  }

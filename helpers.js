@@ -10,11 +10,11 @@ export const renderError = (res, code, msg) => {
     msg: `Error ${code}: ${msg}`});
 }
 
-export const renderError400 = (res, code, msg) => {
-  res.status(code).render("400", {
-    title: `Error ${code}`,
-    msg: `Error ${code}: ${msg}`});
-}
+// export const renderErrorGeneric = (res, code, msg) => {
+//   res.status(code).render("error", {
+//     title: `Error ${code}`,
+//     msg: `Error ${code}: ${msg}`});
+// }
 
 export const checkId = (id, varName) => {
   if (!id) throw `Error: You must provide a ${varName}`;

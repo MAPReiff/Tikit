@@ -5,7 +5,7 @@ import {ticketData} from '../data/index.js';
 import {userData} from '../data/index.js';
 import {commentData} from '../data/index.js';
 import * as helpers from "../helpers.js"; 
-import { renderError, renderError400 } from '../helpers.js';
+import { renderError } from '../helpers.js';
 
 
 router
@@ -36,7 +36,14 @@ router
 
   })
   /*add comment to given ticket, need to pass userId in body as well as content, may be able to change how this works later*/
-  .post(async (req, res) => {
+  .post(
+    (req, res, next) => {
+      if (!req.session.user) {
+        return res.redirect('/login');
+      }
+      next();
+    }, 
+    async (req, res) => {
     let commentInfo = req.body;
     try {
       req.params.ticketId = helpers.checkId(req.params.ticketId, 'ID URL Param');
@@ -93,7 +100,14 @@ router
     }
 
   })
-  .delete(async (req, res) => {
+  .delete(
+    (req, res, next) => {
+      if (!req.session.user) {
+        return res.redirect('/login');
+      }
+      next();
+    },
+    async (req, res) => {
     //code here for DELETE
 
     try {
@@ -105,7 +119,7 @@ router
     try {
       let curComment = await commentData.get(req.params.commentId); 
       if (curComment.author != req.session.user._id) {
-        return res.status(403).render("403", {msg: "Error: Cannot delete other users comments"});
+        return res.status(403).json( {msg: "Error: Cannot delete other users comments"});
       }
     } catch (e) { 
       return res.status(404).json({error: e});
@@ -124,7 +138,14 @@ router
     }
 
   })
-  .patch(async (req, res) => {
+  .patch(
+    (req, res, next) => {
+      if (!req.session.user) {
+        return res.redirect('/login');
+      }
+      next();
+    }, 
+    async (req, res) => {
     try {
       req.params.commentId = helpers.checkId(req.params.commentId, 'ID URL Param');
     } catch (e) {

@@ -28,12 +28,16 @@
     <p class="lead description info">{{description}}</p>
   </div>
   <div>
+    <div class="border rounded commentBorder">
+    <h4 class="commentHeader">Comments</h4>
     <div class="add-comment">
       <button onclick="setReplyID('null')" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal">
         Add Comment
     </button>
     </div>
 
+
+    <div id="delete-error-div" class="error-div" hidden></div>
     <p>
       {{#each comments}}
     <ol class="list-group">
@@ -67,7 +71,7 @@
 
     {{/each}}
   </div>
-
+  </div>
 </section>
 
 
@@ -77,7 +81,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="commentModalLabel">Modal title</h1>
+        <h1 class="modal-title fs-5" id="commentModalLabel">Create Comment</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div id="error-div" class="error-div" hidden></div>

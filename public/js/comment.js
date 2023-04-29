@@ -18,7 +18,7 @@
     let errordiv = document.getElementById('error-div'); 
     let mycommentform = document.getElementById('comment-form');
     let ticketID = document.getElementById('tickedIDInput');
-
+    let deleteErrorDiv = document.getElementById('delete-error-div'); 
 
     if(mycommentform) { 
         mycommentform.addEventListener('submit', (event) => {
@@ -42,9 +42,16 @@
               console.log(msg);
               window.location.reload();
             },
+            error: function (xhr, ajaxOptions, thrownError) {
+              let errorMsg = xhr.status + ":" + thrownError;
+              errordiv.innerHTML = errorMsg + "<br>" + xhr.responseText;
+              errordiv.hidden = false;
+              content.value = '';
+              content.focus();
+              mycommentform.reset();
+            }
           });
         } catch (e){ 
-          alert(errordiv.innerHTML)
           errordiv.innerHTML = e;
           errordiv.hidden = false;
           content.value = '';
@@ -70,6 +77,11 @@
                     console.log(msg);
                     window.location.reload();
                   },
+                  error: function (xhr, ajaxOptions, thrownError) {
+                    let errorMsg = xhr.status + ":" + thrownError;
+                    deleteErrorDiv.innerHTML = errorMsg + "<br>" + xhr.responseText;
+                    deleteErrorDiv.hidden = false;
+                  }
                 });
               } else {
                 return;
@@ -92,6 +104,11 @@
                     console.log(msg);
                     window.location.reload();
                   },
+                  error: function (xhr, ajaxOptions, thrownError) {
+                    let errorMsg = xhr.status + ":" + thrownError;
+                    deleteErrorDiv.innerHTML = errorMsg + "<br>" + xhr.responseText;
+                    deleteErrorDiv.hidden = false;
+                  }
                 });
               } else {
                 return;
