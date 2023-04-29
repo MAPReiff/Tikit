@@ -52,28 +52,7 @@
   <input class="btn btn-primary searchBtn" type="submit" id="subBtn" value="Submit Changes">
 </form>
 
-<script>
-
-    var temp = "{{priority}}";
-    var mySelect = document.getElementById('ticketPriority');
-
-    for(var i, j = 0; i = mySelect.options[j]; j++) {
-        if(i.value == temp) {
-            mySelect.selectedIndex = j;
-            break;
-        }
-    }
-
-    var temp2 = "{{category}}";
-    var mySelect2 = document.getElementById('ticketCategory');
-
-    for(var i, j = 0; i = mySelect2.options[j]; j++) {
-        if(i.value == temp2) {
-            mySelect2.selectedIndex = j;
-            break;
-        }
-    }
-</script>
+<script src="/public/js/editTicket.js"></script>
 
 
 </section>
