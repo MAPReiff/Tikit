@@ -164,6 +164,9 @@ export const timeConverter = (UNIX_timestamp) => {
     min = "0" + min; 
   }
   let sec = a.getSeconds();
+  if(sec < 10){ 
+    sec = "0" + sec; 
+  }
   let time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
   return time;
 }
