@@ -1,31 +1,37 @@
+<script src="/public/js/userEdit.js"></script>
 <section>
-<h1 class="display-4 fw-normal pageHeader">Edit {{name}}</h1>
+  <h1 class="display-4 fw-normal pageHeader">Edit {{name}}</h1>
 
-<p>Current settings for {{name}}</p>
-<ul>
-  <li>Role: {{role}}</li>
-  <li>Title: {{jobTitle}}</li>
-</ul>
+  <p>Current settings for {{name}}</p>
+  <ul>
+    <li>Role: {{role}}</li>
+    <li>Title: {{jobTitle}}</li>
+  </ul>
 
-<br>
+  <br>
 
-<p>New settings for {{name}}</p>
+  <p>New settings for {{name}}</p>
 
-<form action="/users/edit/{{id}}" method="POST" class="userEdit-form" id="userEdit-form">
-  <label for="roleInput">Role</label>
-  <select id="roleInput" name="roleInput" required>
-    <option value="">Choose Role</option>
-    <option value="admin">Admin</option>
-    <option value="user">User</option>
-  </select>
-  <br><br>
-  <label for="titleInput">Title</label>
-  <input type="text" id="titleInput" name="titleInput" placeholder="New Title" required>
-  <br><br>
-  {{!-- these 2 are passed along but not intended for the end user to see/edit --}}
-  <input type="hidden" id="userIDInput" name="userIDInput" value="{{id}}">
-  <input type="hidden" id="adminIDInput" name="adminIDInput" value="{{adminID}}">
+  <form action="/users/edit/{{id}}" method="POST" class="userEdit-form" id="userEdit-form">
+    {{#if error}}
+    <p id="error" class="error">{{error}}</p>
+    {{else}}
+    <p id="error" class="error" hidden></p>
+    {{/if}}
+    <label for="roleInput">Role</label>
+    <select id="roleInput" name="roleInput" required>
+      <option value="">Choose Role</option>
+      <option value="admin">Admin</option>
+      <option value="user">User</option>
+    </select>
+    <br><br>
+    <label for="titleInput">Title</label>
+    <input type="text" id="titleInput" name="titleInput" placeholder="New Title" required>
+    <br><br>
+    {{!-- these 2 are passed along but not intended for the end user to see/edit --}}
+    <input type="hidden" id="userIDInput" name="userIDInput" value="{{id}}">
+    <input type="hidden" id="adminIDInput" name="adminIDInput" value="{{adminID}}">
 
-  <input type="submit" id="submitButton" name="submitButton" value="Submit">
-</form>
+    <input type="submit" id="submitButton" name="submitButton" value="Submit">
+  </form>
 </section>
