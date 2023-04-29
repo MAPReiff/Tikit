@@ -38,8 +38,7 @@
               replyingToID: replyingToIDValue
             }),
             success: function () {
-              let msg = "create successful";
-              console.log(msg);
+              content.value = '';
               window.location.reload();
             },
             error: function (xhr, ajaxOptions, thrownError) {
