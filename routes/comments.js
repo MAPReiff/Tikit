@@ -41,8 +41,12 @@ router
     try {
       req.params.ticketId = helpers.checkId(req.params.ticketId, 'ID URL Param');
       if (!commentInfo || Object.keys(commentInfo).length === 0) throw 'There are no fields in the request body'
-      if ( !commentInfo.contentInput) throw 'Not all neccessary fields provided in request body'; 
+      if ( !commentInfo.contentInput || !commentInfo.replyingToID) throw 'Not all neccessary fields provided in request body'; 
       commentInfo.contentInput = helpers.checkString(commentInfo.contentInput, 'content');
+      commentInfo.replyingToID = helpers.checkString(commentInfo.replyingToID, 'replying to ID');
+      if (commentInfo.replyingToID.toLowerCase() !== "null") { 
+        commentInfo.replyingToID = helpers.checkId(commentInfo.replyingToID);
+      } 
     } catch (e) {
       return res.status(400).json({error: e});
     }
@@ -54,9 +58,9 @@ router
     }
 
     try {
-      const newComment = await commentData.create(req.params.ticketId, req.session.user._id, 0, commentInfo.contentInput);
+      const newComment = await commentData.create(req.params.ticketId, req.session.user._id, commentInfo.replyingToID, commentInfo.contentInput);
       let redirectURL = '/tickets/view/' +  req.params.ticketId; 
-      res.redirect(redirectURL); 
+      return res.status(200).json(newComment);
     } catch (e) {
       res.status(500).json({error: e});
     }

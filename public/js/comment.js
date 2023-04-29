@@ -11,11 +11,13 @@
         return strVal;
     };
 
-    let deleteButton = document.getElementById('deleteCommentBtn');
+    let deleteCommentButton = document.getElementById('deleteCommentBtn');
+    let deleteReplyButton = document.getElementById('deleteReplyBtn');
     let content = document.getElementById('contentInput');
+    let replyingToID = document.getElementById('replyingToID');
     let errordiv = document.getElementById('error-div'); 
-    let mycommentform = document.getElementById('comment-form')
-    let ticketID = document.getElementById('tickedIDInput')
+    let mycommentform = document.getElementById('comment-form');
+    let ticketID = document.getElementById('tickedIDInput');
 
 
     if(mycommentform) { 
@@ -23,6 +25,7 @@
             event.preventDefault();
         try { 
           let contentValue = content.value;
+          let replyingToIDValue = replyingToID.value; 
           let ticketIDValue = ticketID.value;
           errordiv.hidden = true;
           contentValue = checkString(contentValue, "content"); 
@@ -31,7 +34,8 @@
             url: '/comments/' + ticketIDValue,
             contentType: "application/json",
             data: JSON.stringify({
-              contentInput: contentValue
+              contentInput: contentValue,
+              replyingToID: replyingToIDValue
             }),
             success: function () {
               let msg = "create successful";
@@ -50,10 +54,11 @@
       });
     }
 
-    if(deleteButton) {
-        deleteButton.addEventListener('click', (event) => {
+    if(deleteCommentButton) {
+      deleteCommentButton.addEventListener('click', (event) => {
             event.preventDefault();
-            let commentId = deleteButton.value;
+            let commentId = deleteCommentButton.value;
+            console.log(commentId)
             if (confirm("Are you sure you want to delete this comment?") === true) {
                 $.ajax({
                   type: "DELETE",
@@ -71,9 +76,35 @@
               }
         });
     }
-    
+    if(deleteReplyButton) {
+      deleteReplyButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            let commentId = deleteReplyButton.value;
+            console.log(commentId)
+            if (confirm("Are you sure you want to delete this comment?") === true) {
+                $.ajax({
+                  type: "DELETE",
+                  url: '/comments/comment/' + commentId,
+                  contentType: "application/json",
+                  //data: JSON.stringify(""),
+                  success: function () {
+                    let msg = "create successful";
+                    console.log(msg);
+                    window.location.reload();
+                  },
+                });
+              } else {
+                return;
+              }
+        });
+    }
 })();
 
+function setReplyID(replyID) { 
+  let replyingToID = document.getElementById('replyingToID');
+  replyingToID.value = replyID; 
+  console.log(replyingToID.value)
+}
 
 
 

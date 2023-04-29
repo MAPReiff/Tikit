@@ -35,9 +35,15 @@ const create = async (
     content = helpers.checkString(content, "Content");
     let commentedOn = Date.now();
 
+    replyingToID = helpers.checkString(replyingToID, "Replying to ID"); 
+    if (replyingToID !== 'null') { 
+        replyingToID = helpers.checkId(replyingToID, "Replying to ID")
+        let replyingToIDcurComment = await ticketCollection.findOne({ "comments": { $elemMatch: { "_id": new ObjectId(replyingToID) } } });
+        if(!replyingToIDcurComment) throw "Error: Could not find comment with that replying to ID!";
+    }
 
     let newComment; 
-    if (replyingToID !== 0) { //comment is replying to comment
+    if (replyingToID !== 'null') { //comment is replying to comment
         replyingToID = helpers.checkId(replyingToID, "Replying to ID");
         let curComment = await ticketCollection.findOne({ "comments": { $elemMatch: { "_id": new ObjectId(replyingToID) } } });
         if(!curComment) throw "Error: Could not find comment with that ID!";
@@ -159,7 +165,7 @@ const get = async (commentId) => {
 const remove = async (commentId,hasChildren) => {
     commentId = helpers.checkId(commentId); 
 
-    if (!hasChildren) throw `Error: You must supply hasChildren!`;
+    //if (!hasChildren) throw `Error: You must supply hasChildren!`;
     if (typeof hasChildren !== "boolean") throw `Error: hasChildren must be a boolean!`;
 
     const ticketCollection = await tickets();
@@ -168,24 +174,14 @@ const remove = async (commentId,hasChildren) => {
     ticketId = ticketId[0]._id.toString(); 
 
 
-    // //first remove from replies
-    // if (hasChildren) { 
-    //     //here the comment has children so must write a mongodb query to find and delete them all, we cna have more than one child comment
-    //     // get all the child comment ids
-    //     const replies = await ticketCollection
-    //     .find({ "comments.replyingToID": new ObjectId(commentId) })
-    //     .toArray();
-    //     //console.log(replies)
-    //     const result = await ticketCollection.find({ "comments": { $elemMatch: { "replyingToID": new ObjectId(commentId)}}});
-    //     console.log(result)
-    //     // const childIds = comment[0].comments[0].replies.map((reply) => reply._id);
-    //     // childIds.push(new ObjectId(commentId)); // include the comment itself
-    //     // // remove the comment and its children from the ticket
-    //     // filter = { _id: new ObjectId(ticketId), "comments._id": { $in: childIds } };
-    //     // update = { $pull: { comments: { _id: { $in: childIds } } } };
-    // } 
+    //first remove from replies
+    if (hasChildren) { 
+        ticketCollection.updateMany(
+            { _id: new ObjectId(ticketId)},
+            { $pull: {comments: {replyingToID: new ObjectId(commentId)}}}
+        );
+    } 
 
-   
 
     const updatedInfoTicket = await ticketCollection.findOneAndUpdate(
         {_id: new ObjectId(ticketId)},
@@ -201,6 +197,11 @@ const remove = async (commentId,hasChildren) => {
       let userId = await userCollection.find({ "commentsLeft" : {$elemMatch: { "_id": new ObjectId(commentId)}}}).toArray();
       if (userId === null) throw "Error: No ticket found with that comment ID";
       userId = userId[0]._id.toString(); 
+
+    //   userCollection.updateMany(
+    //     {_id: new ObjectId(userId)},
+    //     {$pull: {commentsLeft: {_id: new ObjectId(commentId)}}}
+    //   ); 
 
       const updatedInfoUser = await userCollection.findOneAndUpdate(
         {_id: new ObjectId(userId)},

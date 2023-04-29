@@ -29,7 +29,7 @@
   </div>
   <div>
     <div class="add-comment">
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal">
+      <button onclick="setReplyID('null')" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal">
         Add Comment
     </button>
     </div>
@@ -42,7 +42,8 @@
           <div class="fw-bold author">Author: {{this.createdBy}}</div>
           {{this.content}}
         </div>
-        <span class="material-symbols-outlined replyicon">reply_all</span>
+        <button onclick="setReplyID('{{this._id}}')" type="button" class="replyCommentBtn" id="replyCommentBtn" value="{{this._id}}" data-bs-toggle="modal" data-bs-target="#commentModal"> <span class="material-symbols-outlined replyicon">reply_all</span> </button>
+        
         {{#if this.allowDelete}}
         <button class="deleteCommentBtn" id="deleteCommentBtn" value="{{this._id}}"><span class="material-symbols-outlined deleteicon"> delete
           </span></button>
@@ -56,7 +57,8 @@
           &nbsp;&nbsp;{{this.content}}
         </div>
         {{#if this.allowDelete}}
-        <span class="material-symbols-outlined deleteicon"> delete </span>
+        <button class="deleteReplyBtn" id="deleteReplyBtn" value="{{this._id}}"><span class="material-symbols-outlined deleteicon"> delete
+          </span></button>
          {{/if}}
         <span class="badge text-bg-light rounded-pill">{{this.commentedOn}}</span>
       </li>
@@ -83,14 +85,15 @@
       <div class="modal-body">
           <div class="mb-3">
             <input id="tickedIDInput" type="text" name="tickedIDInput" value={{ticketId}} hidden>
+            <input id="replyingToID" type="text" name="replyingToID" value="null" hidden>
             <label for="contentInput" class="form-label">Comment:</label>
-            <textarea id="contentInput" type="text" name="contentInput" placeholder="Enter your comment"
+            <textarea id="contentInput" name="contentInput" placeholder="Enter your comment"
               class="form-control" rows="3"></textarea>
           </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-         <button class="btn btn-primary"type="submit" value="Submit">Submit</button>
+        <button class="btn btn-primary" type="submit" value="Submit">Submit</button>
         {{!-- <button type="button" class="btn btn-primary" onclick="postComment('{{ticketId}}')">Save changes</button> --}}
       </div>
       </form>
