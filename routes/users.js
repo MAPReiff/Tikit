@@ -2,7 +2,7 @@ import { Router } from "express";
 const router = Router();
 import { ticketData } from "../data/index.js";
 import { userData } from "../data/index.js";
-import { renderError } from "../helpers.js";
+import { renderError, checkId, checkString } from "../helpers.js";
 
 router
   .route("/")
@@ -157,6 +157,12 @@ router
         ) {
           let adminUser = await userData.get(req.body.adminIDInput);
           if (adminUser.role.toLowerCase() === "admin") {
+            // checks for errors
+            let userID = checkId(req.body.userIDInput);
+            let role = checkString(req.body.roleInput);
+            let title = checkString(req.body.titleInput);
+            let user = await userData.get(userID);
+
             await userData.editUserRoleTitle(
               req.body.userIDInput,
               req.session.user._id,
