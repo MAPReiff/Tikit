@@ -60,7 +60,7 @@
       });
     }
 
-
+    //adapted from https://stackoverflow.com/questions/19655189/javascript-click-event-listener-on-class
     Array.from(deleteCommentButton).forEach(function(deleteCommentButton) {
       if(deleteCommentButton) {
         deleteCommentButton.addEventListener('click', (event) => {
@@ -91,6 +91,7 @@
       }
     });
   
+    //adapted from https://stackoverflow.com/questions/19655189/javascript-click-event-listener-on-class
     Array.from(deleteReplyButton).forEach(function(deleteReplyButton) {
       if(deleteReplyButton) {
         deleteReplyButton.addEventListener('click', (event) => {
