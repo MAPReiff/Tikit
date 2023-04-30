@@ -11,8 +11,8 @@
         return strVal;
     };
 
-    let deleteCommentButton = document.getElementById('deleteCommentBtn');
-    let deleteReplyButton = document.getElementById('deleteReplyBtn');
+    let deleteCommentButton = document.getElementsByClassName('deleteCommentBtn');
+    let deleteReplyButton = document.getElementsByClassName('deleteReplyBtn');
     let content = document.getElementById('contentInput');
     let replyingToID = document.getElementById('replyingToID');
     let errordiv = document.getElementById('error-div'); 
@@ -60,60 +60,67 @@
       });
     }
 
-    if(deleteCommentButton) {
-      deleteCommentButton.addEventListener('click', (event) => {
-            event.preventDefault();
-            let commentId = deleteCommentButton.value;
-            console.log(commentId)
-            if (confirm("Are you sure you want to delete this comment?") === true) {
-                $.ajax({
-                  type: "DELETE",
-                  url: '/comments/comment/' + commentId,
-                  contentType: "application/json",
-                  //data: JSON.stringify(""),
-                  success: function () {
-                    let msg = "create successful";
-                    console.log(msg);
-                    window.location.reload();
-                  },
-                  error: function (xhr, ajaxOptions, thrownError) {
-                    let errorMsg = xhr.status + ":" + thrownError;
-                    deleteErrorDiv.innerHTML = errorMsg + "<br>" + xhr.responseText;
-                    deleteErrorDiv.hidden = false;
-                  }
-                });
-              } else {
-                return;
-              }
-        });
-    }
-    if(deleteReplyButton) {
-      deleteReplyButton.addEventListener('click', (event) => {
-            event.preventDefault();
-            let commentId = deleteReplyButton.value;
-            console.log(commentId)
-            if (confirm("Are you sure you want to delete this comment?") === true) {
-                $.ajax({
-                  type: "DELETE",
-                  url: '/comments/comment/' + commentId,
-                  contentType: "application/json",
-                  //data: JSON.stringify(""),
-                  success: function () {
-                    let msg = "create successful";
-                    console.log(msg);
-                    window.location.reload();
-                  },
-                  error: function (xhr, ajaxOptions, thrownError) {
-                    let errorMsg = xhr.status + ":" + thrownError;
-                    deleteErrorDiv.innerHTML = errorMsg + "<br>" + xhr.responseText;
-                    deleteErrorDiv.hidden = false;
-                  }
-                });
-              } else {
-                return;
-              }
-        });
-    }
+
+    Array.from(deleteCommentButton).forEach(function(deleteCommentButton) {
+      if(deleteCommentButton) {
+        deleteCommentButton.addEventListener('click', (event) => {
+              event.preventDefault();
+              let commentId = deleteCommentButton.value;
+              console.log(commentId)
+              if (confirm("Are you sure you want to delete this comment and its replies?") === true) {
+                  $.ajax({
+                    type: "DELETE",
+                    url: '/comments/comment/' + commentId,
+                    contentType: "application/json",
+                    //data: JSON.stringify(""),
+                    success: function () {
+                      let msg = "create successful";
+                      console.log(msg);
+                      window.location.reload();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                      let errorMsg = xhr.status + ":" + thrownError;
+                      deleteErrorDiv.innerHTML = errorMsg + "<br>" + xhr.responseText;
+                      deleteErrorDiv.hidden = false;
+                    }
+                  });
+                } else {
+                  return;
+                }
+          });
+      }
+    });
+  
+    Array.from(deleteReplyButton).forEach(function(deleteReplyButton) {
+      if(deleteReplyButton) {
+        deleteReplyButton.addEventListener('click', (event) => {
+              event.preventDefault();
+              let commentId = deleteReplyButton.value;
+              console.log(commentId)
+              if (confirm("Are you sure you want to delete this reply?") === true) {
+                  $.ajax({
+                    type: "DELETE",
+                    url: '/comments/comment/' + commentId,
+                    contentType: "application/json",
+                    //data: JSON.stringify(""),
+                    success: function () {
+                      let msg = "create successful";
+                      console.log(msg);
+                      window.location.reload();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                      let errorMsg = xhr.status + ":" + thrownError;
+                      deleteErrorDiv.innerHTML = errorMsg + "<br>" + xhr.responseText;
+                      deleteErrorDiv.hidden = false;
+                    }
+                  });
+                } else {
+                  return;
+                }
+          });
+      }
+    });
+    
 })();
 
 function setReplyID(replyID) { 
