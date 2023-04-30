@@ -94,21 +94,38 @@ const updatedUser = await users.update(
 const comment1 = await comments.create(
   ticket2._id,
   user2._id,
+  "null",
   "this is my fist comment"
 );
 const comment2 = await comments.create(
   ticket2._id,
   user2._id,
+  "null",
   "this is my second comment"
 );
+
+const replyToComment1 = await comments.create( 
+  ticket2._id, 
+  user2._id, 
+  comment1._id, 
+  "this is a reply to the first comment"
+)
+
 const comment3 = await comments.create(
   ticket2._id,
   user2._id,
+  "null",
   "this is my third comment"
 );
-const getAllComments = await comments.getAll(ticket2._id);
-const getComment = await comments.get(comment1._id);
-const removeComment = await comments.remove(comment1._id);
+const replyToComment2 = await comments.create( 
+  ticket2._id, 
+  user2._id, 
+  comment3._id, 
+  "this is a reply to the third comment"
+)
+//const getAllComments = await comments.getAll(ticket2._id);
+//const getComment = await comments.get(comment1._id);
+//const removeComment = await comments.remove(comment1._id,true);
 
 const updatedComment = await comments.update(
   comment2._id,

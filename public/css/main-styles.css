@@ -88,3 +88,57 @@ section {
     background-color: #4d004d !important;
     border-color: #4d004d !important;
 }
+
+.add-comment { 
+    text-align: right;
+}
+
+.list-group { 
+    padding-bottom: 20px;
+}
+
+.reply { 
+    margin-left: 20px;
+}
+
+.author { 
+    font-size: 0.7em;
+}
+
+.replyicon { 
+    margin-right: 5px;
+}
+
+.deleteicon { 
+    margin-right: 5px;
+}
+
+.replyicon:hover{
+    color: green;
+}
+
+.deleteicon:hover { 
+    color: red;
+}
+
+.error-div { 
+    color: red;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.deleteCommentBtn, .replyCommentBtn, .deleteReplyBtn {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .commentHeader { 
+    color: black; 
+  }
+  .commentBorder { 
+    padding: 10px;
+    color: lightgray;
+  }

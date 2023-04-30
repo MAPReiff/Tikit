@@ -168,4 +168,28 @@ router
     }
   });
 
+
+  // router.route('/error/:errorCode').get(
+  //   (req, res, next) => {
+  //     if (!req.session.user) {
+  //       return res.redirect('/login');
+  //     }
+  //     next();
+  //   }, 
+  //   async (req, res) => {
+  //   //code here for GET
+  //   if( req.params.errorCode === '500'){ 
+  //     renderErrorGeneric(res, 500, 'Error: Internal Server Problem');
+  //   } else if( req.params.errorCode === '404') { 
+  //     renderErrorGeneric(res, 404, 'Error: Resource Not Found');
+  //   } else if( req.params.errorCode === '403') { 
+  //     renderErrorGeneric(res, 403, 'Error: Request Forbidden Error');
+  //   } else if(req.params.errorCode === '400') { 
+  //     renderErrorGeneric(res, 400, 'Error: Bad Request');
+  //   } else { 
+  //     renderErrorGeneric(res, '', 'Oops, something went wrong!');
+  //   }
+  //   //res.status(403).render('error', {title: "Error Page", error: "Sorry, you do not have permission to access to this page"});
+  // });
+
 export default router;
