@@ -28,9 +28,9 @@
 <div class="bg-light">
   <p class="lead description info">{{description}}</p>
 </div>
-<a href="/tickets/editTicket/{{ticketId}}" class="btn btn-primary searchBtn" id="editButton" name="editButton" value="Edit Ticket" _id={{ticketId}} status={{status}} deadline={{deadline}} name={{name}} priority={{priority}} category={{category}} description={{description}}>Edit ticket</a>
+<a href="/tickets/editTicket/{{ticketId}}" class="btn btn-primary editTicketBtn" id="editButton" name="editButton" value="Edit Ticket" _id={{ticketId}} status={{status}} deadline={{deadline}} name={{name}} priority={{priority}} category={{category}} description={{description}}>Edit ticket</a>
   <div>
-    
+    <br> 
     <div class="border rounded commentBorder">
     <h2 class="commentHeader">Comments</h2>
     <div class="add-comment">
@@ -49,7 +49,7 @@
           <div class="fw-bold author">Author: {{this.createdBy}}</div>
           {{this.content}}
         </div>
-        <button onclick="setReplyID('{{this._id}}')" type="button" class="replyCommentBtn" id="replyCommentBtn" value="{{this._id}}" data-bs-toggle="modal" data-bs-target="#commentModal"> <span class="material-symbols-outlined replyicon">reply_all</span> </button>
+        <button onclick="setReplyID('{{this._id}}')" type="button" class="replyCommentBtn" value="{{this._id}}" data-bs-toggle="modal" data-bs-target="#commentModal"> <span class="material-symbols-outlined replyicon">reply_all</span> </button>
         
         {{#if this.allowDelete}}
         <button class="deleteCommentBtn" id="deleteCommentBtn" value="{{this._id}}"><span class="material-symbols-outlined deleteicon"> delete
