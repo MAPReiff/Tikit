@@ -1,0 +1,58 @@
+<section> 
+<h1 class="display-4 fw-normal pageHeader">Edit Ticket</h1>
+{{#if error}}
+    <p id="error" class="error">{{error}}</p>
+{{else}}
+    <p id="error" class="error" hidden></p>
+{{/if}}
+
+<form action="/tickets/editTicket/{{_id}}" method="POST" class="form-inline editTicketForm" method="POST">
+  <div class="col-auto editTicketForm-group">
+        <label class="" for="ticketName" >Ticket Name</label>
+        <input class="form-control" type="text" id="ticketName" name="ticketName" placeholder={{name}} value={{name}} > <br>
+
+        <label class="" for="ticketDescription">Description</label>
+        <input class="form-control" type="text" id="ticketDescription" name="ticketDescription" placeholder={{description}} value={{description}}> <br>
+
+         <label class="" for="ticketCategory">Category</label>
+        <div class="col-md-12"></div>
+            <div class="infoCategory">
+                <i class="icon-info-sign"></i>
+                <span class="extra-info">
+                <p class="infoSubtitle">Service Request:</p><p class="categoryDescription">Inquire about product or service. These tickets are usually low-risk and do not require immediate action (ex: request new hardware or software, want to reset their password, or renew their software licenses)</p>
+                <br>
+                <p class="infoSubtitle">Incident:</p> Point out a problem with product or service (ex: disruption to IT service)
+                <br>
+                <p class="infoSubtitle">Problem:</p> For technical staff - problem that may cause an incident for a customer
+                <br>
+                <p class="infoSubtitle">Change Request:</p> Make changes to product or service (ex: permission changes)
+                <br>
+                </span>
+            </div>
+            </div>
+
+         <select class="form-control"  id="ticketCategory" name="ticketCategory">    
+                    <option value="Service Request" selected="selected">Service Request</option>
+                    <option value="Incident">Incident</option>
+                    <option value="Problem">Problem</option>
+                    <option value="Change Request">Change Request</option>
+        </select><br>
+
+        <label class="" for="ticketDeadline">Deadline</label>
+        <input class="form-control" type="date" id="ticketDeadline" name="ticketDeadline" placeholder={{deadline}} value={{deadline}}><br>
+
+        <label class="" for="ticketPriority">Priority</label>
+         <select class="form-control"  id="ticketPriority" name="ticketPriority">
+                    <option value="Critical">Critical</option>
+                    <option value="High">High</option>
+                    <option value="Normal">Normal</option>
+                    <option value="Low" selected="selected">Low</option>
+        </select><br><br>
+  </div>
+  <input class="btn btn-primary searchBtn" type="submit" id="subBtn" value="Submit Changes">
+</form>
+
+<script src="/public/js/editTicket.js"></script>
+
+
+</section>

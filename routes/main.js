@@ -119,7 +119,6 @@ router
   )
   .post(async (req, res) => {
     //code here for POST
-    // console.log(req.body);
     try {
       if (
         req.body.hasOwnProperty("firstNameInput") &&

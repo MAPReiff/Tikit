@@ -19,6 +19,12 @@ const create = async (
 
   // validate description
   description = helpers.checkString(description, "Description");
+  
+  if (description.length < 10) {
+    throw new Error(`${type} must be atleast 10 characters long`);
+  } else if (description.length > 200) {
+    throw new Error(`${type} must be no longer than 200 characters`);
+  }
 
   // validate status
   status = helpers.checkString(status, "Status");
@@ -27,18 +33,19 @@ const create = async (
     status != "In Progress" &&
     status != "Completed"
   ) {
-    throw new Error("status must be a string equal to, To Do, In Progress, or Completed");
+    throw new Error("status must be a string equal to To Do, In Progress, or Completed");
   }
 
   // validate priority
   priority = helpers.checkString(priority, "Priority");
+
   if (
     priority != "Low" &&
-    priority != "Medium" &&
+    priority != "Normal" &&
     priority != "High" &&
     priority != "Critical"
   ) {
-    throw new Error("priority must be a string equal to, Low, Medium, High, or Critical");
+    throw new Error("priority must be a string equal to Low, Normal, High, or Critical");
   }
 
   // check if dadline is provided
@@ -66,6 +73,14 @@ const create = async (
 
   // validate category
   category = helpers.checkString(category, "Category");
+  if (
+    category != "Service Request" &&
+    category != "Incident" &&
+    category != "Problem" &&
+    category != "Change Request"
+  ) {
+    throw new Error("category must be a string equal to Service Request, Incident, Problem, or Change Request");
+  }
 
   customerID = new ObjectId(helpers.validateID(customerID));
 

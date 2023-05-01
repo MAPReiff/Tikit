@@ -87,7 +87,6 @@ function checkUsername(data, type) {
 
 // cant use node modules in the browser gotta do these 2 by hand
 const checkEmail = (emailAddress) => {
-  console.log("w")
   if (typeof emailAddress == "undefined") {
     throw new Error("please provide an email string");
   } else if (typeof emailAddress != "string") {

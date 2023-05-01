@@ -1,33 +1,36 @@
+
 <section>
   <h1 class="display-4 fw-normal pageHeader">{{name}}</h1>
-  <p class="lead info">Status: {{status}}</p>
-  <p class="lead info">Priority: {{priority}}</p>
-  <p class="lead info">Category: {{category}}</p>
-  <div>
-    <p class="lead info ">Customer:
-      <a class="badge link-clean text-bg-primary rounded-pill"
-        href="/users/view/{{customer._id}}">{{customer.firstName}} {{customer.lastName}}</a>
-    </p>
-  </div>
-  <p class="lead info">Owners:</p>
-  <ul>
-    {{#each owner}}
-    <li class="badge text-bg-primary rounded-pill"><a class="pageLink-light"
-        href="/users/view/{{this._id}}">{{this.firstName}} {{this.lastName}}</a></li>
-    {{/each}}
-  </ul>
-  <p class="lead info">Created: {{created}}</p>
-  <p class="lead info">Deadline: {{deadline}}</p>
+<p class="lead info">Status: {{status}}</p>
+<p class="lead info">Priority: {{priority}}</p>
+<p class="lead info">Category: {{category}}</p>
+<div>
+  <p class="lead info ">Customer:
+
+  <a class="badge link-clean text-bg-primary rounded-pill" href= "/users/view/{{customer._id}}">{{customer.firstName}} {{customer.lastName}}</a></p>
+</div>
+<p class="lead info">Owners:</p>
+<ul>
+  {{#each owner}}
+    <li class="badge text-bg-primary rounded-pill"><a  class="pageLink-light" href= "/users/view/{{this._id}}">{{this.firstName}} {{this.lastName}}</a></li>
+  {{/each}}
+</ul>
+<p class="lead info">Created: {{created}}</p>
+<p class="lead info">Deadline: {{deadline}}</p>
+{{#if tag}}
   <p class="lead info">Tags:</p>
   <ul>
     {{#each tag}}
-    <li class="badge text-bg-primary rounded-pill">{{this}}</li>
+      <li class="badge text-bg-primary rounded-pill">{{this}}</li>
     {{/each}}
   </ul>
-  <div class="bg-light">
-    <p class="lead description info">{{description}}</p>
-  </div>
+{{/if}}
+<div class="bg-light">
+  <p class="lead description info">{{description}}</p>
+</div>
+<a href="/tickets/editTicket/{{ticketId}}" class="btn btn-primary searchBtn" id="editButton" name="editButton" value="Edit Ticket" _id={{ticketId}} status={{status}} deadline={{deadline}} name={{name}} priority={{priority}} category={{category}} description={{description}}>Edit ticket</a>
   <div>
+    
     <div class="border rounded commentBorder">
     <h2 class="commentHeader">Comments</h2>
     <div class="add-comment">
@@ -104,3 +107,4 @@
     </div>
   </div>
 </div>
+

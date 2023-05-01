@@ -89,6 +89,42 @@ section {
     border-color: #4d004d !important;
 }
 
+
+
+.extra-info {
+    display: none;
+    line-height: 20px;
+    font-size: 12px;
+    top: 0;
+    left: 50px;
+}
+  
+.infoCategory:hover .extra-info {
+display: inline-block;;
+}
+
+.infoCategory {
+font-size: 20px;
+padding-left: 5px;
+border-radius: 15px;
+}
+
+.infoCategory:hover {
+background-color: white;
+padding: 0 0 0 5px;
+
+text-align: left !important;
+}
+
+.infoSubtitle {
+    font-weight: bold;
+    display:inline-block; 
+}
+
+.categoryDescription {
+    display:inline-block; 
+}
+=======
 .add-comment { 
     text-align: right;
 }
@@ -142,3 +178,4 @@ section {
     padding: 10px;
     color: lightgray;
   }
+
