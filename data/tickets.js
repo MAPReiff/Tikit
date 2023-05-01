@@ -1,12 +1,12 @@
 import * as helpers from "../helpers.js";
-import { tickets, createIndexes} from "../config/mongoCollections.js";
+import { tickets, createIndexes } from "../config/mongoCollections.js";
 import { users } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
 
 const create = async (
   name, // string input
   description, // string input
-  status, //string input, dropdown menu 
+  status, //string input, dropdown menu
   priority, // dropdown menue to select (probably strings)
   deadline, // optional timestamp
   customerID, // objectID of the account who did the action
@@ -19,7 +19,7 @@ const create = async (
 
   // validate description
   description = helpers.checkString(description, "Description");
-  
+
   if (description.length < 10) {
     throw new Error(`${type} must be atleast 10 characters long`);
   } else if (description.length > 200) {
@@ -28,12 +28,10 @@ const create = async (
 
   // validate status
   status = helpers.checkString(status, "Status");
-  if (
-    status != "To Do" &&
-    status != "In Progress" &&
-    status != "Completed"
-  ) {
-    throw new Error("status must be a string equal to To Do, In Progress, or Completed");
+  if (status != "To Do" && status != "In Progress" && status != "Completed") {
+    throw new Error(
+      "status must be a string equal to To Do, In Progress, or Completed"
+    );
   }
 
   // validate priority
@@ -45,7 +43,9 @@ const create = async (
     priority != "High" &&
     priority != "Critical"
   ) {
-    throw new Error("priority must be a string equal to Low, Normal, High, or Critical");
+    throw new Error(
+      "priority must be a string equal to Low, Normal, High, or Critical"
+    );
   }
 
   // check if dadline is provided
@@ -69,7 +69,9 @@ const create = async (
   customerID = helpers.checkId(customerID, "Customer ID");
 
   //validate owners
-  owners = helpers.checkIdArray(owners, "Owners ID Array")
+  if (owners.length != 0) {
+    owners = helpers.checkIdArray(owners, "Owners ID Array");
+  }
 
   // validate category
   category = helpers.checkString(category, "Category");
@@ -79,7 +81,9 @@ const create = async (
     category != "Problem" &&
     category != "Change Request"
   ) {
-    throw new Error("category must be a string equal to Service Request, Incident, Problem, or Change Request");
+    throw new Error(
+      "category must be a string equal to Service Request, Incident, Problem, or Change Request"
+    );
   }
 
   customerID = new ObjectId(helpers.validateID(customerID));
@@ -88,7 +92,7 @@ const create = async (
     for (let [index, user] of owners.entries()) {
       owners[index] = new ObjectId(helpers.validateID(user));
     }
-  } else {
+  } else if (owners.length != 0) {
     throw "Owners is not a valid array";
   }
 
@@ -110,18 +114,20 @@ const create = async (
     owners: owners,
     category: category,
     tags: tags,
-    comments: []
+    comments: [],
   };
   const ticketCollection = await tickets();
   const insertInfo = await ticketCollection.insertOne(newTicket);
-  if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Error: Could not add new ticket!';
+  if (!insertInfo.acknowledged || !insertInfo.insertedId)
+    throw "Error: Could not add new ticket!";
 
   const userCollection = await users();
   const updatedInfo = await userCollection.findOneAndUpdate(
     { _id: new ObjectId(customerID) },
-    { $addToSet: {
-      createdTickets: insertInfo.insertedId,
-     } 
+    {
+      $addToSet: {
+        createdTickets: insertInfo.insertedId,
+      },
     },
     { returnDocument: "after" }
   );
@@ -133,7 +139,7 @@ const create = async (
   await updateOwners(userCollection, insertInfo.insertedId, owners);
 
   const newId = insertInfo.insertedId.toString();
-  
+
   const ticket = await get(newId);
   return ticket;
 };
@@ -142,21 +148,21 @@ const create = async (
 const getAll = async () => {
   const ticketCollection = await tickets();
   let ticketList = await ticketCollection.find({}).toArray();
-  if (!ticketList) throw 'Error: Could not get all tickets!';
+  if (!ticketList) throw "Error: Could not get all tickets!";
   ticketList = ticketList.map((element) => {
     return toStringify(element);
   });
   return ticketList;
-}
+};
 
 //gets multiple tickets based on an array of ids
 const getMultiple = async (ids) => {
   let retArr = [];
-  for(const id of ids){
-      retArr.push(await get(id));
+  for (const id of ids) {
+    retArr.push(await get(id));
   }
   return retArr;
-}
+};
 
 //get ticket based on id
 const get = async (id) => {
@@ -172,15 +178,13 @@ const remove = async (id) => {
   id = helpers.checkId(id, "Ticket ID");
   const ticketCollection = await tickets();
   const deletionInfo = await ticketCollection.findOneAndDelete({
-    _id: new ObjectId(id)
+    _id: new ObjectId(id),
   });
   if (deletionInfo.lastErrorObject.n === 0) {
     throw `Could not delete ticket with id of ${id}`;
   }
   return `${deletionInfo.value.name} has been successfully deleted!`;
-
 };
-
 
 /*for now I will not allow users to upate the owners of a ticket, 
 because it make it alittle more complex, we need to go and update the ticketsBeingWorkedOn in the user
@@ -200,7 +204,6 @@ const update = async (
   category,
   tags
 ) => {
-
   id = helpers.checkId(id, "Ticket ID");
   const ticketCollection = await tickets();
   const ticket = await ticketCollection.findOne({ _id: new ObjectId(id) });
@@ -214,12 +217,10 @@ const update = async (
 
   // validate status
   status = helpers.checkString(status, "Status");
-  if (
-    status != "To Do" &&
-    status != "In Progress" &&
-    status != "Completed"
-  ) {
-    throw new Error("status must be a string equal to, To Do, In Progress, or Completed");
+  if (status != "To Do" && status != "In Progress" && status != "Completed") {
+    throw new Error(
+      "status must be a string equal to, To Do, In Progress, or Completed"
+    );
   }
 
   // validate priority
@@ -230,7 +231,9 @@ const update = async (
     priority != "High" &&
     priority != "Critical"
   ) {
-    throw new Error("priority must be a string equal to, Low, Medium, High, or Critical");
+    throw new Error(
+      "priority must be a string equal to, Low, Medium, High, or Critical"
+    );
   }
 
   // check if dadline is provided
@@ -269,7 +272,7 @@ const update = async (
 
   const curTicket = await get(id);
 
-  let updatedTicket = { 
+  let updatedTicket = {
     name: name,
     description: description,
     status: status,
@@ -280,13 +283,13 @@ const update = async (
     owners: owners,
     category: category,
     tags: tags,
-    comments: curTicket.comments
-  }
+    comments: curTicket.comments,
+  };
   const objID = new ObjectId(id);
   const updatedInfo = await ticketCollection.findOneAndUpdate(
-    {_id: objID},
-    {$set: updatedTicket},
-    {returnDocument: 'after'}
+    { _id: objID },
+    { $set: updatedTicket },
+    { returnDocument: "after" }
   );
   if (updatedInfo.lastErrorObject.n === 0) {
     throw "Error: could not update ticket successfully!";
@@ -302,38 +305,39 @@ const search = async (query) => {
   if (!query) return getAll();
   if (typeof query !== "string") throw `Error: Search Query must be a string!`;
   query = query.trim();
-  if(query.length === 0){
+  if (query.length === 0) {
     return getAll();
   }
 
   const ticketCollection = await tickets();
-  return await (
-  ticketCollection.find( 
-    {$text: {$search: `${query}`, $caseSensitive: false}},
-    { score: { $meta: "textScore" } }
-  )
-  .sort( { score: { $meta: "textScore" } } )
-  ).toArray();
-}
+  return await ticketCollection
+    .find(
+      { $text: { $search: `${query}`, $caseSensitive: false } },
+      { score: { $meta: "textScore" } }
+    )
+    .sort({ score: { $meta: "textScore" } })
+    .toArray();
+};
 
 const updateOwners = async (userCollection, ticketID, owners) => {
   let updatedInfo;
-  
-  for(let owner of owners) {
-    updatedInfo = await userCollection.findOneAndUpdate(
-     { _id: new ObjectId(owner) },
-     { $addToSet: {
-       ticketsBeingWorkedOn: ticketID
-      } 
-     },
-     { returnDocument: "after" }
-   );
 
-   if (updatedInfo.lastErrorObject.n === 0) {
-     throw "Error: could not update user successfully!";
-   }
- }
-}
+  for (let owner of owners) {
+    updatedInfo = await userCollection.findOneAndUpdate(
+      { _id: new ObjectId(owner) },
+      {
+        $addToSet: {
+          ticketsBeingWorkedOn: ticketID,
+        },
+      },
+      { returnDocument: "after" }
+    );
+
+    if (updatedInfo.lastErrorObject.n === 0) {
+      throw "Error: could not update user successfully!";
+    }
+  }
+};
 
 const toStringify = (ticket) => {
   ticket._id = ticket._id.toString();
@@ -343,7 +347,6 @@ const toStringify = (ticket) => {
   });
 
   return ticket;
-}
+};
 
-
-export default { create, getAll, get, getMultiple, remove, update, search};
+export default { create, getAll, get, getMultiple, remove, update, search };
