@@ -217,7 +217,7 @@ router
             ticketPriority,
             req.body["ticketDeadline"],
             req.session.user._id,
-            ['644939d4475bc92a43a50aef'],
+            [],
             ticketCategory
             //[]
           );

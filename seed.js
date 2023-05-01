@@ -46,7 +46,7 @@ const ticket1 = await tickets.create(
   "",
   user3._id,
   [user2._id, user3._id],
-  "Test Category",
+  "Problem",
   ["Databases", "Angular"]
 );
 const ticket2 = await tickets.create(
@@ -57,7 +57,7 @@ const ticket2 = await tickets.create(
   "",
   user2._id,
   [user3._id],
-  "Test Category",
+  "Problem",
   ["Databases"]
 );
 let newOwners = [];// = ticket2.owners.map((owner) => {return owner.toString() });
@@ -70,7 +70,7 @@ const ticket2Update = await tickets.update(
   "Low",
   "",
   newOwners,
-  "Test Category 2",
+  "Problem",
   ["Databases", "Mongo"]
 );
 
@@ -142,7 +142,7 @@ const ticket3 = await tickets.create(
   "",
   user2._id,
   [user3._id],
-  "Test Category",
+  "Problem",
   ["Databases"]
 );
 cursor = await tickets.search("handlebar");
