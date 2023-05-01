@@ -299,6 +299,13 @@ const update = async (
 };
 
 const search = async (query) => {
+  if (!query) return getAll();
+  if (typeof query !== "string") throw `Error: Search Query must be a string!`;
+  query = query.trim();
+  if(query.length === 0){
+    return getAll();
+  }
+
   const ticketCollection = await tickets();
   return await (
   ticketCollection.find( 

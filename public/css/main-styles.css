@@ -24,8 +24,8 @@ section {
 }
 
 .link-clean {
-    text-decoration: none;
-    color: black;
+    text-decoration: inherit;
+    color: inherit;
 }
 
 .pageLink-light {
@@ -46,13 +46,21 @@ section {
     padding-bottom: 5px;
 }
 
+.fc-today-button{
+    background-color: rgb(102, 1, 102) !important;
+}
+
+.fc-daygrid-day-number{
+    color: black !important;
+}
+
 #userImage {
     width:50px;
     margin: 5%;
     height: auto;
 }
 
-#ticketImage {
+.smallImage {
     width:80px;
     margin: 5%;
     height: auto;
@@ -80,6 +88,7 @@ section {
     background-color: #4d004d !important;
     border-color: #4d004d !important;
 }
+
 
 
 .extra-info {
@@ -115,3 +124,58 @@ text-align: left !important;
 .categoryDescription {
     display:inline-block; 
 }
+=======
+.add-comment { 
+    text-align: right;
+}
+
+.list-group { 
+    padding-bottom: 20px;
+}
+
+.reply { 
+    margin-left: 20px;
+}
+
+.author { 
+    font-size: 0.7em;
+}
+
+.replyicon { 
+    margin-right: 5px;
+}
+
+.deleteicon { 
+    margin-right: 5px;
+}
+
+.replyicon:hover{
+    color: green;
+}
+
+.deleteicon:hover { 
+    color: red;
+}
+
+.error-div { 
+    color: red;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.deleteCommentBtn, .replyCommentBtn, .deleteReplyBtn {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .commentHeader { 
+    color: black; 
+  }
+  .commentBorder { 
+    padding: 10px;
+    color: lightgray;
+  }
+

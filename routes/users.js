@@ -2,7 +2,7 @@ import { Router } from "express";
 const router = Router();
 import { ticketData } from "../data/index.js";
 import { userData } from "../data/index.js";
-import { renderError } from "../helpers.js";
+import { renderError, checkId, checkString } from "../helpers.js";
 
 router
   .route("/")
@@ -13,6 +13,7 @@ router
       users = await userData.getAll();
     } catch (e) {
       renderError(res, 404, "Issue Retrieving users");
+      return;
     }
 
     try {
@@ -27,19 +28,20 @@ router
   })
   .post(async (req, res) => {
     let users;
-    const { search } = req.body;
+    const { searchUsers } = req.body;
 
     try {
-      users = await userData.search(search);
+      users = await userData.search(searchUsers);
     } catch (e) {
       renderError(res, 404, "User(s) not found");
+      return;
     }
 
     try {
       res.status(200).render("allUsersView", {
         title: "Users View",
         users: users,
-        query: search,
+        query: searchUsers,
       });
     } catch (e) {
       renderError(res, 500, "Internal Server Error");
@@ -98,6 +100,7 @@ router
         user = await userData.get(req.params.id);
       } catch (e) {
         renderError(res, 404, "User not found");
+        return;
       }
 
       try {
@@ -154,6 +157,12 @@ router
         ) {
           let adminUser = await userData.get(req.body.adminIDInput);
           if (adminUser.role.toLowerCase() === "admin") {
+            // checks for errors
+            let userID = checkId(req.body.userIDInput);
+            let role = checkString(req.body.roleInput);
+            let title = checkString(req.body.titleInput);
+            let user = await userData.get(userID);
+
             await userData.editUserRoleTitle(
               req.body.userIDInput,
               req.session.user._id,
@@ -163,6 +172,7 @@ router
             res.status(200).redirect(`/users/view/${req.body.userIDInput}`);
           } else {
             renderError(res, 403, "Forbidden");
+            return;
           }
         }
       } catch (e) {

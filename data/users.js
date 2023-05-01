@@ -110,7 +110,7 @@ const get = async (id) => {
   return toStringify(user);
 };
 
-const remove = async (id) => {
+const remove = async (id,hasChildren) => {
   id = helpers.checkId(id, "User ID");
   const userCollection = await users();
   const deletionInfo = await userCollection.findOneAndDelete({
@@ -233,6 +233,13 @@ const checkUser = async (email, password) => {
 };
 
 const search = async (query) => {
+  if (!query) return getAll();
+  if (typeof query !== "string") throw `Error: Search Query must be a string!`;
+  query = query.trim();
+  if(query.length === 0){
+    return getAll();
+  }
+
   const userCollection = await users();
   return await (
   userCollection.find( 
