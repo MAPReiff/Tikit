@@ -79,15 +79,6 @@ const create = async (
         throw "Error: could not update ticket successfully!";
     }
 
-    const updateInfoUser = await userCollection.findOneAndUpdate(
-        { _id: new ObjectId(userId) },
-        { $push: { commentsLeft: {_id: newComment._id} } },
-        { returnDocument: 'after' }
-    );
-
-    if (updateInfoUser.lastErrorObject.n === 0) {
-        throw "Error: could not update user successfully!";
-    }
 
     newComment._id = newComment._id.toString();
     return newComment;
@@ -189,26 +180,6 @@ const remove = async (commentId,hasChildren) => {
         {returnDocument: 'after'}
       );
       if (updatedInfoTicket.lastErrorObject.n === 0) {
-        throw "Error: could not update ticket successfully!";
-      }
-
-    //then remove from user
-      let userCollection = await users(); 
-      let userId = await userCollection.find({ "commentsLeft" : {$elemMatch: { "_id": new ObjectId(commentId)}}}).toArray();
-      if (userId === null) throw "Error: No ticket found with that comment ID";
-      userId = userId[0]._id.toString(); 
-
-    //   userCollection.updateMany(
-    //     {_id: new ObjectId(userId)},
-    //     {$pull: {commentsLeft: {_id: new ObjectId(commentId)}}}
-    //   ); 
-
-      const updatedInfoUser = await userCollection.findOneAndUpdate(
-        {_id: new ObjectId(userId)},
-        {$pull: {commentsLeft: {_id: new ObjectId(commentId)}}}, 
-        {returnDocument: 'after'}
-      );
-      if (updatedInfoUser.lastErrorObject.n === 0) {
         throw "Error: could not update ticket successfully!";
       }
 
