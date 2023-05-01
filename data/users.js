@@ -34,8 +34,7 @@ const create = async (
   title = helpers.checkString(title);
   let createdTickets = []; //creating user now so should always be empty in this function
   let ticketsBeingWorkedOn = []; //creating user now so should always be empty in this function
-  let commentsLeft = []; //creating user now so should always be empty in this function
-
+ 
   let newUser = {
     firstName: firstName,
     lastName: lastName,
@@ -46,7 +45,6 @@ const create = async (
     title: title,
     createdTickets: createdTickets,
     ticketsBeingWorkedOn: ticketsBeingWorkedOn,
-    commentsLeft: commentsLeft,
   };
   const userCollection = await users();
 
@@ -131,8 +129,7 @@ const update = async (
   role,
   title,
   createdTickets,
-  ticketsBeingWorkedOn,
-  commentsLeft
+  ticketsBeingWorkedOn
 ) => {
   id = helpers.checkId(id, "User ID");
   const userCollection = await users();
@@ -165,13 +162,7 @@ const update = async (
     throw "Owned Tickets is not a valid array";
   }
 
-  if (commentsLeft && Array.isArray(commentsLeft)) {
-    for (let comment of commentsLeft) {
-      comment = helpers.validateID(comment);
-    }
-  } else {
-    throw "Comments Left is not a valid array";
-  }
+
 
   let updatedUser = {
     firstName: firstName,
@@ -182,8 +173,7 @@ const update = async (
     role: role,
     title: title,
     createdTickets: createdTickets,
-    ticketsBeingWorkedOn: ticketsBeingWorkedOn,
-    commentsLeft: commentsLeft,
+    ticketsBeingWorkedOn: ticketsBeingWorkedOn
   };
 
   const objID = new ObjectId(id);

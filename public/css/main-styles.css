@@ -124,7 +124,7 @@ text-align: left !important;
 .categoryDescription {
     display:inline-block; 
 }
-=======
+
 .add-comment { 
     text-align: right;
 }
@@ -179,3 +179,7 @@ text-align: left !important;
     color: lightgray;
   }
 
+  .editTicketBtn { 
+    padding: 10px;
+    width: 40%;
+  }

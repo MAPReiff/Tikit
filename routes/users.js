@@ -70,7 +70,6 @@ router.route("/view/:id").get(async (req, res) => {
           return ticket.toString();
         })
       ),
-      commentsLeft: user.commentsLeft,
       admin: req.session.user.role.toLowerCase() === "admin",
     });
   } catch (e) {
@@ -125,7 +124,6 @@ router
               return ticket.toString();
             })
           ),
-          commentsLeft: user.commentsLeft,
           adminID: adminUser._id,
         });
       } catch (e) {
