@@ -267,6 +267,9 @@ const ticket5 = await tickets.create(
   "Service Request",
   ["Laptop", "MacBook", "MacOS"]
 );
+console.log(
+  `Created ticket ${ticket5.name} | ${ticket5.status} | ${ticket5.priority}`
+);
 
 const comment13 = await comments.create(
   ticket5._id,
@@ -338,4 +341,38 @@ const comment22 = await comments.create(
   `Great, I'm on my way!`
 );
 
+const ticket6 = await tickets.create(
+  "Deskchair is broken",
+  "My deskchair is broken. The backrest snapped off and I need a new one",
+  "Completed",
+  "Normal",
+  "",
+  user2._id,
+  [admin2._id],
+  "Service Request"
+);
+
+console.log(
+  `Created ticket ${ticket6.name} | ${ticket6.status} | ${ticket6.priority}`
+);
+
+const comment23 = await comments.create(
+  ticket6._id,
+  admin2._id,
+  "null",
+  `Hi ${user2.firstName}, please reach out to the facilities department for this request. There is nothing the IT department can do to assist you with this.`
+);
+
 await closeConnection();
+
+/*
+admin1 - John
+admin2 - Marcus
+admin3 - Hanna
+
+user1 - Alex
+user2 - Sarah
+user3 - Jannet
+user4 - Clyde (intern)
+user5 - Jessica
+*/
