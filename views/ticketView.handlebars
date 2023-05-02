@@ -49,10 +49,10 @@
           <div class="fw-bold author">Author: {{this.createdBy}}</div>
           {{this.content}}
         </div>
-        <button onclick="setReplyID('{{this._id}}')" type="button" class="replyCommentBtn" value="{{this._id}}" data-bs-toggle="modal" data-bs-target="#commentModal"> <span class="material-symbols-outlined replyicon">reply_all</span> </button>
+        <button onclick="setReplyID('{{this._id}}')" type="button" class="replyCommentBtn" id="replyCommentBtn{{this._id}}" value="{{this._id}}" data-bs-toggle="modal" data-bs-target="#commentModal"> <span class="material-symbols-outlined replyicon">reply_all</span> </button>
         
         {{#if this.allowDelete}}
-        <button class="deleteCommentBtn" id="deleteCommentBtn" value="{{this._id}}"><span class="material-symbols-outlined deleteicon"> delete
+        <button class="deleteCommentBtn" id="deleteCommentBtn{{this._id}}" value="{{this._id}}"><span class="material-symbols-outlined deleteicon"> delete
           </span></button>
           {{/if}}
         <span class="badge text-bg-light rounded-pill">{{this.commentedOn}}</span>
@@ -64,7 +64,7 @@
           &nbsp;&nbsp;{{this.content}}
         </div>
         {{#if this.allowDelete}}
-        <button class="deleteReplyBtn" id="deleteReplyBtn" value="{{this._id}}"><span class="material-symbols-outlined deleteicon"> delete
+        <button class="deleteReplyBtn" id="deleteReplyBtn{{this._id}}" value="{{this._id}}"><span class="material-symbols-outlined deleteicon"> delete
           </span></button>
          {{/if}}
         <span class="badge text-bg-light rounded-pill">{{this.commentedOn}}</span>

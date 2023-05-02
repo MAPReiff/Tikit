@@ -76,7 +76,7 @@ const ticket2Update = await tickets.update(
 
 const allUser = await users.getAll();
 const getUser = await users.get(user1._id);
-const removeUser = await users.remove(user1._id);
+//const removeUser = await users.remove(user1._id);
 const updatedUser = await users.update(
   user3._id,
   "Ari",
