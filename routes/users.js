@@ -19,6 +19,7 @@ router
     try {
       res.status(200).render("allUsersView", {
         title: "Users View",
+        user_id: req.session.user._id,
         users: users,
         query: "",
       });
@@ -40,6 +41,7 @@ router
     try {
       res.status(200).render("allUsersView", {
         title: "Users View",
+        user_id: req.session.user._id,
         users: users,
         query: searchUsers,
       });
@@ -54,6 +56,7 @@ router.route("/view/:id").get(async (req, res) => {
     const name = `${user.firstName} ${user.lastName}`;
     res.status(200).render("userView", {
       title: `View User - ${name}`,
+      user_id: user._id,
       id: user._id,
       name: name,
       username: user.username,
@@ -75,6 +78,7 @@ router.route("/view/:id").get(async (req, res) => {
   } catch (e) {
     res.status(404).render("404", {
       title: "404 User not found",
+      user_id: req.session.user._id,
       msg: "Error 404: User ID Not Found",
     });
   }
@@ -108,6 +112,7 @@ router
         const name = `${user.firstName} ${user.lastName}`;
         res.status(200).render("userEdit", {
           title: `Edit User - ${name}`,
+          user_id: req.session.user._id,
           id: user._id,
           name: name,
           username: user.username,
@@ -129,6 +134,7 @@ router
       } catch (e) {
         res.status(404).render("404", {
           title: "404 User not found",
+          user_id: req.session.user._id,
           msg: "Error 404: User ID Not Found",
         });
       }
@@ -139,7 +145,7 @@ router
       if (req.session.user.role.toLowerCase() !== "admin") {
         return res
           .status(403)
-          .json({ error: "Forbidden - Only admins can edit users" });
+          .json({ user_id: req.session.user._id, error: "Forbidden - Only admins can edit users" });
       } else {
         req.method = "GET";
         next();
@@ -177,6 +183,7 @@ router
 
         res.status(404).render("404", {
           title: "404 User not found",
+          user_id: req.session.user._id,
           msg: "Error 404: User ID Not Found",
         });
       }

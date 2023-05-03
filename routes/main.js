@@ -2,34 +2,81 @@ import { Router } from "express";
 const router = Router();
 import * as helpers from "../helpers.js";
 import users from "../data/users.js";
+import {ticketData} from '../data/index.js';
 
 router
-  .route("/")
-  .get(
-    (req, res, next) => {
-      if (!req.session.user) {
-        req.method = "GET";
-        return res.redirect("/login");
-      }
-      next();
-    },
-    async (req, res) => {
-      //code here for GET
+.route('/')
+.get((req, res, next) => {
+  if (!req.session.user) {
+    req.method = "GET";
+    return res.redirect("/login");
+  }
+  next();
+},
+async (req, res) => {
+  let tickets;
+  try{
+    tickets = await ticketData.getAll(req.session.user.role === "admin", req.session.user._id);
+  }catch(e) {
+    console.log(e);
+    helpers.renderError(res, 404, 'Issue Retrieving tickets');
+    return;
+  }
 
-      try {
-        res.status(200).render("homepage", { title: "Tikit" });
-      } catch (e) {
-        res.status(500).render("error", {
-          title: "Error",
-          error: "internal server error",
-          code: "500",
-        });
-      }
+  for(let ticket of tickets){
+    ticket.createdOn = !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString();
+    ticket.deadline = !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString();
+  }
+
+  try {
+    res.status(200).render("allTicketsView", {
+      title: "Tickets View",
+      user_id: req.session.user._id,
+      tickets: tickets,
+      query: ""
+    });
+  }catch(e) {
+    helpers.renderError(res, 500, 'Internal Server Error');
+  }
+  //code here for GET
+})
+.post(async (req, res) => {
+  //code here for POST
+  let { searchTickets } = req.body;
+  let tickets;
+
+  try{
+
+    if(!searchTickets){
+      searchTickets = req.body.search;
     }
-  )
-  .post(async (req, res) => {
-    //code here for POST
-  });
+    
+    tickets = await ticketData.search(searchTickets, 
+      req.session.user._id, 
+      req.session.user.role === "admin");
+
+    for(let ticket of tickets){
+      ticket.createdOn = !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString();
+      ticket.deadline = !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString();
+    }
+
+
+  }catch(e) {
+    helpers.renderError(res, 404, 'Issue Retrieving ticket(s)');
+    return;
+  }
+
+  try {
+    res.status(200).render("allTicketsView", {
+      title: "Tickets View",
+      user_id: req.session.user._id,
+      tickets: tickets,
+      query: searchTickets
+    });
+  }catch(e) {
+    helpers.renderError(res, 500, 'Internal Server Error');
+  }
+});
 
 router
   .route("/login")
@@ -45,7 +92,9 @@ router
     async (req, res) => {
       //code here for GET
       try {
-        res.status(200).render("login", { title: "Login", loginPage: true });
+        res.status(200).render("login", { 
+        title: "Login", 
+        loginPage: true });
       } catch (e) {
         res.status(500).render("error", {
           title: "Error",
@@ -74,7 +123,10 @@ router
         }
       }
     } catch (e) {
-      res.status(400).render("login", { title: "Login", error: `${e}`, loginPage: true });
+      res.status(400).render("login", { 
+        title: "Login", 
+        user_id: req.session.user._id,
+        error: `${e}`, loginPage: true });
     }
   });
 
@@ -107,10 +159,14 @@ router
     async (req, res) => {
       //code here for GET
       try {
-        res.status(200).render("register", { title: "Register", loginPage: true });
+        res.status(200).render("register", { 
+          title: "Register", 
+          user_id: req.session.user._id,
+          loginPage: true });
       } catch (e) {
         res.status(500).render("error", {
           title: "Error",
+          user_id: req.session.user._id,
           error: "internal server error",
           code: "500",
         });
@@ -163,7 +219,11 @@ router
       }
     } catch (e) {
       // render form with 400 code
-      res.status(400).render("register", { title: "Register", error: `${e}`, loginPage: true });
+      res.status(400).render("register", { 
+        title: "Register", 
+        user_id: req.session.user._id,
+        error: `${e}`, 
+        loginPage: true });
     }
   });
 

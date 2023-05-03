@@ -222,6 +222,23 @@ const checkUser = async (email, password) => {
   };
 };
 
+export const checkUserAccess = async (userID, ticketID) => {
+  userID = helpers.checkId(userID, "User ID");
+  ticketID = helpers.checkId(ticketID, "Ticket ID");
+  const userCollection = await users();
+  const user = await userCollection.findOne({ _id: new ObjectId(userID) });
+  if (user === null) throw "Error: No user found with that ID";
+  const stringifiedUser = toStringify(user);
+  let hasAccess = false;
+  for(let createdTicket of stringifiedUser.createdTickets) {
+    hasAccess = createdTicket === ticketID || hasAccess;
+  }
+  for(let workedOnTicket of stringifiedUser.ticketsBeingWorkedOn) {
+    hasAccess = workedOnTicket === ticketID || hasAccess;
+  }
+  return hasAccess;
+}
+
 const search = async (query) => {
   if (!query) return getAll();
   if (typeof query !== "string") throw `Error: Search Query must be a string!`;
