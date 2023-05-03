@@ -37,12 +37,6 @@ function checkTicketDescription(data, type) {
   
     data = data.trim();
   
-    if (data.length < 10) {
-      throw new Error(`${type} must be atleast 10 characters long`);
-    } else if (data.length > 200) {
-      throw new Error(`${type} must be no longer than 200 characters`);
-    }
-  
     return data;
 }
 

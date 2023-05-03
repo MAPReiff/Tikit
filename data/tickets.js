@@ -2,6 +2,7 @@ import * as helpers from "../helpers.js";
 import { tickets, createIndexes } from "../config/mongoCollections.js";
 import { users } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
+import { userData } from "./index.js";
 
 const create = async (
   name, // string input
@@ -86,16 +87,23 @@ const create = async (
 
 
   if (owners && Array.isArray(owners)) {
-    for (let [index, user] of owners.entries()) {
-      owners[index] = new ObjectId(helpers.validateID(user));
+    let userIncluded = false;
+    for (let i = 0; i < owners.length; i++) {
+      owners[i] = new ObjectId(helpers.validateID(owners[i]));
+      if(owners[i].equals(customerID)){
+        userIncluded = true;
+      }
     }
+
+    if(!userIncluded){
+      let user = await userData.get(customerID.toString());
+      owners.push(customerID);
+    }
+
   } else if (owners.length != 0) {
     throw "Owners is not a valid array";
   }
 
-  if(owners){
-    owners.push(customerID);
-  }
 
   // check if tags are provided
   if (!tags) {
@@ -104,12 +112,13 @@ const create = async (
     tags = helpers.checkStringArray(tags, "Tags");
   }
 
+
   let newTicket = {
     name: name,
     description: description,
     status: status,
     priority: priority,
-    createdOn: createdOn,
+    createdOn: new Date(createdOn),
     deadline: deadline,
     customerID: customerID,
     owners: owners,
@@ -117,6 +126,7 @@ const create = async (
     tags: tags,
     comments: [],
   };
+
   const ticketCollection = await tickets();
   const insertInfo = await ticketCollection.insertOne(newTicket);
   if (!insertInfo.acknowledged || !insertInfo.insertedId)
@@ -205,27 +215,22 @@ const update = async (
   tags
 ) => {
   id = helpers.checkId(id, "Ticket ID");
-  console.log('id', id);
   const ticketCollection = await tickets();
   const ticket = await ticketCollection.findOne({ _id: new ObjectId(id) });
 
-  console.log('find ticket', ticket);
   if (ticket === null) throw "Error: No ticket found with that ID";
-  console.log('edit ticket');
+
   // validate name
   name = helpers.checkString(name, "Name");
-  console.log('after name');
+
 
   // validate description
   description = helpers.checkString(description, "Description");
 
-  console.log('after description s=check string');
-
-  console.log('after description');
 
   // validate priority
   priority = helpers.checkString(priority, "Priority");
-  console.log('after priority', priority);
+
   if (
     priority != "Low" &&
     priority != "Normal" &&
@@ -237,7 +242,7 @@ const update = async (
     );
   }
 
-  console.log('after priority');
+
 
   // check if dadline is provided
   // deadline expected like this - timestamp
@@ -256,7 +261,6 @@ const update = async (
     }
   }
 
-  console.log('after deadline');
 
   /*validate owners
   if (owners && Array.isArray(owners)) {
@@ -267,7 +271,7 @@ const update = async (
     throw "Owners is not a valid array";
   }*/
 
-  console.log('after owner');
+
 
   // validate category
   console.log('category', category);
@@ -283,7 +287,6 @@ const update = async (
     );
   }
 
-  console.log('after category');
 
 
   // check if tags are provided
@@ -314,7 +317,6 @@ const update = async (
     { returnDocument: "after" }
   );
 
-  console.log('updated info', updatedInfo);
   if (updatedInfo.lastErrorObject.n === 0) {
     throw "Error: could not update ticket successfully!";
   }

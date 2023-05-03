@@ -155,8 +155,6 @@ router
        renderError(res, 404, 'Issue Retrieving ticket');
     }
 
-    console.log('description', req.body["ticketDescription"]);
-
 
     try{
       if (
@@ -166,8 +164,6 @@ router
         req.body.hasOwnProperty("ticketDeadline") &&
         req.body.hasOwnProperty("ticketPriority")
       ){
-
-        console.log('in if');
 
         let ticketName = checkString(
           req.body["ticketName"],
@@ -196,7 +192,6 @@ router
           ticketCategory
         );
 
-        console.log(editedTicket);
 
         if (editedTicket) {
           res.status(200).redirect("/tickets/view/" + editedTicket._id);
@@ -214,9 +209,6 @@ router
     res.status(400).render("editTicket", { title: "Edit Ticket", error: `${e}`, _id: req.params.id});
   }
 
-
-
-
   });
 
 
@@ -224,9 +216,18 @@ router
   .route('/makeTicket')
   .get(async (req, res) => {
 
+    let usersAll = await userData.getAll();
+    var users = [];
+    for(let i = 0; i < usersAll.length; i++){
+      if(req.session.user._id !== usersAll[i]._id){
+        users.push({id: usersAll[i]._id,firstName: usersAll[i].firstName, lastName: usersAll[i].lastName});
+      }
+    }
+
     try{ 
       res.status(200).render("makeTicket", {
-        title: "Create Ticket"
+        title: "Create Ticket",
+        users: users
       });
     } catch (e) {
       renderError(res, 500, 'Internal Server Error');
@@ -236,12 +237,23 @@ router
   }).post(async (req, res) => {
 
     let user;
+    let users;
 
     try {
       user = await userData.get(req.session.user._id);
+      let usersAll = await userData.getAll();
+      users = [];
+      for(let i = 0; i < usersAll.length; i++){
+        if(req.session.user._id !== usersAll[i]._id){
+          users.push({id: usersAll[i]._id,firstName: usersAll[i].firstName, lastName: usersAll[i].lastName});
+        }
+      }
+
     } catch (e) {
       renderError(res, 404, "Issue Retrieving user");
     }
+
+
 
     try{
         if (
@@ -268,6 +280,12 @@ router
             req.body["ticketPriority"],
             "ticket priority"
           );
+
+          if(typeof req.body["ticketOwners"] === 'string'){
+            req.body["ticketOwners"] = [req.body["ticketOwners"]];
+          }
+
+          console.log(req.body["ticketOwners"]);
         
           let createdTicket = await ticketData.create(
             ticketName,
@@ -276,7 +294,7 @@ router
             ticketPriority,
             req.body["ticketDeadline"],
             req.session.user._id,
-            [],
+            req.body["ticketOwners"],
             ticketCategory
           );
 
@@ -287,12 +305,12 @@ router
           }
 
         }else{
-          res.status(400).render("makeTicket", { title: "Create Ticket", error: 'All fields must be filled out'});
+          res.status(400).render("makeTicket", { title: "Create Ticket", error: 'All fields must be filled out',  users: users});
         }
 
     } catch (e) {
       // render form with 400 code
-      res.status(400).render("makeTicket", { title: "Create Ticket", error: `${e}`});
+      res.status(400).render("makeTicket", { title: "Create Ticket", error: `${e}`,  users: users});
     }
 
 
