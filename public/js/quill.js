@@ -13,8 +13,8 @@ var quill = new Quill("#editor", {
       quality: 0.7,
       maxWidth: 500, // default
       maxHeight: 500, // default
-      imageType: 'image/jpeg'
-    }
+      imageType: "image/jpeg",
+    },
   },
   theme: "snow",
 });
