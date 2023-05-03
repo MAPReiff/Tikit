@@ -27,6 +27,7 @@ const constructorMethod = (app) => {
     // res.status(404).json({error: 'Route Not found'});
     res.status(404).render("404", {
       title: "404 Page not found",
+      user_id: req.session.user._id,
       msg: "Error 404: Page Not Found",
     });
   });

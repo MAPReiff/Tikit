@@ -5,72 +5,6 @@ import {userData} from '../data/index.js';
 import {commentData} from '../data/index.js';
 import { renderError, checkString } from '../helpers.js';
 
-
-
-
-router
-  .route('/')
-  .get(async (req, res) => {
-    let tickets;
-    try{
-      tickets = await ticketData.getAll();
-    }catch(e) {
-      renderError(res, 404, 'Issue Retrieving tickets');
-      return;
-    }
-
-    for(let ticket of tickets){
-      ticket.createdOn = !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString();
-      ticket.deadline = !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString();
-    }
-
-    try {
-      res.status(200).render("allTicketsView", {
-        title: "Tickets View",
-        tickets: tickets,
-        query: ""
-      });
-    }catch(e) {
-      renderError(res, 500, 'Internal Server Error');
-    }
-    //code here for GET
-  })
-  .post(async (req, res) => {
-    //code here for POST
-    let { searchTickets } = req.body;
-    let tickets;
-
-    try{
-
-      if(!searchTickets){
-        searchTickets = req.body.search;
-      }
-      
-      tickets = await ticketData.search(searchTickets);
-
-      for(let ticket of tickets){
-        ticket.createdOn = !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString();
-        ticket.deadline = !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString();
-      }
-
-
-    }catch(e) {
-      console.log(e);
-      renderError(res, 404, 'Issue Retrieving ticket(s)');
-      return;
-    }
-
-    try {
-      res.status(200).render("allTicketsView", {
-        title: "Tickets View",
-        tickets: tickets,
-        query: searchTickets
-      });
-    }catch(e) {
-      renderError(res, 500, 'Internal Server Error');
-    }
-  });
-
 router
   .route('/view/:id')
   .get(async (req, res) => {
@@ -90,6 +24,7 @@ router
       res.status(200).render("ticketView", {
         ticketId: ticket._id,
         title: ticket.name,
+        user_id: req.session.user._id,
         name: ticket.name,
         description: ticket.description,
         status: ticket.status,
@@ -129,6 +64,7 @@ router
       res.status(200).render("editTicket", {
         _id: req.params.id,
         title: ticket.name,
+        user_id: req.session.user._id,
         name: ticket.name,
         description: ticket.description,
         status: ticket.status,
@@ -167,7 +103,8 @@ router
 
     try{ 
       res.status(200).render("makeTicket", {
-        title: "Create Ticket"
+        title: "Create Ticket",
+        user_id: req.session.user._id
       });
     } catch (e) {
       renderError(res, 500, 'Internal Server Error');
@@ -229,12 +166,18 @@ router
           }
 
         }else{
-          res.status(400).render("makeTicket", { title: "Create Ticket", error: 'All fields must be filled out'});
+          res.status(400).render("makeTicket", { 
+            title: "Create Ticket", 
+            user_id: req.session.user._id,
+            error: 'All fields must be filled out'});
         }
 
     } catch (e) {
       // render form with 400 code
-      res.status(400).render("makeTicket", { title: "Create Ticket", error: `${e}`});
+      res.status(400).render("makeTicket", { 
+        title: "Create Ticket", 
+        user_id: req.session.user._id,
+        error: `${e}`});
     }
 
 
@@ -250,7 +193,7 @@ router
       let tickets;
 
       try{
-        tickets = await ticketData.getAll();
+        tickets = await ticketData.getAll(req.session.user.role === "admin", req.session.user._id);
       }catch(e) {
         renderError(res, 404, 'Issue Retrieving ticket(s)');
         return;
@@ -264,6 +207,7 @@ router
       try{ 
         res.status(200).render("calendar", {
           title: "Calendar View",
+          user_id: req.session.user._id,
           tickets: tickets
         });
       } catch (e) {

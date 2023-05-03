@@ -5,6 +5,7 @@ import configRoutes from "./routes/index.js";
 
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { pageView } from "./middleware.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -38,6 +39,8 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+app.use("/tickets/view/:id", pageView);
 
 app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");

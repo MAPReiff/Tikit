@@ -146,14 +146,14 @@ const create = async (
 };
 
 //get all tickets
-const getAll = async () => {
+const getAll = async (isAdmin, userID) => {
   const ticketCollection = await tickets();
   let ticketList = await ticketCollection.find({}).toArray();
   if (!ticketList) throw "Error: Could not get all tickets!";
   ticketList = ticketList.map((element) => {
     return toStringify(element);
   });
-  return ticketList;
+  return filterResults(ticketList, isAdmin, userID);
 };
 
 //gets multiple tickets based on an array of ids
@@ -302,23 +302,50 @@ const update = async (
   return toStringify(updatedInfo.value);
 };
 
-const search = async (query) => {
-  if (!query) return getAll();
+const search = async (query, userID, isAdmin) => {
+  if (!query) return getAll(isAdmin, userID);
   if (typeof query !== "string") throw `Error: Search Query must be a string!`;
   query = query.trim();
   if (query.length === 0) {
-    return getAll();
+    return getAll(isAdmin. userID);
   }
+  userID = helpers.checkId(userID, "User ID");
 
   const ticketCollection = await tickets();
-  return await ticketCollection
+  let foundTickets = await ticketCollection
     .find(
       { $text: { $search: `${query}`, $caseSensitive: false } },
       { score: { $meta: "textScore" } }
     )
     .sort({ score: { $meta: "textScore" } })
     .toArray();
+
+    foundTickets = foundTickets.map((element) => {
+      return toStringify(element);
+    });
+
+    return filterResults(foundTickets, isAdmin, userID);
 };
+
+const filterResults = async (inputTickets, isAdmin, userID) => {
+  let returnVal = [];
+
+  if(!isAdmin) {
+    for(let ticket of inputTickets) {
+      if(ticket.customerID === userID) {
+        returnVal.push(ticket);
+      }
+
+      if(ticket.owners.includes(userID)){
+        returnVal.push(ticket);
+      }
+    }
+  } else{
+    returnVal = inputTickets;
+  }
+
+  return returnVal;
+}
 
 const updateOwners = async (userCollection, ticketID, owners) => {
   let updatedInfo;
