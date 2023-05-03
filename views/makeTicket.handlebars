@@ -11,7 +11,11 @@
         <input class="form-control" type="text" id="ticketName" name="ticketName" placeholder="Ticket Name"> <br>
 
         <label class="" for="ticketDescription">Description</label>
-        <input class="form-control" type="text" id="ticketDescription" name="ticketDescription" placeholder="Ticket Description"> <br>
+        {{!-- <input class="form-control" type="text" id="ticketDescription" name="ticketDescription" placeholder="Ticket Description"> <br> --}}
+        <input type='hidden' name='ticketDescription' id='ticketDescription'>
+        <div id="editor">
+              {{!-- no sample data to include --}}
+            </div>
 
          <label class="" for="ticketCategory">Category</label>
       <div class="col-md-12"></div>
@@ -50,6 +54,7 @@
   </div>
   <input class="btn btn-primary searchBtn" type="submit" id="subBtn" value="Submit">
 </form>
-<script src="/public/js/mainTicket.js"></script>
+{{!-- <script src="/public/js/mainTicket.js"></script> --}}
+<script src="/public/js/quill.js"></script>
 <br>
 </section> 
