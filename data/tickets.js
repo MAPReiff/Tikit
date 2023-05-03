@@ -20,12 +20,6 @@ const create = async (
   // validate description
   description = helpers.checkString(description, "Description");
 
-  if (description.length < 10) {
-    throw new Error(`${type} must be atleast 10 characters long`);
-  } else if (description.length > 200) {
-    throw new Error(`${type} must be no longer than 200 characters`);
-  }
-
   // validate status
   status = helpers.checkString(status, "Status");
   if (status != "To Do" && status != "In Progress" && status != "Completed") {
@@ -63,15 +57,12 @@ const create = async (
     } else if (new Date(deadline).getTime() < createdOn) {
       throw new Error("provided dealine in the past");
     }
+    deadline =  new Date(deadline);
   }
 
   // validate customerID
   customerID = helpers.checkId(customerID, "Customer ID");
-
-  //validate owners
-  if (owners.length != 0) {
-    owners = helpers.checkIdArray(owners, "Owners ID Array");
-  }
+  
 
   // validate category
   category = helpers.checkString(category, "Category");
@@ -88,12 +79,22 @@ const create = async (
 
   customerID = new ObjectId(helpers.validateID(customerID));
 
+  //validate owners
+  if (owners.length != 0) {
+    owners = helpers.checkIdArray(owners, "Owners ID Array");
+  }
+
+
   if (owners && Array.isArray(owners)) {
     for (let [index, user] of owners.entries()) {
       owners[index] = new ObjectId(helpers.validateID(user));
     }
   } else if (owners.length != 0) {
     throw "Owners is not a valid array";
+  }
+
+  if(owners){
+    owners.push(customerID);
   }
 
   // check if tags are provided

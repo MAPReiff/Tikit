@@ -155,7 +155,7 @@ router
        renderError(res, 404, 'Issue Retrieving ticket');
     }
 
-    console.log('ticket', ticket);
+    console.log('description', req.body["ticketDescription"]);
 
 
     try{
@@ -166,6 +166,8 @@ router
         req.body.hasOwnProperty("ticketDeadline") &&
         req.body.hasOwnProperty("ticketPriority")
       ){
+
+        console.log('in if');
 
         let ticketName = checkString(
           req.body["ticketName"],
@@ -203,12 +205,13 @@ router
         }
 
       }else{
-        res.status(400).render("editTicket", { title: "Edit Ticket", error: 'All fields must be filled out'});
+        console.log("in ekse");
+        res.status(400).render("editTicket", { title: "Edit Ticket", error: 'All fields must be filled out', _id: req.params.id});
       }
 
   } catch (e) {
     // render form with 400 code
-    res.status(400).render("editTicket", { title: "Edit Ticket", error: `${e}`});
+    res.status(400).render("editTicket", { title: "Edit Ticket", error: `${e}`, _id: req.params.id});
   }
 
 
@@ -275,7 +278,6 @@ router
             req.session.user._id,
             [],
             ticketCategory
-            //[]
           );
 
           if (createdTicket) {
