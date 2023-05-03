@@ -6,7 +6,7 @@ var quill = new Quill("#editor", {
       [{ size: ["small", false, "large", "huge"] }],
       ["bold", "italic", "underline", "strike"],
       ["image"],
-      [{ list: "ordered" }, { list: "bullet" }],
+      [{ list: "bullet" }],
       ["clean"],
     ],
     imageCompressor: {
@@ -43,3 +43,13 @@ quill.on("text-change", function () {
     inputElement.value = "";
   }
 });
+
+// set the title attribute for each of the obejcts in the toolbar for accessibility 
+
+quill.container.previousSibling.querySelector('button.ql-bold').setAttribute('title', 'Bold');
+quill.container.previousSibling.querySelector('button.ql-italic').setAttribute('title', 'Italic');
+quill.container.previousSibling.querySelector('button.ql-underline').setAttribute('title', 'Underline');
+quill.container.previousSibling.querySelector('button.ql-strike').setAttribute('title', 'Strike');
+quill.container.previousSibling.querySelector('button.ql-image').setAttribute('title', 'Insert Image');
+quill.container.previousSibling.querySelector('button.ql-list').setAttribute('title', 'Bullet List');
+quill.container.previousSibling.querySelector('button.ql-clean').setAttribute('title', 'Clear Formatting');

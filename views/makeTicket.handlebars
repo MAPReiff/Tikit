@@ -10,13 +10,14 @@
         <label class="" for="ticketName">Ticket Name</label>
         <input class="form-control" type="text" id="ticketName" name="ticketName" placeholder="Ticket Name"> <br>
 
-        <label class="" for="ticketDescription">Description</label>
+        {{!-- <label class="" for="ticketDescription">Description</label> --}}
         {{!-- <input class="form-control" type="text" id="ticketDescription" name="ticketDescription" placeholder="Ticket Description"> <br> --}}
         <input type='hidden' name='ticketDescription' id='ticketDescription'>
-        <div id="editor">
+        <a>Description</a>
+        <div id="editor" title="Description">
               {{!-- no sample data to include --}}
             </div>
-
+          <br>
          <label class="" for="ticketCategory">Category</label>
       <div class="col-md-12"></div>
           <div class="infoCategory">
