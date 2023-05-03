@@ -145,7 +145,6 @@ router
     } catch (e) {
       renderError(res, 500, 'Internal Server Error');
     }
-    
     //code here for GET
   }).post(async (req, res) => {
     let ticket;
@@ -156,8 +155,65 @@ router
        renderError(res, 404, 'Issue Retrieving ticket');
     }
 
+    console.log('ticket', ticket);
 
-    update()
+
+    try{
+      if (
+        req.body.hasOwnProperty("ticketName") &&
+        req.body.hasOwnProperty("ticketDescription") &&
+        req.body.hasOwnProperty("ticketCategory") &&
+        req.body.hasOwnProperty("ticketDeadline") &&
+        req.body.hasOwnProperty("ticketPriority")
+      ){
+
+        let ticketName = checkString(
+          req.body["ticketName"],
+          "ticket name"
+        );
+        let ticketDescription = checkString(
+          req.body["ticketDescription"],
+          "ticket description"
+        );
+        let ticketCategory = checkString(
+          req.body["ticketCategory"],
+          "ticket category"
+        );
+        let ticketPriority = checkString(
+          req.body["ticketPriority"],
+          "ticket priority"
+        );
+      
+        let editedTicket = await ticketData.update(
+          req.params.id,
+          ticketName,
+          ticketDescription,
+          ticketPriority,
+          req.body["ticketDeadline"],
+          [],
+          ticketCategory
+        );
+
+        console.log(editedTicket);
+
+        if (editedTicket) {
+          res.status(200).redirect("/tickets/view/" + editedTicket._id);
+        } else {
+          throw new Error("unable to edit user");
+        }
+
+      }else{
+        res.status(400).render("editTicket", { title: "Edit Ticket", error: 'All fields must be filled out'});
+      }
+
+  } catch (e) {
+    // render form with 400 code
+    res.status(400).render("editTicket", { title: "Edit Ticket", error: `${e}`});
+  }
+
+
+
+
   });
 
 

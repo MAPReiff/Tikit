@@ -1,19 +1,16 @@
-var temp = "{{priority}}";
-var mySelect = document.getElementById("ticketPriority");
+// Have the edit ticket page automatically be filled with the past values
+var priority = document.getElementById("ticketPriority").value;
+console.log(priority);
+var prioritySelect = document.getElementById('ticketPriority');
+prioritySelect.selectedIndex = priority;
 
-for (var i, j = 0; (i = mySelect.options[j]); j++) {
-  if (i.value == temp) {
-    mySelect.selectedIndex = j;
-    break;
-  }
-}
 
-var temp2 = "{{category}}";
-var mySelect2 = document.getElementById("ticketCategory");
+var category = document.getElementById("ticketCategory").value;
+console.log(category);
+var categorySelect = document.getElementById('ticketCategory');
+categorySelect.selectedIndex = category;
 
-for (var i, j = 0; (i = mySelect2.options[j]); j++) {
-  if (i.value == temp2) {
-    mySelect2.selectedIndex = j;
-    break;
-  }
-}
+
+var date = document.getElementById("ticketDeadline").value;
+console.log(date)
+var dateSelect = document.getElementById('ticketDeadline');

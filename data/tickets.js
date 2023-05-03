@@ -197,7 +197,6 @@ const update = async (
   id,
   name,
   description,
-  status,
   priority,
   deadline,
   owners,
@@ -205,29 +204,30 @@ const update = async (
   tags
 ) => {
   id = helpers.checkId(id, "Ticket ID");
+  console.log('id', id);
   const ticketCollection = await tickets();
   const ticket = await ticketCollection.findOne({ _id: new ObjectId(id) });
-  if (ticket === null) throw "Error: No ticket found with that ID";
 
+  console.log('find ticket', ticket);
+  if (ticket === null) throw "Error: No ticket found with that ID";
+  console.log('edit ticket');
   // validate name
   name = helpers.checkString(name, "Name");
+  console.log('after name');
 
   // validate description
   description = helpers.checkString(description, "Description");
 
-  // validate status
-  status = helpers.checkString(status, "Status");
-  if (status != "To Do" && status != "In Progress" && status != "Completed") {
-    throw new Error(
-      "status must be a string equal to, To Do, In Progress, or Completed"
-    );
-  }
+  console.log('after description s=check string');
+
+  console.log('after description');
 
   // validate priority
   priority = helpers.checkString(priority, "Priority");
+  console.log('after priority', priority);
   if (
     priority != "Low" &&
-    priority != "Medium" &&
+    priority != "Normal" &&
     priority != "High" &&
     priority != "Critical"
   ) {
@@ -236,10 +236,13 @@ const update = async (
     );
   }
 
+  console.log('after priority');
+
   // check if dadline is provided
   // deadline expected like this - timestamp
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local
 
+  let createdOn = Date.now();
   if (!deadline) {
     deadline = NaN;
     // no deadline so we just use NaN as a placeholder
@@ -252,16 +255,35 @@ const update = async (
     }
   }
 
+  console.log('after deadline');
+
+  /*validate owners
   if (owners && Array.isArray(owners)) {
     for (let [index, user] of owners.entries()) {
       owners[index] = new ObjectId(helpers.validateID(user));
     }
   } else {
     throw "Owners is not a valid array";
-  }
+  }*/
+
+  console.log('after owner');
 
   // validate category
+  console.log('category', category);
   category = helpers.checkString(category, "Category");
+  if (
+    category != "Service Request" &&
+    category != "Incident" &&
+    category != "Problem" &&
+    category != "Change Request"
+  ) {
+    throw new Error(
+      "category must be a string equal to Service Request, Incident, Problem, or Change Request"
+    );
+  }
+
+  console.log('after category');
+
 
   // check if tags are provided
   if (!tags) {
@@ -275,7 +297,6 @@ const update = async (
   let updatedTicket = {
     name: name,
     description: description,
-    status: status,
     priority: priority,
     createdOn: curTicket.createdOn,
     deadline: deadline,
@@ -291,12 +312,14 @@ const update = async (
     { $set: updatedTicket },
     { returnDocument: "after" }
   );
+
+  console.log('updated info', updatedInfo);
   if (updatedInfo.lastErrorObject.n === 0) {
     throw "Error: could not update ticket successfully!";
   }
 
-  const userCollection = await users();
-  await updateOwners(userCollection, objID, owners);
+  //const userCollection = await users();
+  //await updateOwners(userCollection, objID, owners);
 
   return toStringify(updatedInfo.value);
 };
