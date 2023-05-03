@@ -19,13 +19,24 @@ var quill = new Quill("#editor", {
   theme: "snow",
 });
 
-// get the hidden input - from https://stackoverflow.com/a/67682117
-let inputElement = document.getElementById("contentInput");
+// get the hidden input - inspired by https://stackoverflow.com/a/67682117
+let route = window.location.pathname;
+let inputElement;
+if (route.startsWith("/tickets/view")) {
+  inputElement = document.getElementById("contentInput");
+} else if (route.startsWith("/tickets/makeTicket")) {
+  inputElement = document.getElementById("ticketDescription");
+}
+
 quill.on("text-change", function () {
   // console.log(quill.getText())
   let richText = quill.getText().trim().replaceAll(/\s+/g, "");
   // console.log(richText.length)
-  if (richText.length !== 0 || richText === "\n") {
+  if (
+    richText.length !== 0 ||
+    richText === "\n" ||
+    quill.root.innerHTML.includes("<img src=")
+  ) {
     // inputElement.value = JSON.stringify(quill.getContents());
     inputElement.value = quill.root.innerHTML;
   } else {
