@@ -94,6 +94,7 @@ npm start
 ```
 
 Navigate to http://localhost:3000/, and you can then either login, or register a new account. There are eight pre made accounts in the seed file, all of which use the same password: `Password!23`.
+
 Admin Accounts:
 - `jdoe@stevens.edu`
 - `msmith@stevens.edu`
