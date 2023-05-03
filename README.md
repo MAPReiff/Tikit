@@ -27,7 +27,7 @@ A ticketing system, often used in an IT or support setting, consists of a web in
 
   - [x] List of open tickets (only the ones opened by the user)
 
-  - [ ] Place to make a new ticket
+  - [ ] Place to make a new ticket - pending error checking
 
   - [x] Search box to look up tickets by some kind of identifier
 
