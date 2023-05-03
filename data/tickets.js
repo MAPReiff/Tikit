@@ -20,11 +20,12 @@ const create = async (
   // validate description
   description = helpers.checkString(description, "Description");
 
-  if (description.length < 10) {
-    throw new Error(`${type} must be atleast 10 characters long`);
-  } else if (description.length > 200) {
-    throw new Error(`${type} must be no longer than 200 characters`);
-  }
+  // @Val - why do we need this? Why do you use a variable called type that does not exist?
+  // if (description.length < 10) {
+  //   throw new Error(`${type} must be atleast 10 characters long`);
+  // } else if (description.length > 200) {
+  //   throw new Error(`${type} must be no longer than 200 characters`);
+  // }
 
   // validate status
   status = helpers.checkString(status, "Status");
