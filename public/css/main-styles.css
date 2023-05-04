@@ -183,3 +183,15 @@ text-align: left !important;
     padding: 10px;
     width: 40%;
   }
+
+.ql-size-huge {
+    font-size: 2.5em;
+}
+
+.ql-size-large {
+    font-size: 1.5em;
+}
+
+.ql-size-small {
+    font-size: 0.75em;
+}

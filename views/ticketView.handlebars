@@ -1,79 +1,89 @@
-
 <section>
   <h1 class="display-4 fw-normal pageHeader">{{name}}</h1>
-<p class="lead info">Status: {{status}}</p>
-<p class="lead info">Priority: {{priority}}</p>
-<p class="lead info">Category: {{category}}</p>
-<div>
-  <p class="lead info ">Customer:
+  <p class="lead info">Status: {{status}}</p>
+  <p class="lead info">Priority: {{priority}}</p>
+  <p class="lead info">Category: {{category}}</p>
+  <div>
+    <p class="lead info ">Customer:
 
-  <a class="badge link-clean text-bg-primary rounded-pill" href= "/users/view/{{customer._id}}">{{customer.firstName}} {{customer.lastName}}</a></p>
-</div>
-<p class="lead info">Owners:</p>
-<ul>
-  {{#each owners}}
-    <li class="badge text-bg-primary rounded-pill"><a  class="pageLink-light" href= "/users/view/{{this._id}}">{{this.firstName}} {{this.lastName}}</a></li>
-  {{/each}}
-</ul>
-<p class="lead info">Created: {{created}}</p>
-<p class="lead info">Deadline: {{deadline}}</p>
-{{#if tag}}
+      <a class="badge link-clean text-bg-primary rounded-pill"
+        href="/users/view/{{customer._id}}">{{customer.firstName}} {{customer.lastName}}</a>
+    </p>
+  </div>
+  <p class="lead info">Owners:</p>
+  <ul>
+    {{#each owners}}
+    <p>{{owners}}</p>
+    <li class="badge text-bg-primary rounded-pill"><a class="pageLink-light"
+        href="/users/view/{{this._id}}">{{this.firstName}} {{this.lastName}}</a></li>
+    {{/each}}
+  </ul>
+  <p class="lead info">Created: {{created}}</p>
+  <p class="lead info">Deadline: {{deadline}}</p>
+  {{#if tag}}
   <p class="lead info">Tags:</p>
   <ul>
     {{#each tag}}
-      <li class="badge text-bg-primary rounded-pill">{{this}}</li>
+    <li class="badge text-bg-primary rounded-pill">{{this}}</li>
     {{/each}}
   </ul>
-{{/if}}
-<div class="bg-light">
-  <p class="lead description info">{{description}}</p>
-</div>
-<a href="/tickets/editTicket/{{ticketId}}" class="btn btn-primary editTicketBtn" id="editButton" name="editButton" value="Edit Ticket">Edit ticket</a>
-  <div>
-    <br> 
-    <div class="border rounded commentBorder">
-    <h2 class="commentHeader">Comments</h2>
-    <div class="add-comment">
-      <button onclick="setReplyID('null')" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentModal">
-        Add Comment
-    </button>
-    </div>
-
-
-    <div id="delete-error-div" class="error-div" hidden></div>
-    <p>
-      {{#each comments}}
-    <ol class="list-group">
-      <li class="list-group-item d-flex justify-content-between align-items-start">
-        <div class="ms-2 me-auto">
-          <div class="fw-bold author">Author: {{this.createdBy}}</div>
-          {{this.content}}
-        </div>
-        <button onclick="setReplyID('{{this._id}}')" type="button" class="replyCommentBtn" id="replyCommentBtn{{this._id}}" value="{{this._id}}" data-bs-toggle="modal" data-bs-target="#commentModal"> <span class="material-symbols-outlined replyicon">reply_all</span> </button>
-        
-        {{#if this.allowDelete}}
-        <button class="deleteCommentBtn" id="deleteCommentBtn{{this._id}}" value="{{this._id}}"><span class="material-symbols-outlined deleteicon"> delete
-          </span></button>
-          {{/if}}
-        <span class="badge text-bg-light rounded-pill">{{this.commentedOn}}</span>
-      </li>
-      {{#each this.allReplies}}
-      <li class="list-group-item d-flex justify-content-between align-items-start reply">
-        <div class="ms-2 me-auto">
-          <div class="fw-bold author">- Author: {{this.createdBy}}</div>
-          &nbsp;&nbsp;{{this.content}}
-        </div>
-        {{#if this.allowDelete}}
-        <button class="deleteReplyBtn" id="deleteReplyBtn{{this._id}}" value="{{this._id}}"><span class="material-symbols-outlined deleteicon"> delete
-          </span></button>
-         {{/if}}
-        <span class="badge text-bg-light rounded-pill">{{this.commentedOn}}</span>
-      </li>
-      {{/each}}
-    </ol>
-
-    {{/each}}
+  {{/if}}
+  <div class="bg-light">
+    <p class="lead description info">{{{description}}}</p>
   </div>
+  <a href="/tickets/editTicket/{{ticketId}}" class="btn btn-primary editTicketBtn" id="editButton" name="editButton"
+    value="Edit Ticket" _id={{ticketId}} status={{status}} deadline={{deadline}} name={{name}} priority={{priority}}
+    category={{category}} description={{description}}>Edit ticket</a>
+  <div>
+    <br>
+    <div class="border rounded commentBorder">
+      <h2 class="commentHeader">Comments</h2>
+      <div class="add-comment">
+        <button onclick="setReplyID('null')" type="button" class="btn btn-primary" data-bs-toggle="modal"
+          data-bs-target="#commentModal">
+          Add Comment
+        </button>
+      </div>
+
+
+      <div id="delete-error-div" class="error-div" hidden></div>
+      <p>
+        {{#each comments}}
+      <ol class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+          <div class="ms-2 me-auto">
+            <div class="fw-bold author">Author: {{this.createdBy}}</div>
+            {{{this.content}}}
+          </div>
+          <button onclick="setReplyID('{{this._id}}')" type="button" class="replyCommentBtn"
+            id="replyCommentBtn{{this._id}}" value="{{this._id}}" data-bs-toggle="modal" data-bs-target="#commentModal">
+            <span class="material-symbols-outlined replyicon">reply_all</span> </button>
+
+          {{#if this.allowDelete}}
+          <button class="deleteCommentBtn" id="deleteCommentBtn{{this._id}}" value="{{this._id}}"><span
+              class="material-symbols-outlined deleteicon"> delete
+            </span></button>
+          {{/if}}
+          <span class="badge text-bg-light rounded-pill">{{this.commentedOn}}</span>
+        </li>
+        {{#each this.allReplies}}
+        <li class="list-group-item d-flex justify-content-between align-items-start reply">
+          <div class="ms-2 me-auto">
+            <div class="fw-bold author">- Author: {{this.createdBy}}</div>
+            &nbsp;&nbsp;{{{this.content}}}
+          </div>
+          {{#if this.allowDelete}}
+          <button class="deleteReplyBtn" id="deleteReplyBtn{{this._id}}" value="{{this._id}}"><span
+              class="material-symbols-outlined deleteicon"> delete
+            </span></button>
+          {{/if}}
+          <span class="badge text-bg-light rounded-pill">{{this.commentedOn}}</span>
+        </li>
+        {{/each}}
+      </ol>
+
+      {{/each}}
+    </div>
   </div>
 </section>
 
@@ -89,22 +99,30 @@
       </div>
       <div id="error-div" class="error-div" hidden></div>
       <form method="POST" action="/comments/{{ticketId}}" class="comment-form" id="comment-form">
-      <div class="modal-body">
+        <div class="modal-body">
           <div class="mb-3">
             <input id="tickedIDInput" type="text" name="tickedIDInput" value={{ticketId}} hidden>
             <input id="replyingToID" type="text" name="replyingToID" value="null" hidden>
-            <label for="contentInput" class="form-label">Comment:</label>
-            <textarea id="contentInput" name="contentInput" placeholder="Enter your comment"
-              class="form-control" rows="3"></textarea>
+            {{!-- <label for="contentInput" class="form-label">Comment:</label>
+            <textarea id="contentInput" name="contentInput" placeholder="Enter your comment" class="form-control"
+              rows="3"></textarea> --}}
+            {{!-- <label for="contentInput" class="form-label">Comment:</label> --}}
+            <input type='hidden' name='contentInput' id='contentInput'>
+            <a>Comment:</a>
+            <div id="editor" title="Comment">
+              {{!-- no sample data to include --}}
+            </div>
           </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button class="btn btn-primary" type="submit" value="Submit">Submit</button>
-        {{!-- <button type="button" class="btn btn-primary" onclick="postComment('{{ticketId}}')">Save changes</button> --}}
-      </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-primary" type="submit" value="Submit">Submit</button>
+          {{!-- <button type="button" class="btn btn-primary" onclick="postComment('{{ticketId}}')">Save
+            changes</button> --}}
+        </div>
       </form>
     </div>
   </div>
 </div>
 
+<script src="/public/js/quill.js"></script>

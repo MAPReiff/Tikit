@@ -5,6 +5,7 @@ import configRoutes from "./routes/index.js";
 
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { pageView } from "./middleware.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -39,6 +40,7 @@ app.use(
   })
 );
 
+app.use("/tickets/view/:id", pageView);
 var hbs = exphbs.create({ defaultLayout: 'main', helpers: {
   select: function(value, options) {
     return options.fn(this).replace(

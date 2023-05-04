@@ -22,6 +22,14 @@
   <meta name="msapplication-TileColor" content="#da532c">
   <meta name="msapplication-config" content="/public/assets/browserconfig.xml">
   <meta name="theme-color" content="#ffffff">
+
+  {{!-- for rich text --}}
+  <!-- Include stylesheet -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <!-- Include the Quill library -->
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  {{!-- Quill image compressor module --}}
+  <script src="https://unpkg.com/quill-image-compress@1.2.11/dist/quill.imageCompressor.min.js"></script>
 </head>
 
 <body>
@@ -40,13 +48,16 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="/tickets">Tickets</a>
+                <a class="nav-link" aria-current="page" href="/">Tickets</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/users">Users</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link">View Profile</a>
+                <a class="nav-link" href="/tickets/calendar">Calendar</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/users/view/{{user_id}}">View Profile</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/tickets/makeTicket">Create Ticket</a>
@@ -56,7 +67,7 @@
                     style="vertical-align: -6px;">logout</i></a>
               </li>
             </ul>
-            <form class="d-flex" role="search" action="/tickets" method="POST">
+            <form class="d-flex" role="search" action="/" method="POST">
               <input class="form-control me-2" type="search" id="search" name="search" placeholder="Search for tickets"
                 aria-label="Search">
                 <label hidden for="submitBtn">

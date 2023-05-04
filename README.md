@@ -13,53 +13,98 @@ A ticketing system, often used in an IT or support setting, consists of a web in
 
 ## Core Features
 
-- User Accounts
+- [x] User Accounts
 
-  - End users
+  - [x] End users
 
-  - Those who work on support tickets
+  - [x] Those who work on support tickets
 
-- Login Page
+- [x] Login Page
 
-  - Users will be welcomed with a login page where they will enter their username and password
+  - [x] Users will be welcomed with a login page where they will enter their username and password
 
-- Landing Page
+- [ ] Landing Page
 
-  - List of open tickets (only the ones opened by the user)
+  - [x] List of open tickets (only the ones opened by the user)
 
-  - Place to make a new ticket
+  - [ ] Place to make a new ticket - pending error checking
 
-  - Search box to look up tickets by some kind of identifier
+  - [x] Search box to look up tickets by some kind of identifier
 
-- Tickets
+- [ ] Tickets
 
-  - Store the “customer” who made the request
+  - [x] Store the “customer” who made the request
 
-  - Allow user to add team members to a ticket to give them access to the ticket
+  - [ ] Allow user to add team members to a ticket to give them access to the ticket - pending edit ticket page
 
-  - A subject/title
+  - [x] A subject/title
 
-  - The request message itself
+  - [x] The request message itself
 
-  - The ticket “owner” who is working on the request
+  - [ ] The ticket “owner” who is working on the request - pending edit ticket page
 
-  - Priority of the ticket
+  - [x] Priority of the ticket
 
-  - Status (being worked on, on hold, resolved, etc)
+  - [ ] Status (being worked on, on hold, resolved, etc) - pending edit ticket page
 
-  - Communication log
+  - [x] Communication log (comments)
 
-- Comment: Allow users to start a thread of comments
+- [x] Comment: Allow users to start a thread of comments
 
 ## Extra Features
 
-- Ticket due dates and a calendar
-- Rich text support
-- Image support
-- Private comments not visible to end user accounts
+- [x] Ticket due dates and a calendar
+- [x] Rich text support
+- [x] Image support
+- [ ] Private comments not visible to end user accounts
 
-  - Visibility denotations
+  - [ ] Visibility denotations
 
-- Add files to tickets
-- Email notifications
-- @ mentions for users
+- [ ] Add files to tickets
+- [ ] Email notifications
+- [ ] @ mentions for users
+
+## Running Tikit
+In order to run Tikit, please make sure that you have Node.js, npm, and MongoDB installed on your system. Please ensure your MongoDB server is running on the default address and port.
+Clone the repository to your local device, either by downloading the repo zip file and extracting it or through the terminal:
+```
+git@github.com:MAPReiff/Tikit.git
+or
+https://github.com/MAPReiff/Tikit.git
+```
+
+Once you have downloaded the repo, navigate to the directory with your terminal, for example:
+```
+cd Tikit
+```
+
+Next, you will need to install the npm dependencies through the terminal:
+```
+npm install
+```
+
+Following your dependencies, we recomend seeding the database. Please make sure that your local MongoDB server is running on the default address and port:
+```
+npm run seed
+```
+
+You can then start Tikit by running:
+```
+npm start
+```
+
+Navigate to http://localhost:3000/, and you can then either login, or register a new account. There are eight pre made accounts in the seed file, all of which use the same password: `Password!23`.
+
+Admin Accounts:
+- `jdoe@stevens.edu`
+- `msmith@stevens.edu`
+- `hwong@stevens.edu`
+
+Normal User Accounts:
+- `awilliams@stevens.edu`
+- `sbrown@stevens.edu`
+- `jwaterland@stevens.edu`
+- `csmith@stevens.edu`
+- `jevans@stevens.edu`
+
+If you are creating a new account, it will be made as a normal `user`. If you wish to make this user an `admin`, and existing `admin` must manually edit this user under their profile to assign the higher level of access.
