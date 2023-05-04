@@ -9,10 +9,10 @@
 <form action="/tickets/editTicket/{{_id}}" method="POST" class="form-inline editTicketForm" method="POST">
   <div class="col-auto editTicketForm-group">
         <label class="" for="ticketName" >Ticket Name</label>
-        <input class="form-control" type="text" id="ticketName" name="ticketName" placeholder={{name}}> <br>
+        <input class="form-control" type="text" id="ticketName" name="ticketName" placeholder={{name}} value={{name}}> <br>
 
         <label class="" for="ticketDescription">Description</label>
-        <input class="form-control" type="text" id="ticketDescription" name="ticketDescription" placeholder={{description}}> <br>
+        <input class="form-control" type="text" id="ticketDescription" name="ticketDescription" placeholder={{description}} value={{description}}> <br>
 
          <label class="" for="ticketCategory">Category</label>
         <div class="col-md-12"></div>
@@ -38,7 +38,7 @@
         </select><br>
 
         <label class="" for="ticketDeadline">Deadline</label>
-        <input class="form-control" type="date" id="ticketDeadline" name="ticketDeadline" placeholder={{deadline}}><br>
+        <input class="form-control" type="date" id="ticketDeadline" name="ticketDeadline" placeholder={{deadline}} value={{deadline}}><br>
 
         <label class="" for="ticketPriority">Priority</label>
          <select class="form-control"  id="ticketPriority" name="ticketPriority" placeholder={{priority}}>
