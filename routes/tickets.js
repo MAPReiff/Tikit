@@ -15,7 +15,7 @@ router
     try{
       tickets = await ticketData.getAll();
     }catch(e) {
-      renderError(res, 404, 'Issue Retrieving tickets');
+      renderError(res, 404, 'Issue Retrieving tickets' + e);
       return;
     }
 
@@ -86,6 +86,7 @@ router
        return;
     }
 
+    console.log(ticket.owners);
     try{ 
       res.status(200).render("ticketView", {
         ticketId: ticket._id,
@@ -97,7 +98,7 @@ router
         created: !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString(),
         deadline: !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString(),
         customer: await userData.get(ticket.customerID.toString()),
-        owner: await userData.getMultiple(ticket.owners.map((ticket) => {
+        owners: await userData.getMultiple(ticket.owners.map((ticket) => {
           return ticket.toString();
         })),
         category: ticket.category,
@@ -119,6 +120,14 @@ router
 
     let ticket;
 
+    let usersAll = await userData.getAll();
+    var users = [];
+    for(let i = 0; i < usersAll.length; i++){
+      if(req.session.user._id !== usersAll[i]._id){
+        users.push({id: usersAll[i]._id,firstName: usersAll[i].firstName, lastName: usersAll[i].lastName});
+      }
+    }
+
     try {
       ticket = await ticketData.get(req.params.id);
     } catch(e) {
@@ -136,9 +145,8 @@ router
         created: !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString(),
         deadline: !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString(),
         customer: await userData.get(ticket.customerID.toString()),
-        owner: await userData.getMultiple(ticket.owners.map((ticket) => {
-          return ticket.toString();
-        })),
+        owners: ticket.owners,
+        users: users,
         category: ticket.category,
         tag: ticket.tags
       });
@@ -148,6 +156,15 @@ router
     //code here for GET
   }).post(async (req, res) => {
     let ticket;
+    
+    let usersAll = await userData.getAll();
+    var users = [];
+    for(let i = 0; i < usersAll.length; i++){
+      if(req.session.user._id !== usersAll[i]._id){
+        users.push({id: usersAll[i]._id,firstName: usersAll[i].firstName, lastName: usersAll[i].lastName});
+      }
+    }
+    
 
     try {
       ticket = await ticketData.get(req.params.id);
@@ -181,14 +198,21 @@ router
           req.body["ticketPriority"],
           "ticket priority"
         );
+
+
+        if(typeof req.body["ticketOwners"] === 'string'){
+          req.body["ticketOwners"] = [req.body["ticketOwners"]];
+        }
+
       
         let editedTicket = await ticketData.update(
+          req.session.user._id,
           req.params.id,
           ticketName,
           ticketDescription,
           ticketPriority,
           req.body["ticketDeadline"],
-          [],
+          req.body["ticketOwners"],
           ticketCategory
         );
 
@@ -201,12 +225,12 @@ router
 
       }else{
         console.log("in ekse");
-        res.status(400).render("editTicket", { title: "Edit Ticket", error: 'All fields must be filled out', _id: req.params.id});
+        res.status(400).render("editTicket", { title: "Edit Ticket", error: 'All fields must be filled out', _id: req.params.id, users:users});
       }
 
   } catch (e) {
     // render form with 400 code
-    res.status(400).render("editTicket", { title: "Edit Ticket", error: `${e}`, _id: req.params.id});
+    res.status(400).render("editTicket", { title: "Edit Ticket", error: `${e}`, _id: req.params.id, users:users});
   }
 
   });
@@ -281,8 +305,14 @@ router
             "ticket priority"
           );
 
-          if(typeof req.body["ticketOwners"] === 'string'){
-            req.body["ticketOwners"] = [req.body["ticketOwners"]];
+          let ticketOwners;
+
+          if(!req.body["ticketOwners"]){
+            ticketOwners = [];
+          }else if(typeof req.body["ticketOwners"] === 'string'){
+            ticketOwners = [req.body["ticketOwners"]];
+          }else{
+            ticketOwners = req.body["ticketOwners"];
           }
 
           console.log(req.body["ticketOwners"]);
@@ -294,7 +324,7 @@ router
             ticketPriority,
             req.body["ticketDeadline"],
             req.session.user._id,
-            req.body["ticketOwners"],
+            ticketOwners,
             ticketCategory
           );
 

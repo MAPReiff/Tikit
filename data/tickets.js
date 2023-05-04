@@ -81,13 +81,14 @@ const create = async (
   customerID = new ObjectId(helpers.validateID(customerID));
 
   //validate owners
-  if (owners.length != 0) {
-    owners = helpers.checkIdArray(owners, "Owners ID Array");
-  }
-
 
   if (owners && Array.isArray(owners)) {
+    if(owners.length > 0){
+      owners = helpers.checkIdArray(owners, "Owners ID Array");
+    }
+  
     let userIncluded = false;
+
     for (let i = 0; i < owners.length; i++) {
       owners[i] = new ObjectId(helpers.validateID(owners[i]));
       if(owners[i].equals(customerID)){
@@ -96,13 +97,17 @@ const create = async (
     }
 
     if(!userIncluded){
-      let user = await userData.get(customerID.toString());
       owners.push(customerID);
     }
 
-  } else if (owners.length != 0) {
+  }else if(owners.length == 0){
+    owners.push(customerID);
+
+  }else if (owners.length != 0) {
     throw "Owners is not a valid array";
+    
   }
+
 
 
   // check if tags are provided
@@ -205,6 +210,7 @@ If we need this functionallity we can add it later */
 for now I will just leave it as is*/
 
 const update = async (
+  customerID,
   id,
   name,
   description,
@@ -271,6 +277,36 @@ const update = async (
     throw "Owners is not a valid array";
   }*/
 
+  // validate customerID
+  customerID = helpers.checkId(customerID, "Customer ID");
+  customerID = new ObjectId(helpers.validateID(customerID));
+
+
+  const curTicket = await get(id);
+
+   //validate owners
+  if (owners && Array.isArray(owners)) {
+    if(owners.length > 0){
+      owners = helpers.checkIdArray(owners, "Owners ID Array");
+    }
+    let userIncluded = false;
+    for (let i = 0; i < owners.length; i++) {
+      owners[i] = new ObjectId(helpers.validateID(owners[i]));
+      if(owners[i].equals(customerID)){
+        userIncluded = true;
+      }
+    }
+
+    if(!userIncluded){
+      owners.push(customerID);
+    }
+
+  } else if(!owners){
+    owners = curTicket.owners;
+  } else if (owners.length != 0) {
+    throw "Owners is not a valid array";
+  }
+
 
 
   // validate category
@@ -288,7 +324,6 @@ const update = async (
   }
 
 
-
   // check if tags are provided
   if (!tags) {
     tags = [];
@@ -296,7 +331,6 @@ const update = async (
     tags = helpers.checkStringArray(tags, "Tags");
   }
 
-  const curTicket = await get(id);
 
   let updatedTicket = {
     name: name,
@@ -368,9 +402,11 @@ const updateOwners = async (userCollection, ticketID, owners) => {
 const toStringify = (ticket) => {
   ticket._id = ticket._id.toString();
   ticket.customerID = ticket.customerID.toString();
-  ticket.owners = ticket.owners.map((owner) => {
-    return owner.toString();
-  });
+  if(ticket.owners){
+    ticket.owners = ticket.owners.map((owner) => {
+      return owner.toString();
+    });
+  }
 
   return ticket;
 };
