@@ -125,7 +125,7 @@ router
     } catch (e) {
       res.status(400).render("login", { 
         title: "Login", 
-        user_id: req.session.user._id,
+        // user_id: req.session.user._id,
         error: `${e}`, loginPage: true });
     }
   });
@@ -161,12 +161,12 @@ router
       try {
         res.status(200).render("register", { 
           title: "Register", 
-          user_id: req.session.user._id,
+          // user_id: req.session.user._id,
           loginPage: true });
       } catch (e) {
         res.status(500).render("error", {
           title: "Error",
-          user_id: req.session.user._id,
+          // user_id: req.session.user._id,
           error: "internal server error",
           code: "500",
         });
@@ -221,7 +221,7 @@ router
       // render form with 400 code
       res.status(400).render("register", { 
         title: "Register", 
-        user_id: req.session.user._id,
+        // user_id: req.session.user._id,
         error: `${e}`, 
         loginPage: true });
     }
