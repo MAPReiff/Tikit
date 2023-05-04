@@ -30,11 +30,17 @@
                 </span>
             </div>
             </div>
-         <select class="form-control"  id="ticketCategory" name="ticketCategory" placeholder={{category}}>    
-                    <option value="Service Request" selected="selected">Service Request</option>
-                    <option value="Incident">Incident</option>
+        <p>{{category}}</p>
+         <select class="form-control"  id="ticketCategory" name="ticketCategory" placeholder={{category}}>  
+                {{#select category}}
+                    <option value="Service Request">Service Request</option>
+             
+                    <option value="Incident">Incident</option> 
+               
                     <option value="Problem">Problem</option>
+               
                     <option value="Change Request">Change Request</option>
+                 {{/select}}
         </select><br>
 
         <label class="" for="ticketDeadline">Deadline</label>
@@ -42,10 +48,16 @@
 
         <label class="" for="ticketPriority">Priority</label>
          <select class="form-control"  id="ticketPriority" name="ticketPriority" placeholder={{priority}}>
-                    <option value="Critical">Critical</option>
-                    <option value="High">High</option>
-                    <option value="Normal">Normal</option>
-                    <option value="Low">Low</option>
+                     {{#select priority}}
+                        <option value="Critical">Critical</option>
+                   
+                        <option value="High">High</option>
+                   
+                        <option value="Normal">Normal</option>
+                   
+                        <option value="Low">Low</option>
+                    {{/select}}
+
         </select><br><br>
 
          <label class="" for="ticketOwners">Owners</label>
