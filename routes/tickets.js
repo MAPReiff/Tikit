@@ -55,7 +55,6 @@ router
 
 
     }catch(e) {
-      console.log(e);
       renderError(res, 404, 'Issue Retrieving ticket(s)');
       return;
     }
@@ -86,7 +85,6 @@ router
        return;
     }
 
-    console.log(ticket.owners);
     try{ 
       res.status(200).render("ticketView", {
         ticketId: ticket._id,
@@ -224,7 +222,6 @@ router
         }
 
       }else{
-        console.log("in ekse");
         res.status(400).render("editTicket", { title: "Edit Ticket", error: 'All fields must be filled out', _id: req.params.id, users:users});
       }
 
@@ -315,7 +312,6 @@ router
             ticketOwners = req.body["ticketOwners"];
           }
 
-          console.log(req.body["ticketOwners"]);
         
           let createdTicket = await ticketData.create(
             ticketName,

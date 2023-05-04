@@ -310,7 +310,6 @@ const update = async (
 
 
   // validate category
-  console.log('category', category);
   category = helpers.checkString(category, "Category");
   if (
     category != "Service Request" &&
