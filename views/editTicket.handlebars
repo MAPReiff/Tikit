@@ -60,10 +60,10 @@
         </select><br><br>
 
          <label class="" for="ticketOwners">Owners</label>
-         <select class="form-control"  id="ticketOwners" name="ticketOwners" multiple="multiple">  
-          {{#each users}}
-             <option value={{this.id}}>{{this.firstName}} {{this.lastName}}</option>
-          {{/each}} 
+         <select class="form-control"  id="ticketOwners" name="ticketOwners" multiple="multiple"> 
+                {{#each users}}
+                        <option value={{this.id}}  {{{selectMultiple this.id ../owners}}} >{{this.firstName}} {{this.lastName}}</option>
+                {{/each}} 
         </select><br><br>
   </div>
   <input class="btn btn-primary searchBtn" type="submit" id="subBtn" value="Submit Changes">

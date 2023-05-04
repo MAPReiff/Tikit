@@ -41,11 +41,18 @@ app.use(
 
 var hbs = exphbs.create({ defaultLayout: 'main', helpers: {
   select: function(value, options) {
-    // Create a select element 
     return options.fn(this).replace(
       new RegExp(' value=\"' + value + '\"'),
       '$& selected="selected"');
-},
+  },
+  selectMultiple: function(value, owners, options) {
+    for(let i = 0; i < owners.length; i++){
+      if(value == owners[i]){
+        return 'selected="selected"';
+      }
+    }
+    return "";
+  },
   ifEquals: (arg1, arg2, options) => {
     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
   },
