@@ -8,10 +8,10 @@
 <form action="/tickets/makeTicket" method="POST" class="form-inline makeTicketForm">
   <div class="col-auto makeTicketForm-group">
         <label class="" for="ticketName">Ticket Name</label>
-        <input class="form-control" type="text" id="ticketName" name="ticketName" placeholder="Ticket Name"> <br>
+        <input class="form-control" type="text" id="ticketName" name="ticketName" placeholder="Ticket Name" required> <br>
 
         <label class="" for="ticketDescription">Description</label>
-        <input class="form-control" type="text" id="ticketDescription" name="ticketDescription" placeholder="Ticket Description"> <br>
+        <input class="form-control" type="text" id="ticketDescription" name="ticketDescription" placeholder="Ticket Description" required> <br>
 
          <label class="" for="ticketCategory">Category</label>
       <div class="col-md-12"></div>
@@ -38,7 +38,7 @@
         </select><br>
 
         <label class="" for="ticketDeadline">Deadline</label>
-        <input class="form-control" type="date" id="ticketDeadline" name="ticketDeadline" placeholder="MM/DD/YYYY"><br>
+        <input class="form-control" type="date" id="ticketDeadline" name="ticketDeadline" placeholder="MM/DD/YYYY" required><br>
 
         <label class="" for="ticketPriority">Priority</label>
          <select class="form-control"  id="ticketPriority" name="ticketPriority">    
