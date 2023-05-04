@@ -143,7 +143,7 @@ router
         status: ticket.status,
         priority: ticket.priority,
         created: !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString(),
-        deadline: !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString(),
+        deadline: !ticket.deadline ? "N/A" : new Date(ticket.deadline).toISOString().substring(0, 10),
         customer: await userData.get(ticket.customerID.toString()),
         owners: ticket.owners,
         users: users,
