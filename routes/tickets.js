@@ -145,6 +145,7 @@ router
           req.session.user._id,
           req.params.id,
           ticketName,
+          req.body["ticketStatus"],
           ticketDescription,
           ticketPriority,
           req.body["ticketDeadline"],

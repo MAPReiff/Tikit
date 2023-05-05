@@ -22,7 +22,7 @@ const create = async (
 
   // validate status
   status = helpers.checkString(status, "Status");
-  if (status != "To Do" && status != "In Progress" && status != "Completed") {
+  if (status != "To Do" && status != "In Progress" && status != "Completed" && status != "Problem") {
     throw new Error(
       "status must be a string equal to To Do, In Progress, or Completed"
     );
@@ -80,7 +80,6 @@ const create = async (
   customerID = new ObjectId(helpers.validateID(customerID));
 
   //validate owners
-
   if (owners && Array.isArray(owners)) {
     if(owners.length > 0){
       owners = helpers.checkIdArray(owners, "Owners ID Array");
@@ -96,8 +95,6 @@ const create = async (
   }else{
     owners = [];
   }
-
-
 
   // check if tags are provided
   if (!tags) {
@@ -203,6 +200,7 @@ const update = async (
   customerID,
   id,
   name,
+  status,
   description,
   priority,
   deadline,
@@ -224,6 +222,8 @@ const update = async (
   // validate description
   description = helpers.checkString(description, "Description");
 
+  const curTicket = await get(id);
+
 
   // validate priority
   priority = helpers.checkString(priority, "Priority");
@@ -239,6 +239,17 @@ const update = async (
     );
   }
 
+  // validate status
+  if(status){
+    status = helpers.checkString(status, "Status");
+    if (status != "To Do" && status != "In Progress" && status != "Completed" && status != "Problem") {
+      throw new Error(
+        "status must be a string equal to To Do, In Progress, or Completed"
+      );
+    }
+  }else{
+    status = curTicket.status;
+  }
 
 
   // check if dadline is provided
@@ -262,8 +273,6 @@ const update = async (
   customerID = helpers.checkId(customerID, "Customer ID");
   customerID = new ObjectId(helpers.validateID(customerID));
 
-
-  const curTicket = await get(id);
 
    //validate owners
   if (owners && Array.isArray(owners)) {
@@ -310,6 +319,7 @@ const update = async (
     name: name,
     description: description,
     priority: priority,
+    status: status,
     createdOn: curTicket.createdOn,
     deadline: new Date(deadline),
     customerID: curTicket.customerID,
