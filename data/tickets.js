@@ -212,9 +212,10 @@ const update = async (
 ) => {
   id = helpers.checkId(id, "Ticket ID");
   const ticketCollection = await tickets();
-  const ticket = await ticketCollection.findOne({ _id: new ObjectId(id) });
+  let ticket = await ticketCollection.findOne({ _id: new ObjectId(id) });
 
   if (ticket === null) throw "Error: No ticket found with that ID";
+  ticket = toStringify(ticket);
 
   // validate name
   name = helpers.checkString(name, "Name");
@@ -343,7 +344,7 @@ const update = async (
 
 
   const userCollection = await users();
-  await updateOwners(userCollection, objID, owners, oldOwners);
+  await updateOwners(userCollection, objID, owners, ticket.owners);
 
   return toStringify(updatedInfo.value);
 };
