@@ -48,9 +48,11 @@ var hbs = exphbs.create({ defaultLayout: 'main', helpers: {
       '$& selected="selected"');
   },
   selectMultiple: function(value, owners, options) {
-    for(let i = 0; i < owners.length; i++){
-      if(value == owners[i]){
-        return 'selected="selected"';
+    if(owners){
+      for(let i = 0; i < owners.length; i++){
+        if(value == owners[i]){
+          return 'selected="selected"';
+        }
       }
     }
     return "";

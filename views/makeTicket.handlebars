@@ -46,10 +46,16 @@
                     <option value="High">High</option>
                     <option value="Normal">Normal</option>
                     <option value="Low">Low</option>
-        </select><br><br>
-
-
+        </select><br>
          <label class="" for="ticketOwners">Owners</label>
+          <div class="col-md-12"></div>
+            <div class="infoCategory">
+                <i class="icon-info-sign"></i>
+                <span class="extra-info">
+                <p class="categoryDescription">Owners list cannot be edited after submitting ticket. Only admins can edit owners list submssion.</p>
+                </span>
+            </div>
+          </div>
          <select class="form-control"  id="ticketOwners" name="ticketOwners" multiple="multiple">  
           {{#each users}}
              <option value={{this.id}}>{{this.firstName}} {{this.lastName}}</option>

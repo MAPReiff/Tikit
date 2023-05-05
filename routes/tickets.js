@@ -57,7 +57,7 @@ router
     let usersAll = await userData.getAll();
     var users = [];
     for(let i = 0; i < usersAll.length; i++){
-      if(req.session.user._id !== usersAll[i]._id){
+      if(req.session.user._id !== usersAll[i]._id || req.session.user.role === "admin"){
         users.push({id: usersAll[i]._id,firstName: usersAll[i].firstName, lastName: usersAll[i].lastName});
       }
     }
@@ -83,6 +83,7 @@ router
         owners: ticket.owners,
         users: users,
         category: ticket.category,
+        role: req.session.user.role,
         tag: ticket.tags
       });
     } catch (e) {
@@ -95,7 +96,7 @@ router
     let usersAll = await userData.getAll();
     var users = [];
     for(let i = 0; i < usersAll.length; i++){
-      if(req.session.user._id !== usersAll[i]._id){
+      if(req.session.user._id !== usersAll[i]._id || req.session.user.role === "admin"){
         users.push({id: usersAll[i]._id,firstName: usersAll[i].firstName, lastName: usersAll[i].lastName});
       }
     }
@@ -148,7 +149,8 @@ router
           ticketPriority,
           req.body["ticketDeadline"],
           req.body["ticketOwners"],
-          ticketCategory
+          ticketCategory,
+          req.session.user.role
         );
 
 
@@ -177,7 +179,7 @@ router
     let usersAll = await userData.getAll();
     var users = [];
     for(let i = 0; i < usersAll.length; i++){
-      if(req.session.user._id !== usersAll[i]._id){
+      if(req.session.user._id !== usersAll[i]._id || req.session.user.role === "admin"){
         users.push({id: usersAll[i]._id,firstName: usersAll[i].firstName, lastName: usersAll[i].lastName});
       }
     }
@@ -203,7 +205,8 @@ router
       let usersAll = await userData.getAll();
       users = [];
       for(let i = 0; i < usersAll.length; i++){
-        if(req.session.user._id !== usersAll[i]._id){
+
+        if(req.session.user._id !== usersAll[i]._id || req.session.user.role === "admin"){
           users.push({id: usersAll[i]._id,firstName: usersAll[i].firstName, lastName: usersAll[i].lastName});
         }
       }
@@ -250,7 +253,7 @@ router
             ticketOwners = req.body["ticketOwners"];
           }
 
-        
+
           let createdTicket = await ticketData.create(
             ticketName,
             ticketDescription,

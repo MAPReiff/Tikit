@@ -12,7 +12,7 @@
         <input class="form-control" type="text" id="ticketName" name="ticketName" placeholder="{{name}}" value="{{name}}"> <br>
 
         <label class="" for="ticketDescription">Description</label>
-        <input class="form-control" type="text" id="ticketDescription" name="ticketDescription" placeholder="{{description}}" defaultValue="{{description}}"> <br>
+        <input class="form-control" type="text" id="ticketDescription" name="ticketDescription" placeholder="{{description}}" value="{{description}}"> <br>
 
          <label class="" for="ticketCategory">Category</label>
         <div class="col-md-12"></div>
@@ -58,12 +58,13 @@
                     {{/select}}
 
         </select><br><br>
-
+        {{#ifEquals role "admin"}}
          <label class="" for="ticketOwners">Owners</label>
          <select class="form-control"  id="ticketOwners" name="ticketOwners" multiple="multiple"> 
-                {{#each users}}
+                {{#each ../users}}
                         <option value={{this.id}}  {{{selectMultiple this.id ../owners}}} >{{this.firstName}} {{this.lastName}}</option>
                 {{/each}} 
+        {{/ifEquals}}
         </select><br><br>
   </div>
   <input class="btn btn-primary searchBtn" type="submit" id="subBtn" value="Submit Changes">

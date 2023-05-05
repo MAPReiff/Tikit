@@ -85,26 +85,16 @@ const create = async (
     if(owners.length > 0){
       owners = helpers.checkIdArray(owners, "Owners ID Array");
     }
-  
-    let userIncluded = false;
 
     for (let i = 0; i < owners.length; i++) {
       owners[i] = new ObjectId(helpers.validateID(owners[i]));
-      if(owners[i].equals(customerID)){
-        userIncluded = true;
-      }
     }
-
-    if(!userIncluded){
-      owners.push(customerID);
-    }
-
-  }else if(owners.length == 0){
-    owners.push(customerID);
 
   }else if (owners.length != 0) {
     throw "Owners is not a valid array";
     
+  }else{
+    owners = [];
   }
 
 
@@ -218,6 +208,7 @@ const update = async (
   deadline,
   owners,
   category,
+  role,
   tags
 ) => {
   id = helpers.checkId(id, "Ticket ID");
@@ -279,21 +270,15 @@ const update = async (
     if(owners.length > 0){
       owners = helpers.checkIdArray(owners, "Owners ID Array");
     }
-    let userIncluded = false;
     for (let i = 0; i < owners.length; i++) {
       owners[i] = new ObjectId(helpers.validateID(owners[i]));
-      if(owners[i].equals(customerID)){
-        userIncluded = true;
-      }
     }
 
-    if(!userIncluded){
-      owners.push(customerID);
-    }
-
-  } else if(!owners){
+  } else if(!owners && role == "admin"){
+    owners = [];
+  } else if(!owners && role == "user"){
     owners = curTicket.owners;
-  } else if (owners.length != 0) {
+  }else if (owners.length != 0) {
     throw "Owners is not a valid array";
   }
 
@@ -382,7 +367,9 @@ const filterResults = async (inputTickets, isAdmin, userID) => {
     for(let ticket of inputTickets) {
       if(ticket.customerID === userID) {
         returnVal.push(ticket);
-      }else if(ticket.owners.includes(userID)){
+      }
+
+      if(ticket.owners.includes(userID)){
         returnVal.push(ticket);
       }
     }
