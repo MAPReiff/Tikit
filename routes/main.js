@@ -18,7 +18,7 @@ async (req, res) => {
   try{
     tickets = await ticketData.getAll(req.session.user.role === "admin", req.session.user._id);
   }catch(e) {
-    console.log(e);
+    // console.log(e);
     helpers.renderError(res, 404, 'Issue Retrieving tickets');
     return;
   }
