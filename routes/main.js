@@ -24,8 +24,8 @@ async (req, res) => {
   }
 
   for(let ticket of tickets){
-    ticket.createdOn = !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString();
-    ticket.deadline = !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString();
+    ticket.createdOn = !ticket.createdOn ? "N/A" : helpers.dateFormatter(ticket.createdOn);
+    ticket.deadline = !ticket.deadline ? "N/A" : helpers.dateFormatter(ticket.deadline);
   }
 
   try {
@@ -56,8 +56,8 @@ async (req, res) => {
       req.session.user.role === "admin");
 
     for(let ticket of tickets){
-      ticket.createdOn = !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString();
-      ticket.deadline = !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString();
+      ticket.createdOn = !ticket.createdOn ? "N/A" : helpers.dateFormatter(ticket.createdOn);
+      ticket.deadline = !ticket.deadline ? "N/A" : helpers.dateFormatter(ticket.deadline);
     }
 
 

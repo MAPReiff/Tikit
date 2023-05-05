@@ -3,7 +3,7 @@ const router = Router();
 import {ticketData} from '../data/index.js';
 import {userData} from '../data/index.js';
 import {commentData} from '../data/index.js';
-import { renderError, checkString } from '../helpers.js';
+import { renderError, checkString, dateFormatter } from '../helpers.js';
 
 router
   .route('/view/:id')
@@ -29,8 +29,8 @@ router
         description: ticket.description,
         status: ticket.status,
         priority: ticket.priority,
-        created: !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString(),
-        deadline: !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString(),
+        created: !ticket.createdOn ? "N/A" : dateFormatter(ticket.createdOn),
+        deadline: !ticket.deadline ? "N/A" : dateFormatter(ticket.deadline),
         customer: await userData.get(ticket.customerID.toString()),
         owners: await userData.getMultiple(ticket.owners.map((ticket) => {
           return ticket.toString();
@@ -77,7 +77,7 @@ router
         description: ticket.description,
         status: ticket.status,
         priority: ticket.priority,
-        created: !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString(),
+        created: !ticket.createdOn ? "N/A" : dateFormatter(ticket.createdOn),
         deadline: !ticket.deadline ? "N/A" : new Date(ticket.deadline).toISOString().substring(0, 10),
         customer: await userData.get(ticket.customerID.toString()),
         owners: ticket.owners,
@@ -306,8 +306,8 @@ router
       }
  
       for(let ticket of tickets){
-        ticket.createdOn = !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString();
-        ticket.deadline = !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString();
+        ticket.createdOn = !ticket.createdOn ? "N/A" : dateFormatter(ticket.createdOn);
+        ticket.deadline = !ticket.deadline ? "N/A" : dateFormatter(ticket.deadline);
       }
 
       try{ 

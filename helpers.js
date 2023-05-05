@@ -170,3 +170,20 @@ export const timeConverter = (UNIX_timestamp) => {
   let time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
   return time;
 }
+
+export const dateFormatter = (date) => {
+  if(!(date instanceof Date)) {
+    date = new Date(date);
+  }
+  console.log(date);
+
+  const formatOptions = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: 'UTC'
+  };
+
+  return new Intl.DateTimeFormat([], formatOptions)
+        .format(date);
+}

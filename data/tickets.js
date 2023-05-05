@@ -264,7 +264,7 @@ const update = async (
     // a dealine was provided
     if (new Date(deadline).getTime() === NaN) {
       throw new Error("provided dealine is not a valid timestamp");
-    } else if (new Date(deadline).getTime() < createdOn) {
+    } else if (new Date(deadline).getTime() < createdOn && deadline !== ticket.deadline) {
       throw new Error("provided dealine in the past");
     }
   }

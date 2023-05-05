@@ -28,6 +28,7 @@ if(calendarElement) {
             } else if(isInvalidEnd) {
                 endDate = startDate;
             }
+
             event['start'] = new Date(startDate).toISOString();
             event['end'] = new Date(endDate).toISOString();
 
