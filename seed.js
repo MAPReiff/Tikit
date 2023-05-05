@@ -172,7 +172,7 @@ console.log(
   user1._id,
   [admin2._id],
   "Service Request",
-  ["Laptop", "Dell", "Windows"]
+  "Laptop, Dell, Windows"
 );
 console.log(
   `Created ticket ${ticket1.name} | ${ticket1.status} | ${ticket1.priority}`
@@ -223,7 +223,7 @@ const ticket2 = await tickets.create(
   user2._id,
   [admin2._id, admin1._id],
   "Service Request",
-  ["Email", "Outlook", "Windows"]
+  "Email, Outlook, Windows"
 );
 console.log(
   `Created ticket ${ticket2.name} | ${ticket2.status} | ${ticket2.priority}`
@@ -299,7 +299,7 @@ const ticket3 = await tickets.create(
   user1._id,
   [admin1._id],
   "Service Request",
-  ["Printer", "HP"]
+  "Printer, HP"
 );
 console.log(
   `Created ticket ${ticket3.name} | ${ticket3.status} | ${ticket3.priority}`
@@ -335,7 +335,7 @@ const ticket4 = await tickets.create(
   user4._id,
   [admin3._id],
   "Incident",
-  ["Photoshop", "Adobe", "MacOS"]
+  "Photoshop, Adobe, MacOS"
 );
 console.log(
   `Created ticket ${ticket4.name} | ${ticket4.status} | ${ticket4.priority}`
@@ -372,6 +372,9 @@ const ticket5 = await tickets.create(
   [admin1._id, admin3._id],
   "Service Request",
   ["Laptop", "MacBook", "MacOS"]
+);
+console.log(
+  `Created ticket ${ticket5.name} | ${ticket5.status} | ${ticket5.priority}`
 );
 console.log(
   `Created ticket ${ticket5.name} | ${ticket5.status} | ${ticket5.priority}`
