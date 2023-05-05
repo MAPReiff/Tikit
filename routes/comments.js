@@ -6,6 +6,7 @@ import {userData} from '../data/index.js';
 import {commentData} from '../data/index.js';
 import * as helpers from "../helpers.js"; 
 import { renderError } from '../helpers.js';
+import xss from 'xss';
 
 
 router
@@ -54,6 +55,8 @@ router
       if (commentInfo.replyingToID.toLowerCase() !== "null") { 
         commentInfo.replyingToID = helpers.checkId(commentInfo.replyingToID);
       } 
+      commentInfo.replyingToID = xss(commentInfo.replyingToID);
+      commentInfo.contentInput = xss( commentInfo.contentInput);
     } catch (e) {
       return res.status(400).json({error: e});
     }
@@ -66,7 +69,6 @@ router
 
     try {
       const newComment = await commentData.create(req.params.ticketId, req.session.user._id, commentInfo.replyingToID, commentInfo.contentInput);
-      let redirectURL = '/tickets/view/' +  req.params.ticketId; 
       return res.status(200).json(newComment);
     } catch (e) {
       res.status(500).json({error: e});
@@ -153,13 +155,24 @@ router
     }
 
     try {
-      let curComment = await commentData.get(req.params.commentId); 
+      let curComment = await commentData.get(req.params.commentId);
+      if (curComment.author != req.session.user._id) {
+        return res.status(403).json( {msg: "Error: Cannot delete other users comments"});
+      } 
     } catch (e) { 
       return res.status(404).json({error: e});
     }
+    try{ 
+      if(!req.body.content) throw "Error: Must provide content in request body";
+    } catch (e) { 
+      return res.status(400).json({error: e});
+    }
 
-    let content = req.body.content;
+    let content; 
     try { 
+      if(!req.body.content) throw "Error: Must provide content in request body";
+      req.body.content = xss(req.body.content);
+      content = req.body.content;
       content = helpers.checkString(content, "Content")
     } catch (e) { 
       return res.status(400).json({error: e});

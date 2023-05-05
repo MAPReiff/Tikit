@@ -120,9 +120,16 @@ const getAll = async (ticketId,curUserID) => {
                     if(curUserID === commentsArr[j].author.toString()){ 
                         commentsArr[j]['allowDelete'] = true;
                     }
+                    commentsArr[j]['_id'] =commentsArr[j]['_id'].toString(); 
+                    commentsArr[j]['ticketID'] = commentsArr[j]['ticketID'].toString();
+                    commentsArr[j]['author'] =  commentsArr[j]['author'].toString();
+                    commentsArr[j]['replyingToID'] = commentsArr[j]['replyingToID'].toString();
                     commentsArr[i]['allReplies'].push(commentsArr[j]);
                 }
             }
+            commentsArr[i]['_id'] =commentsArr[i]['_id'].toString(); 
+            commentsArr[i]['ticketID'] = commentsArr[i]['ticketID'].toString();
+            commentsArr[i]['author'] =  commentsArr[i]['author'].toString();
             allComments.push(commentsArr[i]); 
         }
     }

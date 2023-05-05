@@ -28,7 +28,7 @@ const create = async (
 
   let hashedPassword = await bcrypt.hashSync(password, 15);
 
-  email = helpers.validateEmail(email);
+  email = helpers.checkEmail(email);
   role = helpers.checkString(role);
   role = helpers.validateRole(role); //check that role is admin or user
   title = helpers.checkString(title);
@@ -140,7 +140,7 @@ const update = async (
   lastName = helpers.checkString(lastName, "Last Name");
   username = helpers.checkString(username, "username");
 
-  email = helpers.validateEmail(email);
+  email = helpers.checkEmail(email);
   role = helpers.checkString(role);
   title = helpers.checkString(title);
 
@@ -193,7 +193,7 @@ const update = async (
 };
 
 const checkUser = async (email, password) => {
-  email = helpers.validateEmail(email);
+  email = helpers.checkEmail(email);
   password = helpers.checkString(password, "Password");
 
   const userCollection = await users();
