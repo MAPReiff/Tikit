@@ -53,6 +53,7 @@ router
   .get(async (req, res) => {
 
     let ticket;
+    var tagsString = "";
 
     let usersAll = await userData.getAll();
     var users = [];
@@ -66,6 +67,13 @@ router
       ticket = await ticketData.get(req.params.id);
     } catch(e) {
        renderError(res, 404, 'Issue Retrieving ticket');
+    }
+
+    if(ticket.tags){
+      tagsString = ticket.tags.join(',');
+      console.log(ticket.tags);
+      console.log(ticket.tags.join(','));
+      console.log(tagsString);
     }
 
     try{ 
@@ -84,7 +92,8 @@ router
         users: users,
         category: ticket.category,
         role: req.session.user.role,
-        tag: ticket.tags
+        tag: ticket.tags,
+        tagsString: tagsString
       });
     } catch (e) {
       renderError(res, 500, 'Internal Server Error');
@@ -92,6 +101,7 @@ router
     //code here for GET
   }).post(async (req, res) => {
     let ticket;
+    var tagsString = "";
     
     let usersAll = await userData.getAll();
     var users = [];
@@ -106,6 +116,10 @@ router
       ticket = await ticketData.get(req.params.id);
     } catch(e) {
        renderError(res, 404, 'Issue Retrieving ticket');
+    }
+
+    if(ticket.tags){
+      tagsString = ticket.tags.join(',');
     }
 
 
@@ -187,7 +201,8 @@ router
           owners: ticket.owners,
           category: ticket.category,
           role: req.session.user.role,
-          tag: ticket.tags});
+          tag: ticket.tags,
+          tagsString: tagsString});
       }
 
   } catch (e) {
@@ -209,7 +224,8 @@ router
       owners: ticket.owners,
       category: ticket.category,
       role: req.session.user.role,
-      tag: ticket.tags});
+      tag: ticket.tags,
+      tagsString: tagsString});
   }
 
   });

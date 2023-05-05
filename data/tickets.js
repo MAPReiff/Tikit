@@ -96,15 +96,16 @@ const create = async (
     owners = [];
   }
 
-  var tagsArray;
+  var tagsArray = [];
   // check if tags are provided
-  if (!tags || tags.length == 0) {
-    tagsArray = [];
-  } else {
+  if (tags && tags.length != 0) {
     tags = helpers.checkString(tags, "Tags");
-    tagsArray = tags.split(',');
-    for(let tag in tagsArray){
-      tag = tag.trim();
+    let tagsArrayBefore = tags.split(',');
+    for(let i = 0; i < tagsArrayBefore.length; i++){
+      tagsArrayBefore[i] = tagsArrayBefore[i].trim();
+      if(tagsArrayBefore[i].length > 0){
+        tagsArray.push(tagsArrayBefore[i]);
+      }
     }
   }
 
@@ -309,16 +310,16 @@ const update = async (
     );
   }
 
-  var tagsArray;
-
+  var tagsArray = [];
   // check if tags are provided
-  if (!tags || tags.length == 0) {
-    tagsArray = [];
-  } else {
+  if (tags && tags.length != 0) {
     tags = helpers.checkString(tags, "Tags");
-    tagsArray = tags.split(',');
-    for(let tag in tagsArray){
-      tag = tag.trim();
+    let tagsArrayBefore = tags.split(',');
+    for(let i = 0; i < tagsArrayBefore.length; i++){
+      tagsArrayBefore[i] = tagsArrayBefore[i].trim();
+      if(tagsArrayBefore[i].length > 0){
+        tagsArray.push(tagsArrayBefore[i]);
+      }
     }
   }
 
