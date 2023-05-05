@@ -6,6 +6,7 @@ import {userData} from '../data/index.js';
 import {commentData} from '../data/index.js';
 import * as helpers from "../helpers.js"; 
 import { renderError } from '../helpers.js';
+import xss from 'xss';
 
 
 router
