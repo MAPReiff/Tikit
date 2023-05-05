@@ -26,6 +26,9 @@ if (route.startsWith("/tickets/view")) {
   inputElement = document.getElementById("contentInput");
 } else if (route.startsWith("/tickets/makeTicket")) {
   inputElement = document.getElementById("ticketDescription");
+} else if (route.startsWith("/tickets/edit")) {
+  inputElement = document.getElementById("ticketDescription");
+  inputElement.value = quill.root.innerHTML;
 }
 
 quill.on("text-change", function () {
@@ -44,12 +47,26 @@ quill.on("text-change", function () {
   }
 });
 
-// set the title attribute for each of the obejcts in the toolbar for accessibility 
+// set the title attribute for each of the obejcts in the toolbar for accessibility
 
-quill.container.previousSibling.querySelector('button.ql-bold').setAttribute('title', 'Bold');
-quill.container.previousSibling.querySelector('button.ql-italic').setAttribute('title', 'Italic');
-quill.container.previousSibling.querySelector('button.ql-underline').setAttribute('title', 'Underline');
-quill.container.previousSibling.querySelector('button.ql-strike').setAttribute('title', 'Strike');
-quill.container.previousSibling.querySelector('button.ql-image').setAttribute('title', 'Insert Image');
-quill.container.previousSibling.querySelector('button.ql-list').setAttribute('title', 'Bullet List');
-quill.container.previousSibling.querySelector('button.ql-clean').setAttribute('title', 'Clear Formatting');
+quill.container.previousSibling
+  .querySelector("button.ql-bold")
+  .setAttribute("title", "Bold");
+quill.container.previousSibling
+  .querySelector("button.ql-italic")
+  .setAttribute("title", "Italic");
+quill.container.previousSibling
+  .querySelector("button.ql-underline")
+  .setAttribute("title", "Underline");
+quill.container.previousSibling
+  .querySelector("button.ql-strike")
+  .setAttribute("title", "Strike");
+quill.container.previousSibling
+  .querySelector("button.ql-image")
+  .setAttribute("title", "Insert Image");
+quill.container.previousSibling
+  .querySelector("button.ql-list")
+  .setAttribute("title", "Bullet List");
+quill.container.previousSibling
+  .querySelector("button.ql-clean")
+  .setAttribute("title", "Clear Formatting");
