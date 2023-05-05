@@ -23,7 +23,7 @@ A ticketing system, often used in an IT or support setting, consists of a web in
 
   - [x] Users will be welcomed with a login page where they will enter their username and password
 
-- [ ] Landing Page
+- [x] Landing Page
 
   - [x] List of open tickets (only the ones opened by the user)
 
@@ -31,7 +31,7 @@ A ticketing system, often used in an IT or support setting, consists of a web in
 
   - [x] Search box to look up tickets by some kind of identifier
 
-- [ ] Tickets
+- [x] Tickets
 
   - [x] Store the “customer” who made the request
 
