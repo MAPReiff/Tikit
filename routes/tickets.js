@@ -19,8 +19,7 @@ router
        renderError(res, 404, 'Issue Retrieving ticket');
        return;
     }
-    console.log(ticket.owners);
-
+  
     try{ 
       res.status(200).render("ticketView", {
         ticketId: ticket._id,

@@ -168,6 +168,7 @@ const getAll = async (isAdmin, userID) => {
   ticketList = ticketList.map((element) => {
     return toStringify(element);
   });
+
   return filterResults(ticketList, isAdmin, userID);
 };
 
@@ -382,9 +383,7 @@ const filterResults = async (inputTickets, isAdmin, userID) => {
     for(let ticket of inputTickets) {
       if(ticket.customerID === userID) {
         returnVal.push(ticket);
-      }
-
-      if(ticket.owners.includes(userID)){
+      }else if(ticket.owners.includes(userID)){
         returnVal.push(ticket);
       }
     }
