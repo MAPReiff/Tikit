@@ -133,7 +133,6 @@ const comment1 = await comments.create(
   "null",
   `Hi ${user1.firstName}, what is the number of your laptop? It should be on the sticker on the bottom of the laptop. Let me know so I can get a replacement device ready for you.`
 );
-console.log(`Created comment by ${user2.username}`);
 
 const comment2 = await comments.create(
   ticket1._id,
@@ -266,7 +265,7 @@ const ticket5 = await tickets.create(
   user3._id,
   [admin1._id, admin3._id],
   "Service Request",
-  ["Laptop", "MacBook", "MacOS"]
+  "Laptop, MacBook, MacOS"
 );
 console.log(
   `Created ticket ${ticket5.name} | ${ticket5.status} | ${ticket5.priority}`
@@ -342,6 +341,28 @@ const comment22 = await comments.create(
   `Great, I'm on my way!`
 );
 
+const ticket6 = await tickets.create(
+  "Deskchair is broken",
+  "My deskchair is broken. The backrest snapped off and I need a new one",
+  "Completed",
+  "Normal",
+  "",
+  user2._id,
+  [admin2._id],
+  "Service Request"
+);
+
+console.log(
+  `Created ticket ${ticket6.name} | ${ticket6.status} | ${ticket6.priority}`
+);
+
+const comment23 = await comments.create(
+  ticket6._id,
+  admin2._id,
+  "null",
+  `Hi ${user2.firstName}, please reach out to the facilities department for this request. There is nothing the IT department can do to assist you with this.`
+);
+
 await closeConnection();
 
 /*
@@ -355,4 +376,3 @@ user3 - Jannet
 user4 - Clyde (intern)
 user5 - Jessica
 */
-
