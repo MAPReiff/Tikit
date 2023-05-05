@@ -78,8 +78,19 @@
                    
                         <option value="Low">Low</option>
                     {{/select}}
+        </select><br>
 
-        </select><br><br>
+         <label class="" for="ticketTags">Tags</label>
+         <div class="col-md-12"></div>
+        <div class="infoCategory">
+          <i class="icon-info-sign"></i>
+          <span class="extra-info">
+            <p class="categoryDescription">Separate tags with commas.</p>
+          </span>
+        </div>
+      </div>
+        <input class="form-control" type="text" id="ticketTags" name="ticketTags" placeholder="{{tags}}" value="{{tags}}"> <br>
+
         {{#ifEquals role "admin"}}
          <label class="" for="ticketOwners">Owners</label>
          <select class="form-control"  id="ticketOwners" name="ticketOwners" multiple="multiple"> 
