@@ -2,7 +2,7 @@ import { checkUserAccess } from "./data/users.js";
 
 export async function pageView(req, res, next) {
     if(req.method === 'GET') {
-        console.log(req.session)
+        // console.log(req.session)
         if (req.session && req.session.user) {
             if(req.session.user.role === 'admin' 
             || (await checkUserAccess(req.session.user._id, req.params.id))){
