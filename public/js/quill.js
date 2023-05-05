@@ -3,7 +3,7 @@ Quill.register("modules/imageCompressor", imageCompressor);
 var quill = new Quill("#editor", {
   modules: {
     toolbar: [
-      [{ size: ["small", false, "large", "huge"] }],
+      // [{ size: ["small", false, "large", "huge"] }],
       ["bold", "italic", "underline", "strike"],
       ["image"],
       [{ list: "bullet" }],
@@ -32,9 +32,7 @@ if (route.startsWith("/tickets/view")) {
 }
 
 quill.on("text-change", function () {
-  // console.log(quill.getText())
   let richText = quill.getText().trim().replaceAll(/\s+/g, "");
-  // console.log(richText.length)
   if (
     richText.length !== 0 ||
     richText === "\n" ||
