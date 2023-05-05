@@ -29,8 +29,13 @@ if(calendarElement) {
                 endDate = startDate;
             }
 
-            event['start'] = new Date(startDate).toISOString();
-            event['end'] = new Date(endDate).toISOString();
+            const start = new Date(startDate), end = new Date(endDate);
+            if(start.getTime() !== end.getTime()) {
+                end.setDate(end.getDate() + 1);
+            }
+
+            event['start'] = start.toISOString();
+            event['end'] = end.toISOString();
 
             eventObj.events.push(event);
         }
