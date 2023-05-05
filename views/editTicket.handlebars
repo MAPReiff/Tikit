@@ -62,7 +62,7 @@
          <label class="" for="ticketOwners">Owners</label>
          <select class="form-control"  id="ticketOwners" name="ticketOwners" multiple="multiple"> 
                 {{#each ../users}}
-                        <option value={{this.id}}  {{{selectMultiple this.id ../owners}}} >{{this.firstName}} {{this.lastName}}</option>
+                        <option value={{this.id}}  {{{selectMultiple this.id ../../owners}}} >{{this.firstName}} {{this.lastName}}</option>
                 {{/each}} 
         {{/ifEquals}}
         </select><br><br>
