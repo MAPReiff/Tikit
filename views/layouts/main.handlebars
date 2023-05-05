@@ -64,12 +64,13 @@
                     style="vertical-align: -6px;">logout</i></a>
               </li>
             </ul>
-            <form class="d-flex" role="search" action="/" method="POST">
+            <form class="d-flex" id="nav-search-form" role="search" action="/" method="POST">
               <input class="form-control me-2" type="search" id="search" name="search" placeholder="Search for tickets"
                 aria-label="Search">
                 <label hidden for="submitBtn">
                   Submit Ticket Search
                 </label>
+              {{!-- for rich text --}}
               <button id="submitBtn" class="btn btn-primary" type="submit"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                   height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                   <path
@@ -89,10 +90,10 @@
       crossorigin="anonymous"></script>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.6/index.global.min.js'></script>
     <script src="/public/js/main.js"></script>
-    <script src="/public/js/login.js"></script>
-     <script src="/public/js/register.js"></script>
+    <script src="/public/js/loginRegister.js"></script>
      <script src="/public/js/makeTicket.js"></script>
     <script src="/public/js/comment.js"></script>
+    <script src="/public/js/search.js"></script>
 </body>
 
 </html>

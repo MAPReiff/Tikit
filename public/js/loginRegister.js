@@ -1,10 +1,31 @@
-let form;
+let loginForm;
+let registerForm;
+document.addEventListener("DOMContentLoaded", function () {
+  loginForm = document.getElementById("login-form");
+  if (loginForm) {
+    loginForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      let emailAddress = document.getElementById("emailAddressInput").value;
+      let password = document.getElementById("passwordInput").value;
+      let errorP = document.getElementById("error");
+      try {
+        checkEmail(emailAddress);
+        checkPassword(password);
+        loginForm.submit();
+      } catch (e) {
+        errorP.innerHTML = `${e}`;
+        errorP.hidden = false;
+      }
+    });
+  }
+});
+
 document.addEventListener(
   "DOMContentLoaded",
   function () {
-    form = document.getElementById("registration-form");
-    if (form) {
-      form.addEventListener("submit", (event) => {
+    registerForm = document.getElementById("registration-form");
+    if (registerForm) {
+      registerForm.addEventListener("submit", (event) => {
         event.preventDefault();
         let firstName = document.getElementById("firstNameInput").value;
         let lastName = document.getElementById("lastNameInput").value;
@@ -25,7 +46,7 @@ document.addEventListener(
           if (password != confirmPassword) {
             throw new Error("your passwords do not match");
           }
-          form.submit();
+          registerForm.submit();
         } catch (e) {
           errorP.innerHTML = `${e}`;
           errorP.hidden = false;
@@ -36,7 +57,7 @@ document.addEventListener(
   false
 );
 
-
+// helpers
 function checkName(data, type) {
   if (typeof data == "undefined") {
     throw new Error(`please provide a ${type} string`);
