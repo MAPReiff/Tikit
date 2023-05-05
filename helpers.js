@@ -175,7 +175,10 @@ export const dateFormatter = (date) => {
   if(!(date instanceof Date)) {
     date = new Date(date);
   }
-  console.log(date);
+
+  if(date.toString() === 'Invalid Date') {
+    throw 'Error: Invalid date passed into date formatter';
+  }
 
   const formatOptions = {
     year: 'numeric',
@@ -186,4 +189,26 @@ export const dateFormatter = (date) => {
 
   return new Intl.DateTimeFormat([], formatOptions)
         .format(date);
+}
+
+export const isEqualDay = (date1, date2) => {
+  if(!(date1 instanceof Date)) {
+    date1 = new Date(date1);
+  }
+
+  if(!(date2 instanceof Date)) {
+    date2 = new Date(date2);
+  }
+
+  if(date1.toString() === 'Invalid Date') {
+    throw 'Error: Invalid date passed into date formatter';
+  }
+
+  if(date2.toString() === 'Invalid Date') {
+    throw 'Error: Invalid date passed into date formatter';
+  }
+
+  return date1.getUTCMonth() === date2.getUTCMonth()
+        && date1.getUTCDate() === date2.getUTCDate()
+        && date1.getUTCFullYear() === date2.getUTCFullYear();
 }

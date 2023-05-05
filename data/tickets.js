@@ -52,10 +52,11 @@ const create = async (
     // no deadline so we just use NaN as a placeholder
   } else {
     // a dealine was provided
+    console.log(new Date(deadline).getTime());
     if (new Date(deadline).getTime() === NaN) {
-      throw new Error("provided dealine is not a valid timestamp");
+      throw new Error("provided deadline is not a valid timestamp");
     } else if (new Date(deadline).getTime() < createdOn) {
-      throw new Error("provided dealine in the past");
+      throw new Error("provided deadline in the past");
     }
     deadline =  new Date(deadline);
   }
@@ -262,10 +263,11 @@ const update = async (
     // no deadline so we just use NaN as a placeholder
   } else {
     // a dealine was provided
-    if (new Date(deadline).getTime() === NaN) {
-      throw new Error("provided dealine is not a valid timestamp");
-    } else if (new Date(deadline).getTime() < createdOn && deadline !== ticket.deadline) {
-      throw new Error("provided dealine in the past");
+    const deadlinePruned = new Date(deadline).getTime();
+    if (deadlinePruned === NaN) {
+      throw new Error("provided deadline is not a valid timestamp");
+    } else if (deadlinePruned < createdOn && !helpers.isEqualDay(deadlinePruned, ticket.deadline)) {
+      throw new Error("provided deadline in the past");
     }
   }
 
