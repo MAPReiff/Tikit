@@ -2,7 +2,6 @@ import * as helpers from "../helpers.js";
 import { tickets, createIndexes } from "../config/mongoCollections.js";
 import { users } from "../config/mongoCollections.js";
 import { ObjectId } from "mongodb";
-import { userData } from "./index.js";
 
 const create = async (
   name, // string input
