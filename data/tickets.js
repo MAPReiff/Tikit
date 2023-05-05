@@ -52,7 +52,6 @@ const create = async (
     // no deadline so we just use NaN as a placeholder
   } else {
     // a dealine was provided
-    console.log(new Date(deadline).getTime());
     if (new Date(deadline).getTime() === NaN) {
       throw new Error("provided deadline is not a valid timestamp");
     } else if (new Date(deadline).getTime() < createdOn) {
@@ -402,7 +401,6 @@ const updateOwners = async (userCollection, ticketID, newOwners, oldOwners) => {
     if(oldOwners.length > newOwners.length){
       var removeOwners = oldOwners.filter(x => !newOwners.includes(x));
       for (let owner of removeOwners) {
-        console.log("removing owners");
           removeOldOwners = await userCollection.findOneAndUpdate(
           { _id: new ObjectId(owner) },
           {
