@@ -314,6 +314,8 @@ const update = async (
     tags = helpers.checkStringArray(tags, "Tags");
   }
 
+  console.log(owners);
+  console.log(customerID);
 
   let updatedTicket = {
     name: name,
@@ -339,8 +341,8 @@ const update = async (
     throw "Error: could not update ticket successfully!";
   }
 
-  //const userCollection = await users();
-  //await updateOwners(userCollection, objID, owners);
+  const userCollection = await users();
+  await updateOwners(userCollection, objID, owners);
 
   return toStringify(updatedInfo.value);
 };
