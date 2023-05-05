@@ -50,12 +50,6 @@ function checkTicketName(data, type) {
 
   data = data.trim();
 
-  if (data.length < 4) {
-    throw new Error(`${type} must be atleast 4 characters long`);
-  } else if (data.length > 30) {
-    throw new Error(`${type} must be no longer than 30 characters`);
-  }
-
   return data;
 }
 
