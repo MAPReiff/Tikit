@@ -314,9 +314,6 @@ const update = async (
     tags = helpers.checkStringArray(tags, "Tags");
   }
 
-  console.log(owners);
-  console.log(customerID);
-
   let updatedTicket = {
     name: name,
     description: description,
