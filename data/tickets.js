@@ -96,11 +96,17 @@ const create = async (
     owners = [];
   }
 
+  var tagsArray = [];
   // check if tags are provided
-  if (!tags) {
-    tags = [];
-  } else {
-    tags = helpers.checkStringArray(tags, "Tags");
+  if (tags && tags.length != 0) {
+    tags = helpers.checkString(tags, "Tags");
+    let tagsArrayBefore = tags.split(',');
+    for(let i = 0; i < tagsArrayBefore.length; i++){
+      tagsArrayBefore[i] = tagsArrayBefore[i].trim();
+      if(tagsArrayBefore[i].length > 0){
+        tagsArray.push(tagsArrayBefore[i]);
+      }
+    }
   }
 
 
@@ -114,7 +120,7 @@ const create = async (
     customerID: customerID,
     owners: owners,
     category: category,
-    tags: tags,
+    tags: tagsArray,
     comments: [],
   };
 
@@ -304,12 +310,17 @@ const update = async (
     );
   }
 
-
+  var tagsArray = [];
   // check if tags are provided
-  if (!tags) {
-    tags = [];
-  } else {
-    tags = helpers.checkStringArray(tags, "Tags");
+  if (tags && tags.length != 0) {
+    tags = helpers.checkString(tags, "Tags");
+    let tagsArrayBefore = tags.split(',');
+    for(let i = 0; i < tagsArrayBefore.length; i++){
+      tagsArrayBefore[i] = tagsArrayBefore[i].trim();
+      if(tagsArrayBefore[i].length > 0){
+        tagsArray.push(tagsArrayBefore[i]);
+      }
+    }
   }
 
   let updatedTicket = {
@@ -322,7 +333,7 @@ const update = async (
     customerID: curTicket.customerID,
     owners: owners,
     category: category,
-    tags: tags,
+    tags: tagsArray,
     comments: curTicket.comments,
   };
 
