@@ -24,10 +24,9 @@ const constructorMethod = (app) => {
   app.use("/comments", commentRoutes);
 
   app.use("*", (req, res) => {
-    // res.status(404).json({error: 'Route Not found'});
     res.status(404).render("404", {
       title: "404 Page not found",
-      user_id: req.session.user._id,
+      user_id: req.session && req.session.user && req.session.user._id ? req.session.user._id : null,
       msg: "Error 404: Page Not Found",
     });
   });
