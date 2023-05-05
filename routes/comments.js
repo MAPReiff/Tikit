@@ -153,7 +153,10 @@ router
     }
 
     try {
-      let curComment = await commentData.get(req.params.commentId); 
+      let curComment = await commentData.get(req.params.commentId);
+      if (curComment.author != req.session.user._id) {
+        return res.status(403).json( {msg: "Error: Cannot delete other users comments"});
+      } 
     } catch (e) { 
       return res.status(404).json({error: e});
     }
