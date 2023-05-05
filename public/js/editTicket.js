@@ -1,19 +1,7 @@
-var temp = "{{priority}}";
-var mySelect = document.getElementById("ticketPriority");
+// Have the edit ticket page automatically be filled with the past values
+hbs.registerHelper('select', function(selected, options) {
+    return options.fn(this).replace(
+        new RegExp(' value=\"' + selected + '\"'),
+        '$& selected="selected"');
+});
 
-for (var i, j = 0; (i = mySelect.options[j]); j++) {
-  if (i.value == temp) {
-    mySelect.selectedIndex = j;
-    break;
-  }
-}
-
-var temp2 = "{{category}}";
-var mySelect2 = document.getElementById("ticketCategory");
-
-for (var i, j = 0; (i = mySelect2.options[j]); j++) {
-  if (i.value == temp2) {
-    mySelect2.selectedIndex = j;
-    break;
-  }
-}

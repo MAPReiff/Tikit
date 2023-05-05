@@ -3,7 +3,7 @@ const router = Router();
 import {ticketData} from '../data/index.js';
 import {userData} from '../data/index.js';
 import {commentData} from '../data/index.js';
-import { renderError, checkString } from '../helpers.js';
+import { renderError, checkString, dateFormatter } from '../helpers.js';
 
 router
   .route('/view/:id')
@@ -19,7 +19,7 @@ router
        renderError(res, 404, 'Issue Retrieving ticket');
        return;
     }
-
+  
     try{ 
       res.status(200).render("ticketView", {
         ticketId: ticket._id,
@@ -29,10 +29,10 @@ router
         description: ticket.description,
         status: ticket.status,
         priority: ticket.priority,
-        created: !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString(),
-        deadline: !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString(),
+        created: !ticket.createdOn ? "N/A" : dateFormatter(ticket.createdOn),
+        deadline: !ticket.deadline ? "N/A" : dateFormatter(ticket.deadline),
         customer: await userData.get(ticket.customerID.toString()),
-        owner: await userData.getMultiple(ticket.owners.map((ticket) => {
+        owners: await userData.getMultiple(ticket.owners.map((ticket) => {
           return ticket.toString();
         })),
         category: ticket.category,
@@ -54,6 +54,14 @@ router
 
     let ticket;
 
+    let usersAll = await userData.getAll();
+    var users = [];
+    for(let i = 0; i < usersAll.length; i++){
+      if(req.session.user._id !== usersAll[i]._id || req.session.user.role === "admin"){
+        users.push({id: usersAll[i]._id,firstName: usersAll[i].firstName, lastName: usersAll[i].lastName});
+      }
+    }
+
     try {
       ticket = await ticketData.get(req.params.id);
     } catch(e) {
@@ -69,22 +77,30 @@ router
         description: ticket.description,
         status: ticket.status,
         priority: ticket.priority,
-        created: !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString(),
-        deadline: !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString(),
+        created: !ticket.createdOn ? "N/A" : dateFormatter(ticket.createdOn),
+        deadline: !ticket.deadline ? "N/A" : new Date(ticket.deadline).toISOString().substring(0, 10),
         customer: await userData.get(ticket.customerID.toString()),
-        owner: await userData.getMultiple(ticket.owners.map((ticket) => {
-          return ticket.toString();
-        })),
+        owners: ticket.owners,
+        users: users,
         category: ticket.category,
+        role: req.session.user.role,
         tag: ticket.tags
       });
     } catch (e) {
       renderError(res, 500, 'Internal Server Error');
     }
-    
     //code here for GET
   }).post(async (req, res) => {
     let ticket;
+    
+    let usersAll = await userData.getAll();
+    var users = [];
+    for(let i = 0; i < usersAll.length; i++){
+      if(req.session.user._id !== usersAll[i]._id || req.session.user.role === "admin"){
+        users.push({id: usersAll[i]._id,firstName: usersAll[i].firstName, lastName: usersAll[i].lastName});
+      }
+    }
+    
 
     try {
       ticket = await ticketData.get(req.params.id);
@@ -93,7 +109,84 @@ router
     }
 
 
-    update()
+    try{
+      if (
+        req.body.hasOwnProperty("ticketName") &&
+        req.body.hasOwnProperty("ticketDescription") &&
+        req.body.hasOwnProperty("ticketCategory") &&
+        req.body.hasOwnProperty("ticketDeadline") &&
+        req.body.hasOwnProperty("ticketPriority")
+      ){
+
+        let ticketName = checkString(
+          req.body["ticketName"],
+          "ticket name"
+        );
+        let ticketDescription = checkString(
+          req.body["ticketDescription"],
+          "ticket description"
+        );
+        let ticketCategory = checkString(
+          req.body["ticketCategory"],
+          "ticket category"
+        );
+        let ticketPriority = checkString(
+          req.body["ticketPriority"],
+          "ticket priority"
+        );
+
+
+        if(typeof req.body["ticketOwners"] === 'string'){
+          req.body["ticketOwners"] = [req.body["ticketOwners"]];
+        }
+
+      
+        let editedTicket = await ticketData.update(
+          req.session.user._id,
+          req.params.id,
+          ticketName,
+          req.body["ticketStatus"],
+          ticketDescription,
+          ticketPriority,
+          req.body["ticketDeadline"],
+          req.body["ticketOwners"],
+          ticketCategory,
+          req.session.user.role
+        );
+
+
+        if (editedTicket) {
+          res.status(200).redirect("/tickets/view/" + editedTicket._id);
+        } else {
+          throw new Error("unable to edit user");
+        }
+
+      }else{
+        res.status(400).render("editTicket", { title: "Edit Ticket", error: 'All fields must be filled out', _id: req.params.id, users:users});
+      }
+
+  } catch (e) {
+    // render form with 400 code
+    res.status(400).render("editTicket", { 
+      title: "Edit Ticket", 
+      error: `${e}`, 
+      _id: req.params.id, 
+      users:users, 
+      title: ticket.name,
+      user_id: req.session.user._id,
+      name: ticket.name,
+      description: ticket.description,
+      status: ticket.status,
+      priority: ticket.priority,
+      created: !ticket.createdOn ? "N/A" : dateFormatter(ticket.createdOn),
+      deadline: !ticket.deadline ? "N/A" : new Date(ticket.deadline).toISOString().substring(0, 10),
+      customer: await userData.get(ticket.customerID.toString()),
+      owners: ticket.owners,
+      category: ticket.category,
+      role: req.session.user.role,
+      tag: ticket.tags});
+  }
+
   });
 
 
@@ -101,9 +194,18 @@ router
   .route('/makeTicket')
   .get(async (req, res) => {
 
+    let usersAll = await userData.getAll();
+    var users = [];
+    for(let i = 0; i < usersAll.length; i++){
+      if(req.session.user._id !== usersAll[i]._id || req.session.user.role === "admin"){
+        users.push({id: usersAll[i]._id,firstName: usersAll[i].firstName, lastName: usersAll[i].lastName});
+      }
+    }
+
     try{ 
       res.status(200).render("makeTicket", {
         title: "Create Ticket",
+        users: users,
         user_id: req.session.user._id
       });
     } catch (e) {
@@ -114,12 +216,24 @@ router
   }).post(async (req, res) => {
 
     let user;
+    let users;
 
     try {
       user = await userData.get(req.session.user._id);
+      let usersAll = await userData.getAll();
+      users = [];
+      for(let i = 0; i < usersAll.length; i++){
+
+        if(req.session.user._id !== usersAll[i]._id || req.session.user.role === "admin"){
+          users.push({id: usersAll[i]._id,firstName: usersAll[i].firstName, lastName: usersAll[i].lastName});
+        }
+      }
+
     } catch (e) {
       renderError(res, 404, "Issue Retrieving user");
     }
+
+
 
     try{
         if (
@@ -146,7 +260,18 @@ router
             req.body["ticketPriority"],
             "ticket priority"
           );
-        
+
+          let ticketOwners;
+
+          if(!req.body["ticketOwners"]){
+            ticketOwners = [];
+          }else if(typeof req.body["ticketOwners"] === 'string'){
+            ticketOwners = [req.body["ticketOwners"]];
+          }else{
+            ticketOwners = req.body["ticketOwners"];
+          }
+
+
           let createdTicket = await ticketData.create(
             ticketName,
             ticketDescription,
@@ -154,9 +279,8 @@ router
             ticketPriority,
             req.body["ticketDeadline"],
             req.session.user._id,
-            [],
+            ticketOwners,
             ticketCategory
-            //[]
           );
 
           if (createdTicket) {
@@ -180,7 +304,6 @@ router
         error: `${e}`});
     }
 
-
   });
 
 
@@ -200,8 +323,8 @@ router
       }
  
       for(let ticket of tickets){
-        ticket.createdOn = !ticket.createdOn ? "N/A" : new Date(ticket.createdOn).toLocaleDateString();
-        ticket.deadline = !ticket.deadline ? "N/A" : new Date(ticket.deadline).toLocaleDateString();
+        ticket.createdOn = !ticket.createdOn ? "N/A" : dateFormatter(ticket.createdOn);
+        ticket.deadline = !ticket.deadline ? "N/A" : dateFormatter(ticket.deadline);
       }
 
       try{ 

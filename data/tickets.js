@@ -20,16 +20,9 @@ const create = async (
   // validate description
   description = helpers.checkString(description, "Description");
 
-  // @Val - why do we need this? Why do you use a variable called type that does not exist?
-  // if (description.length < 10) {
-  //   throw new Error(`${type} must be atleast 10 characters long`);
-  // } else if (description.length > 200) {
-  //   throw new Error(`${type} must be no longer than 200 characters`);
-  // }
-
   // validate status
   status = helpers.checkString(status, "Status");
-  if (status != "To Do" && status != "In Progress" && status != "Completed") {
+  if (status != "To Do" && status != "In Progress" && status != "Completed" && status != "Problem") {
     throw new Error(
       "status must be a string equal to To Do, In Progress, or Completed"
     );
@@ -60,19 +53,16 @@ const create = async (
   } else {
     // a dealine was provided
     if (new Date(deadline).getTime() === NaN) {
-      throw new Error("provided dealine is not a valid timestamp");
+      throw new Error("provided deadline is not a valid timestamp");
     } else if (new Date(deadline).getTime() < createdOn) {
-      throw new Error("provided dealine in the past");
+      throw new Error("provided deadline in the past");
     }
+    deadline =  new Date(deadline);
   }
 
   // validate customerID
   customerID = helpers.checkId(customerID, "Customer ID");
-
-  //validate owners
-  if (owners.length != 0) {
-    owners = helpers.checkIdArray(owners, "Owners ID Array");
-  }
+  
 
   // validate category
   category = helpers.checkString(category, "Category");
@@ -89,12 +79,21 @@ const create = async (
 
   customerID = new ObjectId(helpers.validateID(customerID));
 
+  //validate owners
   if (owners && Array.isArray(owners)) {
-    for (let [index, user] of owners.entries()) {
-      owners[index] = new ObjectId(helpers.validateID(user));
+    if(owners.length > 0){
+      owners = helpers.checkIdArray(owners, "Owners ID Array");
     }
-  } else if (owners.length != 0) {
+
+    for (let i = 0; i < owners.length; i++) {
+      owners[i] = new ObjectId(helpers.validateID(owners[i]));
+    }
+
+  }else if (owners.length != 0) {
     throw "Owners is not a valid array";
+    
+  }else{
+    owners = [];
   }
 
   // check if tags are provided
@@ -104,19 +103,21 @@ const create = async (
     tags = helpers.checkStringArray(tags, "Tags");
   }
 
+
   let newTicket = {
     name: name,
     description: description,
     status: status,
     priority: priority,
-    createdOn: createdOn,
-    deadline: deadline,
+    createdOn: new Date(createdOn),
+    deadline: new Date(deadline),
     customerID: customerID,
     owners: owners,
     category: category,
     tags: tags,
     comments: [],
   };
+
   const ticketCollection = await tickets();
   const insertInfo = await ticketCollection.insertOne(newTicket);
   if (!insertInfo.acknowledged || !insertInfo.insertedId)
@@ -137,7 +138,7 @@ const create = async (
     throw "Error: could not update user successfully!";
   }
 
-  await updateOwners(userCollection, insertInfo.insertedId, owners);
+  await updateOwners(userCollection, insertInfo.insertedId, owners, owners);
 
   const newId = insertInfo.insertedId.toString();
 
@@ -153,6 +154,7 @@ const getAll = async (isAdmin, userID) => {
   ticketList = ticketList.map((element) => {
     return toStringify(element);
   });
+
   return filterResults(ticketList, isAdmin, userID);
 };
 
@@ -195,40 +197,37 @@ If we need this functionallity we can add it later */
 for now I will just leave it as is*/
 
 const update = async (
+  customerID,
   id,
   name,
-  description,
   status,
+  description,
   priority,
   deadline,
   owners,
   category,
+  role,
   tags
 ) => {
   id = helpers.checkId(id, "Ticket ID");
   const ticketCollection = await tickets();
-  const ticket = await ticketCollection.findOne({ _id: new ObjectId(id) });
-  if (ticket === null) throw "Error: No ticket found with that ID";
 
   // validate name
   name = helpers.checkString(name, "Name");
 
+
   // validate description
   description = helpers.checkString(description, "Description");
 
-  // validate status
-  status = helpers.checkString(status, "Status");
-  if (status != "To Do" && status != "In Progress" && status != "Completed") {
-    throw new Error(
-      "status must be a string equal to, To Do, In Progress, or Completed"
-    );
-  }
+  const curTicket = await get(id);
+
 
   // validate priority
   priority = helpers.checkString(priority, "Priority");
+
   if (
     priority != "Low" &&
-    priority != "Medium" &&
+    priority != "Normal" &&
     priority != "High" &&
     priority != "Critical"
   ) {
@@ -237,32 +236,74 @@ const update = async (
     );
   }
 
+  // validate status
+  if(status){
+    status = helpers.checkString(status, "Status");
+    if (status != "To Do" && status != "In Progress" && status != "Completed" && status != "Problem") {
+      throw new Error(
+        "status must be a string equal to To Do, In Progress, or Completed"
+      );
+    }
+  }else{
+    status = curTicket.status;
+  }
+
+
   // check if dadline is provided
   // deadline expected like this - timestamp
   // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local
 
+  let createdOn = Date.now();
   if (!deadline) {
     deadline = NaN;
     // no deadline so we just use NaN as a placeholder
   } else {
     // a dealine was provided
-    if (new Date(deadline).getTime() === NaN) {
-      throw new Error("provided dealine is not a valid timestamp");
-    } else if (new Date(deadline).getTime() < createdOn) {
-      throw new Error("provided dealine in the past");
+    const deadlinePruned = new Date(deadline).getTime();
+    if (deadlinePruned === NaN) {
+      throw new Error("provided deadline is not a valid timestamp");
+    } else if (deadlinePruned < createdOn && !helpers.isEqualDay(deadlinePruned, curTicket.deadline)) {
+      throw new Error("provided deadline in the past");
     }
   }
 
+  // validate customerID
+  customerID = helpers.checkId(customerID, "Customer ID");
+  customerID = new ObjectId(helpers.validateID(customerID));
+
+
+   //validate owners
   if (owners && Array.isArray(owners)) {
-    for (let [index, user] of owners.entries()) {
-      owners[index] = new ObjectId(helpers.validateID(user));
+    if(owners.length > 0){
+      owners = helpers.checkIdArray(owners, "Owners ID Array");
     }
-  } else {
+    for (let i = 0; i < owners.length; i++) {
+      owners[i] = new ObjectId(helpers.validateID(owners[i]));
+    }
+
+  } else if(!owners && role == "admin"){
+    owners = [];
+  } else if(!owners && role == "user"){
+    owners = curTicket.owners;
+  }else if (owners.length != 0) {
     throw "Owners is not a valid array";
   }
 
+
+
   // validate category
   category = helpers.checkString(category, "Category");
+  if (
+    category != "Service Request" &&
+    category != "Incident" &&
+    category != "Problem" &&
+    category != "Change Request"
+  ) {
+    throw new Error(
+      "category must be a string equal to Service Request, Incident, Problem, or Change Request"
+    );
+  }
+
 
   // check if tags are provided
   if (!tags) {
@@ -271,33 +312,34 @@ const update = async (
     tags = helpers.checkStringArray(tags, "Tags");
   }
 
-  const curTicket = await get(id);
-
   let updatedTicket = {
     name: name,
     description: description,
-    status: status,
     priority: priority,
+    status: status,
     createdOn: curTicket.createdOn,
-    deadline: deadline,
+    deadline: new Date(deadline),
     customerID: curTicket.customerID,
     owners: owners,
     category: category,
     tags: tags,
     comments: curTicket.comments,
   };
+
   const objID = new ObjectId(id);
   const updatedInfo = await ticketCollection.findOneAndUpdate(
     { _id: objID },
     { $set: updatedTicket },
     { returnDocument: "after" }
   );
+
   if (updatedInfo.lastErrorObject.n === 0) {
     throw "Error: could not update ticket successfully!";
   }
 
+
   const userCollection = await users();
-  await updateOwners(userCollection, objID, owners);
+  await updateOwners(userCollection, objID, owners, curTicket.owners);
 
   return toStringify(updatedInfo.value);
 };
@@ -347,10 +389,34 @@ const filterResults = async (inputTickets, isAdmin, userID) => {
   return returnVal;
 }
 
-const updateOwners = async (userCollection, ticketID, owners) => {
+const updateOwners = async (userCollection, ticketID, newOwners, oldOwners) => {
+
+  if(newOwners && oldOwners){
+    var removeOldOwners;
+
+    if(oldOwners.length > newOwners.length){
+      var removeOwners = oldOwners.filter(x => !newOwners.includes(x));
+      for (let owner of removeOwners) {
+          removeOldOwners = await userCollection.findOneAndUpdate(
+          { _id: new ObjectId(owner) },
+          {
+            $pull: {
+              ticketsBeingWorkedOn: ticketID,
+            },
+          },
+          { returnDocument: "after" }
+        );
+
+        if (removeOldOwners.lastErrorObject.n === 0) {
+          throw "Error: could not update user successfully!";
+        }
+      }
+    }
+  }
+
   let updatedInfo;
 
-  for (let owner of owners) {
+  for (let owner of newOwners) {
     updatedInfo = await userCollection.findOneAndUpdate(
       { _id: new ObjectId(owner) },
       {
@@ -370,9 +436,11 @@ const updateOwners = async (userCollection, ticketID, owners) => {
 const toStringify = (ticket) => {
   ticket._id = ticket._id.toString();
   ticket.customerID = ticket.customerID.toString();
-  ticket.owners = ticket.owners.map((owner) => {
-    return owner.toString();
-  });
+  if(ticket.owners){
+    ticket.owners = ticket.owners.map((owner) => {
+      return owner.toString();
+    });
+  }
 
   return ticket;
 };

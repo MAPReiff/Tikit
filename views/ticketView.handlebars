@@ -12,7 +12,8 @@
   </div>
   <p class="lead info">Owners:</p>
   <ul>
-    {{#each owner}}
+    {{#each owners}}
+    <p>{{owners}}</p>
     <li class="badge text-bg-primary rounded-pill"><a class="pageLink-light"
         href="/users/view/{{this._id}}">{{this.firstName}} {{this.lastName}}</a></li>
     {{/each}}

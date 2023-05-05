@@ -41,11 +41,35 @@ app.use(
 );
 
 app.use("/tickets/view/:id", pageView);
+var hbs = exphbs.create({ defaultLayout: 'main', helpers: {
+  select: function(value, options) {
+    return options.fn(this).replace(
+      new RegExp(' value=\"' + value + '\"'),
+      '$& selected="selected"');
+  },
+  selectMultiple: function(value, owners, options) {
+    if(owners){
+      for(let i = 0; i < owners.length; i++){
+        if(value == owners[i]){
+          return 'selected="selected"';
+        }
+      }
+    }
+    return "";
+  },
+  ifEquals: (arg1, arg2, options) => {
+    return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+  },
+  ifNotEquals: (arg1, arg2, options) => {
+    return (arg1 != arg2) ? options.fn(this) : options.inverse(this);
+  }
+}});
 
-app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
+app.engine("handlebars", hbs.engine);
 app.set("view engine", "handlebars");
 
 configRoutes(app);
+
 
 app.listen(3000, () => {
   console.log("We've now got a server!");
