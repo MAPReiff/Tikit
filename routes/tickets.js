@@ -167,7 +167,24 @@ router
 
   } catch (e) {
     // render form with 400 code
-    res.status(400).render("editTicket", { title: "Edit Ticket", error: `${e}`, _id: req.params.id, users:users});
+    res.status(400).render("editTicket", { 
+      title: "Edit Ticket", 
+      error: `${e}`, 
+      _id: req.params.id, 
+      users:users, 
+      title: ticket.name,
+      user_id: req.session.user._id,
+      name: ticket.name,
+      description: ticket.description,
+      status: ticket.status,
+      priority: ticket.priority,
+      created: !ticket.createdOn ? "N/A" : dateFormatter(ticket.createdOn),
+      deadline: !ticket.deadline ? "N/A" : new Date(ticket.deadline).toISOString().substring(0, 10),
+      customer: await userData.get(ticket.customerID.toString()),
+      owners: ticket.owners,
+      category: ticket.category,
+      role: req.session.user.role,
+      tag: ticket.tags});
   }
 
   });
