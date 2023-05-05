@@ -27,7 +27,7 @@ A ticketing system, often used in an IT or support setting, consists of a web in
 
   - [x] List of open tickets (only the ones opened by the user)
 
-  - [ ] Place to make a new ticket - pending error checking
+  - [x] Place to make a new ticket - pending error checking
 
   - [x] Search box to look up tickets by some kind of identifier
 
@@ -35,17 +35,17 @@ A ticketing system, often used in an IT or support setting, consists of a web in
 
   - [x] Store the “customer” who made the request
 
-  - [ ] Allow user to add team members to a ticket to give them access to the ticket - pending edit ticket page
+  - [x] Allow user to add team members to a ticket to give them access to the ticket
 
   - [x] A subject/title
 
   - [x] The request message itself
 
-  - [ ] The ticket “owner” who is working on the request - pending edit ticket page
+  - [x] The ticket “owner” who is working on the request
 
   - [x] Priority of the ticket
 
-  - [ ] Status (being worked on, on hold, resolved, etc) - pending edit ticket page
+  - [x] Status (being worked on, on hold, resolved, etc)
 
   - [x] Communication log (comments)
 
