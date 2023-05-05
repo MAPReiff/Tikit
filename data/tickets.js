@@ -139,7 +139,7 @@ const create = async (
     throw "Error: could not update user successfully!";
   }
 
-  await updateOwners(userCollection, insertInfo.insertedId, owners);
+  await updateOwners(userCollection, insertInfo.insertedId, owners, owners);
 
   const newId = insertInfo.insertedId.toString();
 
@@ -329,6 +329,7 @@ const update = async (
     tags: tags,
     comments: curTicket.comments,
   };
+
   const objID = new ObjectId(id);
   const updatedInfo = await ticketCollection.findOneAndUpdate(
     { _id: objID },
@@ -340,8 +341,9 @@ const update = async (
     throw "Error: could not update ticket successfully!";
   }
 
+
   const userCollection = await users();
-  await updateOwners(userCollection, objID, owners);
+  await updateOwners(userCollection, objID, owners, oldOwners);
 
   return toStringify(updatedInfo.value);
 };
@@ -391,10 +393,35 @@ const filterResults = async (inputTickets, isAdmin, userID) => {
   return returnVal;
 }
 
-const updateOwners = async (userCollection, ticketID, owners) => {
+const updateOwners = async (userCollection, ticketID, newOwners, oldOwners) => {
+
+  if(newOwners && oldOwners){
+    var removeOldOwners;
+
+    if(oldOwners.length > newOwners.length){
+      var removeOwners = oldOwners.filter(x => !newOwners.includes(x));
+      for (let owner of removeOwners) {
+        console.log("removing owners");
+          removeOldOwners = await userCollection.findOneAndUpdate(
+          { _id: new ObjectId(owner) },
+          {
+            $pull: {
+              ticketsBeingWorkedOn: ticketID,
+            },
+          },
+          { returnDocument: "after" }
+        );
+
+        if (removeOldOwners.lastErrorObject.n === 0) {
+          throw "Error: could not update user successfully!";
+        }
+      }
+    }
+  }
+
   let updatedInfo;
 
-  for (let owner of owners) {
+  for (let owner of newOwners) {
     updatedInfo = await userCollection.findOneAndUpdate(
       { _id: new ObjectId(owner) },
       {
