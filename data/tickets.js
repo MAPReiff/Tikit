@@ -211,10 +211,6 @@ const update = async (
 ) => {
   id = helpers.checkId(id, "Ticket ID");
   const ticketCollection = await tickets();
-  let ticket = await ticketCollection.findOne({ _id: new ObjectId(id) });
-
-  if (ticket === null) throw "Error: No ticket found with that ID";
-  ticket = toStringify(ticket);
 
   // validate name
   name = helpers.checkString(name, "Name");
@@ -266,7 +262,7 @@ const update = async (
     const deadlinePruned = new Date(deadline).getTime();
     if (deadlinePruned === NaN) {
       throw new Error("provided deadline is not a valid timestamp");
-    } else if (deadlinePruned < createdOn && !helpers.isEqualDay(deadlinePruned, ticket.deadline)) {
+    } else if (deadlinePruned < createdOn && !helpers.isEqualDay(deadlinePruned, curTicket.deadline)) {
       throw new Error("provided deadline in the past");
     }
   }
@@ -343,7 +339,7 @@ const update = async (
 
 
   const userCollection = await users();
-  await updateOwners(userCollection, objID, owners, ticket.owners);
+  await updateOwners(userCollection, objID, owners, curTicket.owners);
 
   return toStringify(updatedInfo.value);
 };
