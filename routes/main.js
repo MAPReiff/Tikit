@@ -110,7 +110,7 @@ router
         req.body.hasOwnProperty("emailAddressInput") &&
         req.body.hasOwnProperty("passwordInput")
       ) {
-        let email = helpers.validateEmail(req.body.emailAddressInput);
+        let email = helpers.checkEmail(req.body.emailAddressInput);
         let password = helpers.checkPassword(req.body.passwordInput);
 
         let user = await users.checkUser(email, password);
@@ -192,7 +192,7 @@ router
           req.body["lastNameInput"],
           "last name"
         );
-        let emailAddress = helpers.validateEmail(req.body["emailAddressInput"]);
+        let emailAddress = helpers.checkEmail(req.body["emailAddressInput"]);
         let username = helpers.checkString(req.body["usernameInput"]);
         let password = helpers.checkPassword(req.body["passwordInput"]);
         if (password != req.body["confirmPasswordInput"]) {

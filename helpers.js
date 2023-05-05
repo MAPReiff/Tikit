@@ -1,6 +1,5 @@
 //some validation functions
 import { ObjectId } from "mongodb";
-import validator from "validator";
 import * as EmailValidator from "email-validator";
 import passwordValidator from "password-validator";
 
@@ -76,13 +75,6 @@ export const validateID = (id) => {
   return id;
 };
 
-export const validateEmail = (email) => {
-  if (!email) throw "Error: You must supply a email!";
-  if (typeof email !== "string") throw "Error: email must be a string!";
-  email = email.trim();
-  if (!validator.isEmail(email)) throw "Error: Invalid Email Provided";
-  return email;
-};
 
 export const checkEmail = (emailAddress) => {
   if (typeof emailAddress == "undefined") {
