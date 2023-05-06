@@ -41,7 +41,7 @@ quill.on("text-change", function () {
     quill.root.innerHTML.includes("<img src=")
   ) {
     // inputElement.value = JSON.stringify(quill.getContents());
-    inputElement.value = quill.root.innerHTML;
+    inputElement.value = quill.root.innerHTML.replaceAll("<img src=", `<img alt="Ticket Image" src=`);
   } else {
     inputElement.value = "";
   }
