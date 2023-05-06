@@ -30,9 +30,9 @@ router
   })
   .post(async (req, res) => {
     let users;
-    const { searchUsers } = req.body;
-    searchUsers = xss(searchUsers); 
-
+    req.body.searchUsers = xss( req.body.searchUsers); 
+    let  { searchUsers } = req.body;
+    searchUsers = xss( req.body.searchUsers); 
     try {
       users = await userData.search(searchUsers);
     } catch (e) {
@@ -165,7 +165,7 @@ router
           req.body.roleInput = xss(req.body.roleInput); 
           req.body.titleInput = xss(req.body.titleInput); 
           req.body.userIDInput = xss(req.body.userIDInput); 
-          
+
           let adminUser = await userData.get(req.body.adminIDInput);
 
           if (adminUser.role.toLowerCase() === "admin") {
