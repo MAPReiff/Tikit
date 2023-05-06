@@ -41,7 +41,7 @@ quill.on("text-change", function () {
     quill.root.innerHTML.includes("<img src=")
   ) {
     // inputElement.value = JSON.stringify(quill.getContents());
-    inputElement.value = quill.root.innerHTML;
+    inputElement.value = quill.root.innerHTML.replaceAll(`<img src="`, `<img alt="Ticket Image" src="`);
   } else {
     inputElement.value = "";
   }
@@ -55,12 +55,12 @@ quill.container.previousSibling
 quill.container.previousSibling
   .querySelector("button.ql-italic")
   .setAttribute("title", "Italic");
-quill.container.previousSibling
-  .querySelector("button.ql-underline")
-  .setAttribute("title", "Underline");
-quill.container.previousSibling
-  .querySelector("button.ql-strike")
-  .setAttribute("title", "Strike");
+// quill.container.previousSibling
+//   .querySelector("button.ql-underline")
+//   .setAttribute("title", "Underline");
+// quill.container.previousSibling
+//   .querySelector("button.ql-strike")
+//   .setAttribute("title", "Strike");
 quill.container.previousSibling
   .querySelector("button.ql-image")
   .setAttribute("title", "Insert Image");
