@@ -72,9 +72,9 @@ router
 
     if(ticket.tags){
       tagsString = ticket.tags.join(',');
-      console.log(ticket.tags);
-      console.log(ticket.tags.join(','));
-      console.log(tagsString);
+      // console.log(ticket.tags);
+      // console.log(ticket.tags.join(','));
+      // console.log(tagsString);
     }
 
     try{ 
