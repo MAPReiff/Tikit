@@ -3,6 +3,7 @@ const router = Router();
 import * as helpers from "../helpers.js";
 import users from "../data/users.js";
 import {ticketData} from '../data/index.js';
+import xss from 'xss';
 
 router
 .route('/')
@@ -50,6 +51,8 @@ async (req, res) => {
     if(!searchTickets){
       searchTickets = req.body.search;
     }
+
+    searchTickets = xss(searchTickets);
     
     tickets = await ticketData.search(searchTickets, 
       req.session.user._id, 
@@ -112,7 +115,8 @@ router
       ) {
         let email = helpers.checkEmail(req.body.emailAddressInput);
         let password = helpers.checkPassword(req.body.passwordInput);
-
+        email = xss(email);
+        password = xss(password); 
         let user = await users.checkUser(email, password);
 
         if (user) {
@@ -196,6 +200,13 @@ router
           throw new Error("your passwords do not match");
         }
 
+        firstName = xss(firstName); 
+        lastName = xss(lastName); 
+        username = xss(username); 
+        password = xss(password); 
+        req.body["confirmPasswordInput"] = xss(req.body["confirmPasswordInput"]); 
+        emailAddress = xss(emailAddress); 
+        
         let user = await users.create(
           firstName,
           lastName,

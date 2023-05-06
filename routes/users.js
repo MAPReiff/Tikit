@@ -3,6 +3,7 @@ const router = Router();
 import { ticketData } from "../data/index.js";
 import { userData } from "../data/index.js";
 import { renderError, checkId, checkString } from "../helpers.js";
+import xss from 'xss';
 
 router
   .route("/")
@@ -30,6 +31,7 @@ router
   .post(async (req, res) => {
     let users;
     const { searchUsers } = req.body;
+    searchUsers = xss(searchUsers); 
 
     try {
       users = await userData.search(searchUsers);
@@ -159,7 +161,13 @@ router
           req.body.hasOwnProperty("userIDInput") &&
           req.body.hasOwnProperty("adminIDInput")
         ) {
+          req.body.adminIDInput = xss(req.body.adminIDInput); 
+          req.body.roleInput = xss(req.body.roleInput); 
+          req.body.titleInput = xss(req.body.titleInput); 
+          req.body.userIDInput = xss(req.body.userIDInput); 
+          
           let adminUser = await userData.get(req.body.adminIDInput);
+
           if (adminUser.role.toLowerCase() === "admin") {
             // checks for errors
             let userID = checkId(req.body.userIDInput);

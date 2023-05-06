@@ -4,6 +4,7 @@ import {ticketData} from '../data/index.js';
 import {userData} from '../data/index.js';
 import {commentData} from '../data/index.js';
 import { renderError, checkString, dateFormatter } from '../helpers.js';
+import xss from 'xss';
 
 router
   .route('/view/:id')
@@ -132,18 +133,25 @@ router
         req.body.hasOwnProperty("ticketPriority")
       ){
 
+        req.body["ticketName"] = xss(req.body["ticketName"]); 
         let ticketName = checkString(
           req.body["ticketName"],
           "ticket name"
         );
+
+        req.body["ticketDescription"] = xss(req.body["ticketDescription"]); 
         let ticketDescription = checkString(
           req.body["ticketDescription"],
           "ticket description"
         );
+
+        req.body["ticketCategory"] = xss(req.body["ticketCategory"]);
         let ticketCategory = checkString(
           req.body["ticketCategory"],
           "ticket category"
         );
+
+        req.body["ticketPriority"] = xss(req.body["ticketPriority"]); 
         let ticketPriority = checkString(
           req.body["ticketPriority"],
           "ticket priority"
@@ -151,6 +159,7 @@ router
         let ticketTags = "";
 
         if(req.body["ticketTags"]){
+          req.body["ticketTags"] = xss(req.body["ticketTags"]);
           ticketTags = checkString(
             req.body["ticketTags"],
             "ticket tags"
@@ -158,10 +167,15 @@ router
         }
 
         if(typeof req.body["ticketOwners"] === 'string'){
+          req.body["ticketOwners"] = xss(req.body["ticketOwners"]); 
           req.body["ticketOwners"] = [req.body["ticketOwners"]];
         }
 
-      
+        req.body["ticketStatus"] = xss(req.body["ticketStatus"]); 
+        req.body["ticketDeadline"] = xss(req.body["ticketDeadline"]); 
+        req.body["ticketOwners"] = xss(req.body["ticketOwners"]); 
+        req.body["ticketOwners"] = [req.body["ticketOwners"]];
+
         let editedTicket = await ticketData.update(
           req.session.user._id,
           req.params.id,
@@ -285,44 +299,52 @@ router
           req.body.hasOwnProperty("ticketPriority")
         ){
 
+          req.body["ticketName"] = xss(req.body["ticketName"])
           let ticketName = checkString(
             req.body["ticketName"],
             "ticket name"
           );
+    
+          req.body["ticketDescription"] = xss(req.body["ticketDescription"]); 
           let ticketDescription = checkString(
             req.body["ticketDescription"],
             "ticket description"
           );
+
+          req.body["ticketCategory"] = xss( req.body["ticketCategory"]); 
           let ticketCategory = checkString(
             req.body["ticketCategory"],
             "ticket category"
           );
+     
+          req.body["ticketPriority"] = xss(req.body["ticketPriority"]); 
           let ticketPriority = checkString(
             req.body["ticketPriority"],
             "ticket priority"
           );
 
-          console.log();
           let ticketTags = "";
           if(req.body["ticketTags"]){
-            console.log("tags exist");
+            req.body["ticketTags"] = xss(req.body["ticketTags"])
             ticketTags = checkString(
               req.body["ticketTags"],
               "ticket tags"
             );
           }
-          console.log(ticketTags);
 
           let ticketOwners;
 
           if(!req.body["ticketOwners"]){
             ticketOwners = [];
           }else if(typeof req.body["ticketOwners"] === 'string'){
+            req.body["ticketOwners"] = xss(req.body["ticketOwners"])
             ticketOwners = [req.body["ticketOwners"]];
           }else{
+            req.body["ticketOwners"] = xss(req.body["ticketOwners"])
             ticketOwners = req.body["ticketOwners"];
           }
 
+          req.body["ticketDeadline"] = xss(req.body["ticketDeadline"])
 
           let createdTicket = await ticketData.create(
             ticketName,
