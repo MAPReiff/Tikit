@@ -173,8 +173,14 @@ router
 
         req.body["ticketStatus"] = xss(req.body["ticketStatus"]); 
         req.body["ticketDeadline"] = xss(req.body["ticketDeadline"]); 
-        req.body["ticketOwners"] = xss(req.body["ticketOwners"]); 
-        let ticketOwners = req.body["ticketOwners"].split(',');
+        
+        let ticketOwners; 
+        if(req.body["ticketOwners"]) { 
+          req.body["ticketOwners"] = xss(req.body["ticketOwners"]); 
+          ticketOwners = req.body["ticketOwners"].split(',');
+        } else { 
+          ticketOwners = xss(req.body["ticketOwners"])
+        }
         
         let editedTicket = await ticketData.update(
           req.session.user._id,
