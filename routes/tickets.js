@@ -368,6 +368,7 @@ router
           res.status(400).render("makeTicket", { 
             title: "Create Ticket", 
             user_id: req.session.user._id,
+            users: users,
             error: 'All fields must be filled out'});
         }
 
@@ -376,6 +377,7 @@ router
       res.status(400).render("makeTicket", { 
         title: "Create Ticket", 
         user_id: req.session.user._id,
+        users: users,
         error: `${e}`});
     }
 
