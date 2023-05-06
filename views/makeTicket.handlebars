@@ -5,7 +5,7 @@
   {{else}}
   <p id="error" class="error" hidden></p>
   {{/if}}
-  <form action="/tickets/makeTicket" method="POST" class="form-inline makeTicketForm">
+  <form action="/tickets/makeTicket" method="POST" class="form-inline makeTicketForm" id="makeTicketForm">
     <div class="col-auto makeTicketForm-group">
       <label class="" for="ticketName">Ticket Name</label>
       <input class="form-control" type="text" id="ticketName" name="ticketName" placeholder="Ticket Name" required> <br>
@@ -69,7 +69,7 @@
         </div>
       </div>
     <input class="form-control" type="text" id="ticketTags" name="ticketTags"
-    placeholder="Ticket Tags" required> <br>
+    placeholder="Ticket Tags" > <br>
 
     <label class="" for="ticketOwners">Owners</label>
     <div class="col-md-12"></div>
