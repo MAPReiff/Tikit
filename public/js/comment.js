@@ -19,6 +19,7 @@
     let mycommentform = document.getElementById('comment-form');
     let ticketID = document.getElementById('tickedIDInput');
     let deleteErrorDiv = document.getElementById('delete-error-div'); 
+    let closeCommentBtn = document.getElementById('closeCommentModal'); 
 
     if(mycommentform) { 
         mycommentform.addEventListener('submit', (event) => {
@@ -121,6 +122,16 @@
           });
       }
     });
+    
+    if(closeCommentBtn) {
+      closeCommentBtn.addEventListener('click', (event) => {
+          event.preventDefault();
+          errordiv.hidden = true;
+          errordiv.value = ''; 
+          content.value = '';
+          mycommentform.reset();
+        });
+    }
     
 })();
 
