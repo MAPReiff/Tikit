@@ -6,10 +6,10 @@
     <p id="error" class="error" hidden></p>
 {{/if}}
 
-<form action="/tickets/editTicket/{{_id}}" method="POST" class="form-inline editTicketForm" method="POST">
+<form action="/tickets/editTicket/{{_id}}" method="POST" class="form-inline editTicketForm" method="POST" id="makeTicketForm">
   <div class="col-auto editTicketForm-group">
         <label class="" for="ticketName" >Ticket Name</label>
-        <input class="form-control" type="text" id="ticketName" name="ticketName" placeholder="{{name}}" value="{{name}}"> <br>
+        <input class="form-control" type="text" id="ticketName" name="ticketName" placeholder="{{name}}" value="{{name}}" required> <br>
 
         {{!-- <label class="" for="ticketDescription">Description</label>
         <input class="form-control" type="text" id="ticketDescription" name="ticketDescription" placeholder="{{description}}" value="{{description}}"> <br> --}}
@@ -41,18 +41,18 @@
             <div class="infoCategory">
                 <i class="icon-info-sign"></i>
                 <span class="extra-info">
-                <p class="infoSubtitle">Service Request:</p><p class="categoryDescription">Inquire about product or service. These tickets are usually low-risk and do not require immediate action (ex: request new hardware or software, want to reset their password, or renew their software licenses)</p>
+                ervice Request: Inquire about product or service. These tickets are usually low-risk and do not require immediate action (ex: request new hardware or software, want to reset their password, or renew their software licenses)
                 <br>
-                <p class="infoSubtitle">Incident:</p> Point out a problem with product or service (ex: disruption to IT service)
+                Incident: Point out a problem with product or service (ex: disruption to IT service)
                 <br>
-                <p class="infoSubtitle">Problem:</p> For technical staff - problem that may cause an incident for a customer
+                Problem: For technical staff - problem that may cause an incident for a customer
                 <br>
-                <p class="infoSubtitle">Change Request:</p> Make changes to product or service (ex: permission changes)
+                Change Request: Make changes to product or service (ex: permission changes)
                 <br>
                 </span>
             </div>
             </div>
-         <select class="form-control"  id="ticketCategory" name="ticketCategory" placeholder={{category}}>  
+         <select class="form-control"  id="ticketCategory" name="ticketCategory">  
                 {{#select category}}
                     <option value="Service Request">Service Request</option>
              
@@ -65,10 +65,10 @@
         </select><br>
 
         <label class="" for="ticketDeadline">Deadline</label>
-        <input class="form-control" type="date" id="ticketDeadline" name="ticketDeadline" placeholder={{deadline}} value={{deadline}}><br>
+        <input class="form-control" type="date" id="ticketDeadline" name="ticketDeadline" value={{deadline}}><br>
 
         <label class="" for="ticketPriority">Priority</label>
-         <select class="form-control"  id="ticketPriority" name="ticketPriority" placeholder={{priority}}>
+         <select class="form-control"  id="ticketPriority" name="ticketPriority">
                      {{#select priority}}
                         <option value="Critical">Critical</option>
                    
@@ -85,7 +85,7 @@
         <div class="infoCategory">
           <i class="icon-info-sign"></i>
           <span class="extra-info">
-            <p class="categoryDescription">Separate tags with commas.</p>
+            Separate tags with commas.
           </span>
         </div>
       </div>
