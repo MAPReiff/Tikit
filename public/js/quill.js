@@ -55,12 +55,12 @@ quill.container.previousSibling
 quill.container.previousSibling
   .querySelector("button.ql-italic")
   .setAttribute("title", "Italic");
-quill.container.previousSibling
-  .querySelector("button.ql-underline")
-  .setAttribute("title", "Underline");
-quill.container.previousSibling
-  .querySelector("button.ql-strike")
-  .setAttribute("title", "Strike");
+// quill.container.previousSibling
+//   .querySelector("button.ql-underline")
+//   .setAttribute("title", "Underline");
+// quill.container.previousSibling
+//   .querySelector("button.ql-strike")
+//   .setAttribute("title", "Strike");
 quill.container.previousSibling
   .querySelector("button.ql-image")
   .setAttribute("title", "Insert Image");
