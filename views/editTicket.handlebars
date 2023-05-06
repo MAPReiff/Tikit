@@ -6,7 +6,7 @@
     <p id="error" class="error" hidden></p>
 {{/if}}
 
-<form action="/tickets/editTicket/{{_id}}" method="POST" class="form-inline editTicketForm" method="POST">
+<form action="/tickets/editTicket/{{_id}}" method="POST" class="form-inline editTicketForm" method="POST" id="makeTicketForm">
   <div class="col-auto editTicketForm-group">
         <label class="" for="ticketName" >Ticket Name</label>
         <input class="form-control" type="text" id="ticketName" name="ticketName" placeholder="{{name}}" value="{{name}}"> <br>
