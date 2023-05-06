@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", function () {
       } catch (e) {
         errorP.innerHTML = `${e}`;
         errorP.hidden = false;
+        // scroll to top of page so they can see the error
+        window.scrollTo(0, 0);
       }
     });
   }
@@ -119,18 +121,24 @@ function checkTicketDeadline(data) {
     return NaN;
   }
 
-  var t = data.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  let t = data.match(/^\d{4}-\d{2}-\d{2}$/);
   if (t !== null) {
-    var d = +t[1],
-      m = +t[2],
-      y = +t[3];
-    var date = new Date(y, m - 1, d);
-    if (date.getFullYear() === y && date.getMonth() === m - 1) {
-      if (new Date(deadline).getTime() === NaN) {
+    // var d = +t[1],
+    //   m = +t[2],
+    //   y = +t[3];
+    let date = new Date(data);
+    let y = data.substring(0, 4);
+    let m = data.substring(5, 7);
+    let d = data.substring(8, 10);    
+
+    
+    if (date.getFullYear() == y && date.getMonth() == m - 1) {
+      if (new Date(data).getTime() === NaN) {
         throw new Error("provided dealine is not a valid timestamp");
-      } else if (new Date(deadline).getTime() < createdOn) {
-        throw new Error("provided dealine in the past");
-      }
+      } 
+      // else if (new Date(data).getTime() < createdOn) {
+      //   throw new Error("provided dealine in the past");
+      // }
       return data;
     } else {
       throw Error("ticket deadline must be in the format YYYY-DD-MM");
