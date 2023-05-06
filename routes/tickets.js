@@ -173,9 +173,15 @@ router
 
         req.body["ticketStatus"] = xss(req.body["ticketStatus"]); 
         req.body["ticketDeadline"] = xss(req.body["ticketDeadline"]); 
-        req.body["ticketOwners"] = xss(req.body["ticketOwners"]); 
-        req.body["ticketOwners"] = [req.body["ticketOwners"]];
-
+        
+        let ticketOwners; 
+        if(req.body["ticketOwners"]) { 
+          req.body["ticketOwners"] = xss(req.body["ticketOwners"]); 
+          ticketOwners = req.body["ticketOwners"].split(',');
+        } else { 
+          ticketOwners = xss(req.body["ticketOwners"])
+        }
+        
         let editedTicket = await ticketData.update(
           req.session.user._id,
           req.params.id,
@@ -184,7 +190,7 @@ router
           ticketDescription,
           ticketPriority,
           req.body["ticketDeadline"],
-          req.body["ticketOwners"],
+          ticketOwners,
           ticketCategory,
           req.session.user.role,
           ticketTags
@@ -341,7 +347,7 @@ router
             ticketOwners = [req.body["ticketOwners"]];
           }else{
             req.body["ticketOwners"] = xss(req.body["ticketOwners"])
-            ticketOwners = req.body["ticketOwners"];
+            ticketOwners = req.body["ticketOwners"].split(",");
           }
 
           req.body["ticketDeadline"] = xss(req.body["ticketDeadline"])
