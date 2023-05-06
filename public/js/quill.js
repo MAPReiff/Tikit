@@ -4,7 +4,9 @@ var quill = new Quill("#editor", {
   modules: {
     toolbar: [
       // [{ size: ["small", false, "large", "huge"] }],
-      ["bold", "italic", "underline", "strike"],
+      ["bold", "italic"], //, "underline", "strike"],
+      // In slack, prof hill said "Strong and Em are fine to use", but we can not use <u> and <s> so we commented them out
+      // https://stevenswebdevs2023.slack.com/archives/C04GT4VC2CW/p1683320626601129?thread_ts=1683320245.987919&cid=C04GT4VC2CW
       ["image"],
       [{ list: "bullet" }],
       ["clean"],
