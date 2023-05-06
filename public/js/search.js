@@ -32,7 +32,7 @@ if (navForm) {
     // Does not check !query because that is considered valid input (null/undefined/empty is considered an empty search i.e. everything is returned)
     // Also does not check empty strings, as that is also considered valid input (same reason as above)
     event.preventDefault();
-    let query = document.getElementById("searchTickets").value;
+    let query = document.getElementById("search").value;
     if (query && typeof query !== "string")
       throw `Error: Search Query must be a string!`;
     navForm.submit();
