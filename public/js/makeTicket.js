@@ -86,7 +86,7 @@ function checkTicketCategory(data, type) {
 }
 
 function checkTicketPriority(data) {
-  console.log(data)
+  // console.log(data)
   if (typeof data == "undefined") {
     throw new Error(`please provide a ${type} string`);
   } else if (typeof data != "string") {
