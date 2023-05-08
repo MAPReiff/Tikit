@@ -204,3 +204,43 @@ export const isEqualDay = (date1, date2) => {
         && date1.getUTCDate() === date2.getUTCDate()
         && date1.getUTCFullYear() === date2.getUTCFullYear();
 }
+
+
+export const checkTicketDeadline = (data) => {
+  if (typeof data == "undefined") {
+    return NaN;
+  } else if (typeof data != "string") {
+    throw new Error(`please provide a ${type} string`);
+  }
+
+  data = data.trim();
+  if (data.length == 0) {
+    return NaN;
+  }
+
+  let t = data.match(/^\d{4}-\d{2}-\d{2}$/);
+  if (t !== null) {
+    // var d = +t[1],
+    //   m = +t[2],
+    //   y = +t[3];
+    let date = new Date(data);
+    let y = data.substring(0, 4);
+    let m = data.substring(5, 7);
+    let d = data.substring(8, 10);    
+
+    
+    if (date.getFullYear() == y && date.getMonth() == m - 1) {
+      if (new Date(data).getTime() === NaN) {
+        throw new Error("provided dealine is not a valid timestamp");
+      } 
+      // else if (new Date(data).getTime() < createdOn) {
+      //   throw new Error("provided dealine in the past");
+      // }
+      return data;
+    } else {
+      throw Error("ticket deadline must be in the format YYYY-DD-MM");
+    }
+  } else {
+    throw Error("ticket deadline must be in the format YYYY-DD-MM");
+  }
+}

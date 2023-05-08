@@ -71,7 +71,7 @@ router
       const newComment = await commentData.create(req.params.ticketId, req.session.user._id, commentInfo.replyingToID, commentInfo.contentInput);
       return res.status(200).json(newComment);
     } catch (e) {
-      res.status(500).json({error: e});
+      return res.status(500).json({error: e});
     }
     //code here for POST
   });
@@ -134,9 +134,9 @@ router
       updatedTicket = await commentData.remove(req.params.commentId,hasChildren);
 
       updatedTicket._id = updatedTicket._id.toString();
-      res.json(updatedTicket);
+      return res.status(200).json(updatedTicket);
     } catch (e) { 
-      return res.status(404).json({error: e});
+      return res.status(500).json({error: e});
     }
 
   })
@@ -181,9 +181,9 @@ router
     //update the comment and return the new ticket
     try { 
       let updatedTicket = await commentData.update(req.params.commentId, content);
-      res.json(updatedTicket);
+      return res.status(200).json(updatedTicket);
     } catch (e) { 
-      return res.status(404).json({error: e});
+      return res.status(500).json({error: e});
     }
 
   });
