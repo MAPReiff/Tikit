@@ -42,6 +42,7 @@
               content.value = '';
               window.location.reload();
             },
+            //code adapted from https://stackoverflow.com/questions/377644/jquery-ajax-error-handling-show-custom-exception-messages
             error: function (xhr, ajaxOptions, thrownError) {
               let errorMsg = xhr.status + ":" + thrownError;
               errordiv.innerHTML = errorMsg + "<br>" + xhr.responseText;
@@ -78,7 +79,7 @@
                       let msg = "create successful";
                       console.log(msg);
                       window.location.reload();
-                    },
+                    }, //https://stackoverflow.com/questions/377644/jquery-ajax-error-handling-show-custom-exception-messages
                     error: function (xhr, ajaxOptions, thrownError) {
                       let errorMsg = xhr.status + ":" + thrownError;
                       deleteErrorDiv.innerHTML = errorMsg + "<br>" + xhr.responseText;
@@ -109,7 +110,7 @@
                       let msg = "create successful";
                       console.log(msg);
                       window.location.reload();
-                    },
+                    }, //https://stackoverflow.com/questions/377644/jquery-ajax-error-handling-show-custom-exception-messages
                     error: function (xhr, ajaxOptions, thrownError) {
                       let errorMsg = xhr.status + ":" + thrownError;
                       deleteErrorDiv.innerHTML = errorMsg + "<br>" + xhr.responseText;
