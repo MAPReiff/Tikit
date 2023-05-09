@@ -143,11 +143,11 @@ function checkTicketDeadline(data) {
 
     
     if (date.getFullYear() == y && date.getMonth() == m - 1) {
-      if (new Date(data).getTime() === NaN) {
+      if (date.getTime() === NaN) {
         throw new Error("provided dealine is not a valid timestamp");
-      } else if (date.getTime() < new Date()) {
+      } /*else if (date.getTime() < new Date()) {
         throw new Error("provided dealine is in the past");
-      }
+      }*/ // Commented out because it messes with route code
       return data;
     } else {
       throw Error("ticket deadline must be in the format YYYY-DD-MM");
@@ -184,7 +184,7 @@ function checkTicketOwners(data){
     if(data.length > 0){
         data = checkIdArray(data, "Owners ID Array");
     }
-  }else if (data.length != 0) {
+  }else {
     throw "Owners is not a valid array";
   }
 
