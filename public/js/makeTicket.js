@@ -147,10 +147,9 @@ function checkTicketDeadline(data) {
     if (date.getFullYear() == y && date.getMonth() == m - 1) {
       if (new Date(data).getTime() === NaN) {
         throw new Error("provided dealine is not a valid timestamp");
-      } 
-      // else if (new Date(data).getTime() < createdOn) {
-      //   throw new Error("provided dealine in the past");
-      // }
+      } else if (date.getTime() < new Date()) {
+        throw new Error("provided dealine is in the past");
+      }
       return data;
     } else {
       throw Error("ticket deadline must be in the format YYYY-DD-MM");
