@@ -184,7 +184,6 @@ function checkIdArray (idArray, varName){
 
   
 function checkTicketOwners(data){
-    console.log(data)
   if (data && Array.isArray(data)) {
     if(data.length > 0){
         data = checkIdArray(data, "Owners ID Array");
