@@ -4,9 +4,6 @@ import { users } from '../config/mongoCollections.js';
 import { ObjectId } from 'mongodb';
 
 
-
-
-
 /*I think we should do two different create functions
 One for creating a brand new comment on a ticket 
 and one for adding a reply to a ticket

@@ -9,8 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
       let ticketCategory = document.getElementById("ticketCategory").value;
       let ticketDeadline = document.getElementById("ticketDeadline").value;
       let ticketPriority = document.getElementById("ticketPriority").value;
-  
-      // let role = document.getElementById("roleInput").value;
+      let ticketTags = document.getElementById("ticketTags").value;
+      let ticketOwnersElement = document.getElementById("ticketOwners");
+
       let errorP = document.getElementById("error");
       try {
         checkTicketName(ticketName, "ticket name");
@@ -18,6 +19,16 @@ document.addEventListener("DOMContentLoaded", function () {
         checkTicketCategory(ticketCategory, "ticket category");
         checkTicketDeadline(ticketDeadline);
         checkTicketPriority(ticketPriority);
+
+        if(ticketTags){
+            checkTicketTags(ticketTags);
+        }
+
+        if(ticketOwnersElement){
+            let ticketOwners = Array.from(ticketOwnersElement.selectedOptions).map(v=>v.value);
+            checkTicketOwners(ticketOwners);
+        }
+
         formTicket.submit();
       } catch (e) {
         errorP.innerHTML = `${e}`;
@@ -86,7 +97,6 @@ function checkTicketCategory(data, type) {
 }
 
 function checkTicketPriority(data) {
-  // console.log(data)
   if (typeof data == "undefined") {
     throw new Error(`please provide a ${type} string`);
   } else if (typeof data != "string") {
@@ -133,12 +143,11 @@ function checkTicketDeadline(data) {
 
     
     if (date.getFullYear() == y && date.getMonth() == m - 1) {
-      if (new Date(data).getTime() === NaN) {
+      if (date.getTime() === NaN) {
         throw new Error("provided dealine is not a valid timestamp");
-      } 
-      // else if (new Date(data).getTime() < createdOn) {
-      //   throw new Error("provided dealine in the past");
-      // }
+      } /*else if (date.getTime() < new Date()) {
+        throw new Error("provided dealine is in the past");
+      }*/ // Commented out because it messes with route code
       return data;
     } else {
       throw Error("ticket deadline must be in the format YYYY-DD-MM");
@@ -146,4 +155,38 @@ function checkTicketDeadline(data) {
   } else {
     throw Error("ticket deadline must be in the format YYYY-DD-MM");
   }
+}
+
+function checkTicketTags(data){
+    if (typeof data !== "string") throw `Error: ticket tags must be a string!`;
+    data = data.trim();
+    return data;
+}
+
+
+function checkIdArray (idArray, varName){
+    if (!idArray || !Array.isArray(idArray))
+      throw `You must provide an array of ${varName}`;
+    for (let i in idArray) {
+      if (typeof idArray[i] !== "string" || idArray[i].trim().length === 0) {
+        throw `One or more elements in ${varName} array is not a string or is an empty string`;
+      }
+      idArray[i] = idArray[i].trim();
+    }
+    if (!(idArray.length >= 1))
+      throw `You must provide an array, ${varName}, that has at least one element`;
+    return idArray;
+};
+
+  
+function checkTicketOwners(data){
+  if (data && Array.isArray(data)) {
+    if(data.length > 0){
+        data = checkIdArray(data, "Owners ID Array");
+    }
+  }else {
+    throw "Owners is not a valid array";
+  }
+
+  return data;
 }
