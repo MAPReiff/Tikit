@@ -6,7 +6,7 @@
     <p id="error" class="error" hidden></p>
 {{/if}}
 
-<form action="/tickets/editTicket/{{_id}}" method="POST" class="form-inline editTicketForm" method="POST" id="makeTicketForm">
+<form action="/tickets/editTicket/{{_id}}" method="POST" class="form-inline editTicketForm" id="makeTicketForm">
   <div class="col-auto editTicketForm-group">
         <label class="" for="ticketName" >Ticket Name</label>
         <input class="form-control" type="text" id="ticketName" name="ticketName" placeholder="{{name}}" value="{{name}}" required> <br>
@@ -88,7 +88,6 @@
             Separate tags with commas.
           </span>
         </div>
-      </div>
         <input class="form-control" type="text" id="ticketTags" name="ticketTags" placeholder="{{tagsString}}" value="{{tagsString}}"> <br>
 
         {{#ifEquals role "admin"}}
@@ -99,7 +98,6 @@
                 {{/each}} 
         {{/ifEquals}}
         </select><br><br>
-  </div>
   <input class="btn btn-primary searchBtn" type="submit" id="subBtn" value="Submit Changes">
 </form>
 <script src="/public/js/quill.js"></script>

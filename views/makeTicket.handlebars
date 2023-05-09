@@ -67,7 +67,6 @@
             Separate tags with commas.
           </span>
         </div>
-      </div>
     <input class="form-control" type="text" id="ticketTags" name="ticketTags"
     placeholder="Ticket Tags" > <br>
 
@@ -78,8 +77,6 @@
       <span class="extra-info">
         Owners list cannot be edited after submitting ticket. Only admins can edit owners list submssion.
       </span>
-    </div>
-    </div>
     <select class="form-control" id="ticketOwners" name="ticketOwners" multiple="multiple">
       {{#each users}}
       <option value={{this.id}}>{{this.firstName}} {{this.lastName}}</option>
