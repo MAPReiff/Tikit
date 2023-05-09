@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
         checkTicketPriority(ticketPriority);
 
         if(ticketTags){
-            console.log(typeof ticketTags == 'string');
             checkTicketTags(ticketTags);
         }
 
@@ -98,7 +97,6 @@ function checkTicketCategory(data, type) {
 }
 
 function checkTicketPriority(data) {
-  // console.log(data)
   if (typeof data == "undefined") {
     throw new Error(`please provide a ${type} string`);
   } else if (typeof data != "string") {
@@ -160,7 +158,6 @@ function checkTicketDeadline(data) {
 }
 
 function checkTicketTags(data){
-    console.log(typeof data, data);
     if (typeof data !== "string") throw `Error: ticket tags must be a string!`;
     data = data.trim();
     return data;
