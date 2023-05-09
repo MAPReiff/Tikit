@@ -94,9 +94,6 @@ router
 
     if(ticket.tags){
       tagsString = ticket.tags.join(',');
-      // console.log(ticket.tags);
-      // console.log(ticket.tags.join(','));
-      // console.log(tagsString);
     }
 
     try{ 
@@ -225,14 +222,20 @@ router
           req.body["ticketOwners"] = [req.body["ticketOwners"]];
         }
 
+
         let ticketStatus;
-        req.body["ticketStatus"] = xss(req.body["ticketStatus"]); 
-        ticketStatus = req.body["ticketStatus"]; 
-        if (ticketStatus != "To Do" && ticketStatus != "In Progress" && ticketStatus != "Completed" && ticketStatus != "Problem") {
-          throw new Error(
-            "status must be a string equal to To Do, In Progress, or Completed"
-          );
+        if(req.body["ticketStatus"]){
+          req.body["ticketStatus"] = xss(req.body["ticketStatus"]); 
+          ticketStatus = req.body["ticketStatus"]; 
+          if (ticketStatus != "To Do" && ticketStatus != "In Progress" && ticketStatus != "Completed" && ticketStatus != "Problem") {
+            throw new Error(
+              "status must be a string equal to To Do, In Progress, or Completed"
+            );
+          }
+        }else{
+          ticketStatus = ticket.status;
         }
+
 
         req.body["ticketDeadline"] = xss(req.body["ticketDeadline"]); 
         let ticketDeadline = helpers.checkTicketDeadline(req.body["ticketDeadline"]);
@@ -392,6 +395,7 @@ router
             req.body["ticketCategory"],
             "ticket category"
           );
+
           if (
             ticketCategory != "Service Request" &&
             ticketCategory != "Incident" &&
@@ -402,8 +406,6 @@ router
               "category must be a string equal to Service Request, Incident, Problem, or Change Request"
             );
           }
-        
-
         
           req.body["ticketPriority"] = xss(req.body["ticketPriority"]); 
           let ticketPriority = checkString(
